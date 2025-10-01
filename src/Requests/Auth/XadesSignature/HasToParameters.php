@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace N1ebieski\KSEFClient\Requests\Auth\XadesSignature;
+
+use N1ebieski\KSEFClient\Support\Optional;
+use N1ebieski\KSEFClient\Support\ValueObjects\KeyType;
+
+/**
+ * @property-read Optional | bool $verifyCertificateChain
+ */
+trait HasToParameters
+{
+    public function toParameters(KeyType $keyType = KeyType::Camel): array
+    {
+        $parameters = [];
+
+        if ( ! $this->verifyCertificateChain instanceof Optional) {
+            $parameters['verifyCertificateChain'] = $this->verifyCertificateChain ? "true" : "false";
+        }
+
+        return $parameters;
+    }
+}

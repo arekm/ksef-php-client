@@ -20,9 +20,9 @@ enum Mode: string implements EnumInterface
     public function getApiUrl(): ApiUrl
     {
         return match ($this) {
-            self::Test => ApiUrl::from('https://ksef-test.mf.gov.pl/api'),
-            self::Demo => ApiUrl::from('https://ksef-demo.mf.gov.pl/api'),
-            self::Production => ApiUrl::from('https://ksef.mf.gov.pl/api'),
+            self::Test => ApiUrl::from('https://ksef-test.mf.gov.pl/api/v2'),
+            self::Demo => ApiUrl::from('https://ksef-demo.mf.gov.pl/api/v2'),
+            self::Production => ApiUrl::from('https://ksef.mf.gov.pl/api/v2'),
         };
     }
 }

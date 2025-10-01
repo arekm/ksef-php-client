@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Requests\Online\ValueObjects;
+namespace N1ebieski\KSEFClient\Requests\ValueObjects;
 
 enum XmlNamespace: string
 {
+    case Auth = 'http://ksef.mf.gov.pl/auth/token/2.0';
+
     case Ds = 'http://www.w3.org/2000/09/xmldsig#';
 
     case Xades = 'http://uri.etsi.org/01903/v1.3.2#';

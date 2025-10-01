@@ -7,6 +7,7 @@ namespace N1ebieski\KSEFClient\ValueObjects;
 use BCMathExtended\BC;
 use N1ebieski\KSEFClient\Support\AbstractValueObject;
 use OpenSSLAsymmetricKey;
+use RuntimeException;
 use SensitiveParameter;
 
 final readonly class Certificate extends AbstractValueObject
@@ -20,8 +21,22 @@ final readonly class Certificate extends AbstractValueObject
         #[SensitiveParameter]
         public array $info,
         #[SensitiveParameter]
-        public OpenSSLAsymmetricKey $privateKey
+        public OpenSSLAsymmetricKey $privateKey,
     ) {
+    }
+
+    /**
+     * @return array{bits: int, key: string, rsa: array, dsa: array, dh: array, ec: array, type: int}
+     */
+    public function getPrivateKeyDetails(): array
+    {
+        $details = openssl_pkey_get_details($this->privateKey);
+
+        if ($details === false) {
+            throw new RuntimeException('Unable to get key details');
+        }
+
+        return $details;
     }
 
     public function getFingerPrint(): string

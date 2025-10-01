@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\ValueObjects;
+namespace N1ebieski\KSEFClient\Requests\Certificates\ValueObjects;
 
 use N1ebieski\KSEFClient\Contracts\ValueAwareInterface;
 use N1ebieski\KSEFClient\Support\AbstractValueObject;
+use SensitiveParameter;
 use Stringable;
 
-final readonly class NIP extends AbstractValueObject implements ValueAwareInterface, Stringable
+final readonly class CertificateSerialNumber extends AbstractValueObject implements ValueAwareInterface, Stringable
 {
-    public function __construct(public string $value)
-    {
+    public function __construct(
+        #[SensitiveParameter]
+        public string $value
+    ) {
     }
 
     public function __toString(): string

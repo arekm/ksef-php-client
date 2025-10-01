@@ -54,13 +54,16 @@ final readonly class Request extends AbstractDTO
 
     public function getBodyAsString(): string
     {
-        return match (true) {
-            is_string($this->body) => $this->body,
-            is_array($this->body) => json_encode(
-                Arr::filterRecursive($this->body, fn (mixed $value): bool => ! $value instanceof Optional),
-                JSON_THROW_ON_ERROR
-            ),
-            default => ''
-        };
+        if (is_string($this->body)) {
+            return $this->body;
+        }
+
+        if (is_array($this->body)) {
+            $body = Arr::filterRecursive($this->body, fn (mixed $value): bool => ! $value instanceof Optional);
+
+            return ! empty($body) ? json_encode($body, JSON_THROW_ON_ERROR) : '';
+        }
+
+        return '';
     }
 }

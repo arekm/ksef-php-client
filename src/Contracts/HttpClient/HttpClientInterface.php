@@ -6,13 +6,12 @@ namespace N1ebieski\KSEFClient\Contracts\HttpClient;
 
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 use N1ebieski\KSEFClient\HttpClient\DTOs\Request;
-use N1ebieski\KSEFClient\HttpClient\ValueObjects\AccessToken;
+use N1ebieski\KSEFClient\ValueObjects\AccessToken;
+use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
 
 interface HttpClientInterface
 {
     public function sendRequest(Request $request): ResponseInterface;
 
-    public function getSessionToken(): ?AccessToken;
-
-    public function withSessionToken(AccessToken $sessionToken): self;
+    public function withAccessToken(AccessToken $accessToken): self;
 }

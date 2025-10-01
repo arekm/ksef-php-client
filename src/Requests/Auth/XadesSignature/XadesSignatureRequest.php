@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace N1ebieski\KSEFClient\Requests\Auth\XadesSignature;
+
+use N1ebieski\KSEFClient\Contracts\ParametersInterface;
+use N1ebieski\KSEFClient\Contracts\XmlSerializableInterface;
+use N1ebieski\KSEFClient\Requests\AbstractRequest;
+use N1ebieski\KSEFClient\Requests\Auth\DTOs\XadesSignature;
+use N1ebieski\KSEFClient\Support\Optional;
+use N1ebieski\KSEFClient\ValueObjects\CertificatePath;
+use SensitiveParameter;
+
+final readonly class XadesSignatureRequest extends AbstractRequest implements XmlSerializableInterface, ParametersInterface
+{
+    use HasToParameters;
+
+    public function __construct(
+        #[SensitiveParameter]
+        public CertificatePath $certificatePath,
+        public XadesSignature $xadesSignature,
+        public Optional | bool $verifyCertificateChain = new Optional()
+    ) {
+    }
+
+    public function toXml(): string
+    {
+        return $this->xadesSignature->toXml();
+    }
+}

@@ -7,8 +7,10 @@ namespace N1ebieski\KSEFClient\Actions\SignDocument;
 use DateTimeImmutable;
 use DOMDocument;
 use N1ebieski\KSEFClient\Actions\AbstractHandler;
+use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawAction;
+use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandler;
 use N1ebieski\KSEFClient\Actions\SignDocument\SignDocumentAction;
-use N1ebieski\KSEFClient\Requests\Online\ValueObjects\XmlNamespace;
+use N1ebieski\KSEFClient\Requests\ValueObjects\XmlNamespace;
 use N1ebieski\KSEFClient\Support\Str;
 use RuntimeException;
 
@@ -19,6 +21,11 @@ use RuntimeException;
  */
 final readonly class SignDocumentHandler extends AbstractHandler
 {
+    public function __construct(
+        public ConvertEcdsaDerToRawHandler $convertEcdsaDerToRawHandler
+    ) {
+    }
+
     public function handle(SignDocumentAction $action): string
     {
         $dom = new DOMDocument('1.0', 'UTF-8');
@@ -44,7 +51,7 @@ final readonly class SignDocumentHandler extends AbstractHandler
         $signedInfo->appendChild($canonicalizationMethod);
 
         $signatureMethod = $dom->createElementNS((string) XmlNamespace::Ds->value, 'ds:SignatureMethod');
-        $signatureMethod->setAttribute('Algorithm', 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256');
+        $signatureMethod->setAttribute('Algorithm', $action->getSignatureMethodNamespace());
 
         $signedInfo->appendChild($signatureMethod);
 
@@ -171,11 +178,18 @@ final readonly class SignDocumentHandler extends AbstractHandler
             $signedInfo->C14N(),
             $actualDigest,
             $action->certificate->privateKey,
-            'sha256WithRSAEncryption'
+            $action->getAlgorithm()
         );
 
         if ($sign === false) {
             throw new RuntimeException('Unable to sign document');
+        }
+
+        // If private key type is EC, convert DER to raw. Don't ask me why, but it works
+        if ($action->getPrivateKeyType() === OPENSSL_KEYTYPE_EC) {
+            $actualDigest = $this->convertEcdsaDerToRawHandler->handle(
+                new ConvertEcdsaDerToRawAction($actualDigest, 32)
+            );
         }
 
         /** @var string $actualDigest */

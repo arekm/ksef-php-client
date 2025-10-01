@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Contracts\Resources;
 
-use N1ebieski\KSEFClient\Contracts\Resources\Common\CommonResourceInterface;
-use N1ebieski\KSEFClient\Contracts\Resources\Online\OnlineResourceInterface;
-use N1ebieski\KSEFClient\HttpClient\ValueObjects\AccessToken;
+use DateTimeInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Auth\AuthResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Certificates\CertificatesResourceInterface;
+use N1ebieski\KSEFClient\ValueObjects\AccessToken;
+use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
 
 interface ClientResourceInterface
 {
-    public function getSessionToken(): ?AccessToken;
+    public function getAccessToken(): ?AccessToken;
 
-    public function withSessionToken(AccessToken | string $sessionToken): self;
+    public function getRefreshToken(): ?RefreshToken;
 
-    public function online(): OnlineResourceInterface;
+    public function withAccessToken(AccessToken $accessToken, ?DateTimeInterface $validUntil = null): self;
 
-    public function common(): CommonResourceInterface;
+    public function withRefreshToken(RefreshToken $refreshToken, ?DateTimeInterface $validUntil = null): self;
+
+    public function auth(): AuthResourceInterface;
+
+    public function certificates(): CertificatesResourceInterface;
 }

@@ -15,8 +15,6 @@ final class Utility
         $seconds = 0;
 
         while (true) {
-            sleep($backoff);
-
             $result = $closure();
 
             if ($result !== null) {
@@ -28,6 +26,8 @@ final class Utility
             if ($seconds > $retryUntil) {
                 throw new RuntimeException("Operation did not return a result after retrying for {$retryUntil} seconds.");
             }
+
+            sleep($backoff);
         }
     }
 

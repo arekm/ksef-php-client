@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace N1ebieski\KSEFClient\Requests\Certificates\Revoke;
+
+use N1ebieski\KSEFClient\Contracts\BodyInterface;
+use N1ebieski\KSEFClient\Requests\AbstractRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\ValueObjects\CertificateSerialNumber;
+use N1ebieski\KSEFClient\Requests\Certificates\ValueObjects\RevocationReason;
+use N1ebieski\KSEFClient\Support\Optional;
+use N1ebieski\KSEFClient\Support\ValueObjects\KeyType;
+
+final readonly class RevokeRequest extends AbstractRequest implements BodyInterface
+{
+    public function __construct(
+        public CertificateSerialNumber $certificateSerialNumber,
+        public Optional | RevocationReason | null $revocationReason = new Optional()
+    ) {
+    }
+
+    public function toBody(KeyType $keyType = KeyType::Camel): array
+    {
+        return $this->toArray($keyType, ['revocationReason']);
+    }
+}
