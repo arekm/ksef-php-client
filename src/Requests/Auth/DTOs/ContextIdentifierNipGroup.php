@@ -6,13 +6,13 @@ namespace N1ebieski\KSEFClient\Requests\Auth\DTOs;
 
 use DOMDocument;
 use N1ebieski\KSEFClient\Contracts\DomSerializableInterface;
-use N1ebieski\KSEFClient\ValueObjects\Nip;
+use N1ebieski\KSEFClient\ValueObjects\NIP;
 use N1ebieski\KSEFClient\Support\AbstractDTO;
 
 final readonly class ContextIdentifierNipGroup extends AbstractDTO implements DomSerializableInterface
 {
     public function __construct(
-        public Nip $nip,
+        public NIP $nip,
     ) {
     }
 

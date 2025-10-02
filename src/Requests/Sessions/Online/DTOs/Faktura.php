@@ -14,7 +14,7 @@ use N1ebieski\KSEFClient\Requests\Sessions\Online\DTOs\Podmiot2;
 use N1ebieski\KSEFClient\Requests\Sessions\Online\DTOs\Podmiot3;
 use N1ebieski\KSEFClient\Requests\Sessions\Online\DTOs\PodmiotUpowazniony;
 use N1ebieski\KSEFClient\Requests\Sessions\Online\DTOs\Stopka;
-use N1ebieski\KSEFClient\Requests\Online\ValueObjects\XmlNamespace;
+use N1ebieski\KSEFClient\Requests\ValueObjects\XmlNamespace;
 use N1ebieski\KSEFClient\Support\AbstractDTO;
 use N1ebieski\KSEFClient\Support\Concerns\HasToXml;
 use N1ebieski\KSEFClient\Support\Optional;
@@ -64,6 +64,7 @@ final readonly class Faktura extends AbstractDTO implements XmlSerializableInter
 
         $faktura = $dom->createElementNS($this->naglowek->wariantFormularza->getTargetNamespace(), 'Faktura');
         $faktura->setAttribute('xmlns:xsi', (string) XmlNamespace::Xsi->value);
+        $faktura->setAttribute('xmlns:etd', (string) XmlNamespace::Etd->value);
 
         $dom->appendChild($faktura);
 

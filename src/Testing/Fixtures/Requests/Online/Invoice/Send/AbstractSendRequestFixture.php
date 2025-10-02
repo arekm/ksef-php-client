@@ -22,6 +22,13 @@ abstract class AbstractSendRequestFixture extends AbstractRequestFixture
         return $this;
     }
 
+    public function withRandomInvoiceNumber(): self
+    {
+        $this->data['faktura']['fa']['p_2'] = strtoupper(uniqid("INV-"));
+
+        return $this;
+    }
+
     public function withNIP(string $nip): self
     {
         $this->data['faktura']['podmiot1']['daneIdentyfikacyjne']['nip'] = $nip;

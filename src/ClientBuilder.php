@@ -30,7 +30,7 @@ use N1ebieski\KSEFClient\ValueObjects\InternalId;
 use N1ebieski\KSEFClient\ValueObjects\KsefToken;
 use N1ebieski\KSEFClient\ValueObjects\LogPath;
 use N1ebieski\KSEFClient\ValueObjects\Mode;
-use N1ebieski\KSEFClient\ValueObjects\Nip;
+use N1ebieski\KSEFClient\ValueObjects\NIP;
 use N1ebieski\KSEFClient\ValueObjects\NipVatUe;
 use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
 use Psr\Http\Client\ClientInterface;
@@ -181,10 +181,10 @@ final class ClientBuilder
         return $this;
     }
 
-    public function withIdentifier(Nip | NipVatUe | InternalId | string $identifier): self
+    public function withIdentifier(NIP | NipVatUe | InternalId | string $identifier): self
     {
         if (is_string($identifier)) {
-            $identifier = Nip::from($identifier);
+            $identifier = NIP::from($identifier);
         }
 
         $this->identifier = $identifier;
@@ -216,6 +216,7 @@ final class ClientBuilder
             baseUri: new BaseUri($this->apiUrl->value),
             accessToken: $this->accessToken,
             refreshToken: $this->refreshToken,
+            encryptionKey: $this->encryptionKey,
         );
 
         $httpClient = new HttpClient(

@@ -19,4 +19,6 @@ enum XmlNamespace: string
     case KsefOnlineTypes = 'http://ksef.mf.gov.pl/schema/gtw/svc/online/types/2021/10/01/0001';
 
     case Xsi = 'http://www.w3.org/2001/XMLSchema-instance';
+
+    case Etd = 'http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/DefinicjeTypy/';
 }

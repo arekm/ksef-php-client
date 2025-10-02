@@ -12,7 +12,7 @@ final class SendFakturaSprzedazyTowaruRequestFixture extends AbstractSendRequest
     public array $data = [
         'faktura' => [
             'naglowek' => [
-                'wariantFormularza' => 'FA (2)',
+                'wariantFormularza' => 'FA (3)',
                 'systemInfo' => 'KSEF-PHP-Client'
             ],
             'podmiot1' => [
@@ -28,7 +28,7 @@ final class SendFakturaSprzedazyTowaruRequestFixture extends AbstractSendRequest
             'podmiot2' => [
                 'daneIdentyfikacyjne' => [
                     'idGroup' => [
-                        'nip' => '5123957531'
+                        'nip' => '9999999999'
                     ],
                     'nazwa' => 'Firma'
                 ],

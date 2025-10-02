@@ -10,12 +10,12 @@ use N1ebieski\KSEFClient\Requests\AbstractRequest;
 use N1ebieski\KSEFClient\Requests\Testdata\Person\Create\ValueObjects\Pesel;
 use N1ebieski\KSEFClient\Support\Optional;
 use N1ebieski\KSEFClient\Support\ValueObjects\KeyType;
-use N1ebieski\KSEFClient\ValueObjects\Nip;
+use N1ebieski\KSEFClient\ValueObjects\NIP;
 
 final readonly class CreateRequest extends AbstractRequest implements BodyInterface
 {
     public function __construct(
-        public Nip $nip,
+        public NIP $nip,
         public Pesel $pesel,
         public string $description,
         public bool $isBailiff = false,

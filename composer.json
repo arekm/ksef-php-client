@@ -21,7 +21,8 @@
         "cuyz/valinor": "^1.15",
         "symfony/uid": "^7.0",
         "krowinski/bcmath-extended": "^6.0",
-        "psr-discovery/log-implementations": "^1.1"
+        "psr-discovery/log-implementations": "^1.1",
+        "phpseclib/phpseclib": "^3.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.75",

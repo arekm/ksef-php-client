@@ -9,7 +9,7 @@ use DOMElement;
 use N1ebieski\KSEFClient\Contracts\DomSerializableInterface;
 use N1ebieski\KSEFClient\Support\AbstractDTO;
 use N1ebieski\KSEFClient\ValueObjects\InternalId;
-use N1ebieski\KSEFClient\ValueObjects\Nip;
+use N1ebieski\KSEFClient\ValueObjects\NIP;
 use N1ebieski\KSEFClient\ValueObjects\NipVatUe;
 
 final readonly class ContextIdentifierGroup extends AbstractDTO implements DomSerializableInterface
@@ -19,10 +19,10 @@ final readonly class ContextIdentifierGroup extends AbstractDTO implements DomSe
     ) {
     }
 
-    public static function fromIdentifier(Nip | NipVatUe | InternalId $identifier): self
+    public static function fromIdentifier(NIP | NipVatUe | InternalId $identifier): self
     {
         return match (true) {
-            $identifier instanceof Nip => new self(new ContextIdentifierNipGroup($identifier)),
+            $identifier instanceof NIP => new self(new ContextIdentifierNipGroup($identifier)),
             $identifier instanceof NipVatUe => new self(new ContextIdentifierNipVatUeGroup($identifier)),
             $identifier instanceof InternalId => new self(new ContextIdentifierInternalIdGroup($identifier)),
         };

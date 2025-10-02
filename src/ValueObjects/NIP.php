@@ -11,7 +11,7 @@ use N1ebieski\KSEFClient\Validator\Rules\String\RegexRule;
 use N1ebieski\KSEFClient\Validator\Validator;
 use Stringable;
 
-final readonly class Nip extends AbstractValueObject implements FromInterface, Stringable, ValueAwareInterface
+final readonly class NIP extends AbstractValueObject implements FromInterface, Stringable, ValueAwareInterface
 {
     public string $value;
 

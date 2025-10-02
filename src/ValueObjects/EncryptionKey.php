@@ -12,14 +12,14 @@ use SensitiveParameter;
 
 final readonly class EncryptionKey extends AbstractValueObject
 {
-    #[SensitiveParameter]
     public readonly string $key;
 
-    #[SensitiveParameter]
     public readonly string $iv;
 
     public function __construct(
+        #[SensitiveParameter]
         string $key,
+        #[SensitiveParameter]
         string $iv
     ) {
         Validator::validate([
