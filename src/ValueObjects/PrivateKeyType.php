@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\ValueObjects;
 
+use InvalidArgumentException;
 use N1ebieski\KSEFClient\Contracts\EnumInterface;
 use N1ebieski\KSEFClient\Support\Concerns\HasEquals;
 
@@ -14,6 +15,15 @@ enum PrivateKeyType: string implements EnumInterface
     case RSA = 'RSA';
 
     case EC = 'EC';
+
+    public static function fromType(int $type): self
+    {
+        return match ($type) {
+            OPENSSL_KEYTYPE_RSA => self::RSA,
+            OPENSSL_KEYTYPE_EC => self::EC,
+            default => throw new InvalidArgumentException('Unknown key type')
+        };
+    }
 
     public function getOptions(): array
     {

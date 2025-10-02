@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw;
 
+use InvalidArgumentException;
 use N1ebieski\KSEFClient\Actions\AbstractHandler;
-use RuntimeException;
 
 final readonly class ConvertEcdsaDerToRawHandler extends AbstractHandler
 {
     /**
      * Convert ECDSA DER to raw (r||s)
-     *
-     * @param ConvertEcdsaDerToRawAction $action
-     * @return string
-     * @throws RuntimeException
      */
     public function handle(ConvertEcdsaDerToRawAction $action): string
     {
@@ -23,7 +19,7 @@ final readonly class ConvertEcdsaDerToRawHandler extends AbstractHandler
         $offset = 0;
 
         if ($data[$offset++] != 0x30) {
-            throw new RuntimeException("Invalid DER: no SEQUENCE");
+            throw new InvalidArgumentException("Invalid DER: no SEQUENCE");
         }
 
         $seqLen = $data[$offset++];
@@ -37,7 +33,7 @@ final readonly class ConvertEcdsaDerToRawHandler extends AbstractHandler
 
         // INTEGER r
         if ($data[$offset++] != 0x02) {
-            throw new RuntimeException("Invalid DER: expected INTEGER (r)");
+            throw new InvalidArgumentException("Invalid DER: expected INTEGER (r)");
         }
         $rLen = $data[$offset++];
         $r = '';
@@ -47,7 +43,7 @@ final readonly class ConvertEcdsaDerToRawHandler extends AbstractHandler
 
         // INTEGER s
         if ($data[$offset++] != 0x02) {
-            throw new RuntimeException("Invalid DER: expected INTEGER (s)");
+            throw new InvalidArgumentException("Invalid DER: expected INTEGER (s)");
         }
         $sLen = $data[$offset++];
         $s = '';

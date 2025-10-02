@@ -19,25 +19,38 @@ final readonly class ExceptionFactory extends AbstractFactory
      */
     public static function make(
         int $statusCode,
-        object $exceptionResponse
+        ?object $exceptionResponse
     ): Exception {
-        $exceptions = $exceptionResponse->exception->exceptionDetailList;
+        $message = '';
 
-        $firstException = $exceptions[0] ?? null;
+        if ($exceptionResponse !== null) {
+            $exceptions = $exceptionResponse->exception->exceptionDetailList;
+
+            $firstException = $exceptions[0] ?? null;
+
+            if ($firstException !== null) {
+                $message = "{$firstException->exceptionCode} {$firstException->exceptionDescription}";
+            }
+        }
 
         /** @var class-string<Exception> $exceptionNamespace */
         $exceptionNamespace = match (true) {
             $statusCode === 400 => BadRequestException::class,
             $statusCode === 500 => InternalServerException::class,
             $statusCode === 501 => UnknownSystemException::class,
+            $statusCode === 401 => value(function () use (&$message) {
+                $message = 'Unauthorized';
+
+                return ClientException::class;
+            }),
             $statusCode > 400 && $statusCode < 500 => ClientException::class,
             $statusCode > 500 => ServerException::class,
             default => Exception::class
         };
 
-        return new $exceptionNamespace(
-            message: $firstException->exceptionDescription ?? '',
-            code: $firstException->exceptionCode ?? 0,
+        throw new $exceptionNamespace(
+            message: $message,
+            code: $statusCode,
             context: $exceptionResponse
         );
     }

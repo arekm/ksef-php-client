@@ -7,36 +7,48 @@
 
 PHP API client that allows you to interact with the [API Krajowego Systemu e-Faktur](https://www.gov.pl/web/kas/api-krajowego-system-e-faktur)
 
+Main features:
+
+- Support for authorization via qualified certificates, KSEF certificates, KSEF tokens, and trusted signature ePUAP (manual)
+- Handling of CSR certification requests
+- Automatic access token refresh
+- Logical invoice structure mapped to DTOs
+
+|  KSEF Version  | Branch Version |
+|:--------------:|:--------------:|
+|       2.0      |      main      |
+|       1.0      |       1.x      |
+
 ## Table of Contents
 
 - [Get Started](#get-started)
     - [Client configuration](#client-configuration)
     - [Auto mapping](#auto-mapping)
 - [Authorization](#authorization)
-    - [Auto authorization via API Token](#auto-authorization-via-api-token)
+    - [Auto authorization via KSEF Token](#auto-authorization-via-ksef-token)
     - [Auto authorization via certificate .p12](#auto-authorization-via-certificate-p12)
     - [Manual authorization](#manual-authorization)
 - [Resources](#resources)
-    - [Common](#common)
-        - [Status](#status)        
-    - [Online](#online)
-        - [Session](#session)
-            - [Authorisation challenge](#authorization-challenge)
-            - [Init token](#init-token)
-            - [Init signed](#init-signed)
-            - [Session status](#session-status)
-            - [Terminate](#terminate)
-        - [Invoice](#invoice)
-            - [Get an invoice](#get-an-invoice)
-            - [Send an invoice](#send-an-invoice)
-            - [Invoice status](#invoice-status)
-        - [Query](#query)
-            - [Invoice](#invoice)
-                - [Sync](#sync)
-                - [Async](#async)
-                    - [Fetch init](#init-fetch)
-                    - [Fetch status](#fetch-status)
-                    - [Fetch invoices](#fetch-invoices)
+    - [Auth](#auth)
+        - [Challenge](#challenge)
+        - [Xades Signature](#xades-signature)
+        - [Auth Status](#auth-status)
+        - [Token](#token)
+            - [Redeem](#redeem)
+            - [Refresh](#refresh)
+    - [Certificates](#certificates)
+        - [Limits](#limits)
+        - [Enrollments](#enrollments)
+            - [Enrollments Data](#enrollments-data)
+            - [Enrollments Send](#enrollments-send)
+            - [Enrollments Status](#enrollments-status)
+        - [Certificates Retrieve](#certificates-retrieve)
+        - [Certificates Revoke](#certificates-revoke)
+        - [Certificates Query](#certificates-query)
+    - [Testdata](#testdata)
+        - [Person](#person)
+            - [Person Create](#person-create)
+            - [Person Remove](#person-remove)
 - [Examples](#examples)
     - [Send an invoice and check for UPO](#send-an-invoice-and-check-for-upo)
     - [Fetch invoices using encryption key](#fetch-invoices-using-encryption-key)
@@ -73,12 +85,12 @@ $client = new ClientBuilder()
     ->withHttpClient(new \GuzzleHttp\Client([])) // Optional PSR-18 implementation, default is set by Psr18ClientDiscovery::find()
     ->withLogger(new \Monolog\Logger(...)) // Optional PSR-3 implementation, default is set by PsrDiscovery\Discover::log()
     ->withLogPath($_ENV['PATH_TO_LOG_FILE'], $_ENV['LOG_LEVEL']) // Optional, level: null disables logging
-    ->withSessionToken($_ENV['SESSION_TOKEN']) // Optional, if present, auto authorization is skipped
-    ->withApiToken($_ENV['KSEF_KEY']) // Required for API Token authorization
-    ->withKSEFPublicKeyPath($_ENV['PATH_TO_KSEF_PUBLIC_KEY']) // Required (including for API Token authorization and encryption), you can find it on https://ksef.mf.gov.pl
-    ->withCertificatePath($_ENV['PATH_TO_CERTIFICATE'], $_ENV['CERTIFICATE_PASSPHRASE']) // Required .p12 file for Certificate authorization
-    ->withEncryptionKey(EncryptionKeyFactory::makeRandom()) // Optional for online resources, required for batch resources. Remember to save this value!
-    ->withNIP('NIP_NUMBER') // Required for Mode::Production and Mode::Demo if you want to use auto authorization, optional for Mode::Test
+    ->withAccessToken($_ENV['ACCESS_TOKEN']) // Optional, if present, auto authorization is skipped
+    ->withRefreshToken($_ENV['REFRESH_TOKEN']) // Optional, if present, auto refresh access token is enabled
+    ->withKsefToken($_ENV['KSEF_TOKEN']) // Required for API Token authorization. Optional otherwise
+    ->withCertificatePath($_ENV['PATH_TO_CERTIFICATE'], $_ENV['CERTIFICATE_PASSPHRASE']) // Required .p12 file for Certificate authorization. Optional otherwise
+    ->withEncryptionKey(EncryptionKeyFactory::makeRandom()) // Required for invoice resources. Remember to save this value!
+    ->withIdentifier('NIP_NUMBER') // Required for authorization. Optional otherwise
     ->build();
 ```
 
@@ -87,10 +99,10 @@ $client = new ClientBuilder()
 Each resource supports mapping through both an array and a DTO, for example:
 
 ```php
-use N1ebieski\KSEFClient\Requests\Common\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Auth\Status\StatusRequest;
 use N1ebieski\KSEFClient\Requests\ValueObjects\ReferenceNumber;
 
-$commonStatus = $client->common()->status(new StatusRequest(
+$authorisationStatusResponse = $client->auth()->status(new StatusRequest(
     referenceNumber: ReferenceNumber::from('20250508-EE-B395BBC9CD-A7DB4E6095-BD')
 ))->object();
 ```
@@ -98,27 +110,24 @@ $commonStatus = $client->common()->status(new StatusRequest(
 or:
 
 ```php
-$commonStatus = $client->common()->status([
+$authorisationStatusResponse = $client->auth()->status([
     'referenceNumber' => '20250508-EE-B395BBC9CD-A7DB4E6095-BD'
 ])->object();
 ```
 
 ## Authorization
 
-### Auto authorization via API Token
+### Auto authorization via KSEF Token
 
 ```php
 use N1ebieski\KSEFClient\ClientBuilder;
 
 $client = new ClientBuilder()
-    ->withApiToken($_ENV['KSEF_KEY'])
-    ->withKSEFPublicKeyPath($_ENV['PATH_TO_KSEF_PUBLIC_KEY'])
-    ->withNIP('NIP_NUMBER')
+    ->withKsefToken($_ENV['KSEF_KEY'])
+    ->withIdentifier('NIP_NUMBER')
     ->build();
 
 // Do something with the available resources
-
-$client->online()->session()->terminate();
 ```
 
 ### Auto authorization via certificate .p12
@@ -128,366 +137,253 @@ use N1ebieski\KSEFClient\ClientBuilder;
 
 $client = new ClientBuilder()
     ->withCertificatePath($_ENV['PATH_TO_CERTIFICATE'], $_ENV['CERTIFICATE_PASSPHRASE'])
-    ->withKSEFPublicKeyPath($_ENV['PATH_TO_KSEF_PUBLIC_KEY'])
-    ->withNIP('NIP_NUMBER')
+    ->withIdentifier('NIP_NUMBER')
     ->build();
 
 // Do something with the available resources
-
-$client->online()->session()->terminate();
 ```
 
 ### Manual authorization
 
 ```php
 use N1ebieski\KSEFClient\ClientBuilder;
-use N1ebieski\KSEFClient\Requests\Online\Session\AuthorisationChallenge\AuthorisationChallengeRequest;
-use N1ebieski\KSEFClient\Requests\Online\Session\InitSigned\InitSignedXmlRequest;
-use N1ebieski\KSEFClient\Requests\Online\Session\DTOs\InitSessionSigned;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\Requests\Auth\DTOs\XadesSignature;
+use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureXmlRequest;
 
-$client = new ClientBuilder()
-    ->withKSEFPublicKeyPath($_ENV['PATH_TO_KSEF_PUBLIC_KEY'])
-    ->build();
+$client = new ClientBuilder()->build();
 
 $nip = 'NIP_NUMBER';
 
-$authorisationChallengeResponse = $client->online()->session()->authorisationChallenge([
-    'contextIdentifier' => [
-        'subjectIdentifierByGroup' => [
-            'subjectIdentifierByCompany' => $nip
-        ]
-    ]
-])->object();
+$authorisationChallengeResponse = $client->auth()->challenge()->object();
 
-$xml = InitSessionSigned::from([
+$xml = XadesSignature::from([
     'challenge' => $authorisationChallengeResponse->challenge,
-    'timestamp' => $authorisationChallengeResponse->timestamp,
-    'identifier' => $nip
+    'contextIdentifierGroup' => [
+        'contextIdentifierTypeGroup' => [
+            'nip' => $nip
+        ]
+    ],
+    'subjectIdentifierType' => 'certificateSubject'
 ])->toXml();
 
-$signedXml = // Sign a xml document via Szafir, ePUAP etc.
+$signedXml = 'SIGNED_XML_DOCUMENT'; // Sign a xml document via Szafir, ePUAP etc.
 
-$initSignedResponse = $client->online()->session()->initSigned(
-    new InitSignedXmlRequest($signedXml)
+$authorisationAccessResponse = $client->auth()->xadesSignature(
+    new XadesSignatureXmlRequest($signedXml)
 )->object();
 
-$client = $client->withSessionToken($initSignedResponse->sessionToken->token);
+$client = $client->withAccessToken($authorisationAccessResponse->authenticationToken->token);
+
+$authorisationStatusResponse = Utility::retry(function () use ($client, $authorisationAccessResponse) {
+    $authorisationStatusResponse = $client->auth()->status([
+        'referenceNumber' => $authorisationAccessResponse->referenceNumber
+    ])->object();
+
+    if ($authorisationStatusResponse->status->code === 200) {
+        return $authorisationStatusResponse;
+    }
+
+    if ($authorisationStatusResponse->status->code >= 400) {
+        throw new RuntimeException(
+            $authorisationStatusResponse->status->description,
+            $authorisationStatusResponse->status->code
+        );
+    }
+});
+
+$authorisationTokenResponse = $client->auth()->token()->redeem()->object();
+
+$client = $client
+    ->withAccessToken(
+        token: $authorisationTokenResponse->accessToken->token, 
+        validUntil: $authorisationTokenResponse->accessToken->validUntil
+    )
+    ->withRefreshToken(
+        token: $authorisationTokenResponse->refreshToken->token,
+        validUntil: $authorisationTokenResponse->refreshToken->validUntil
+    );
 
 // Do something with the available resources
-
-$client->online()->session()->terminate();
 ```
 
 ## Resources
 
-### Common
+### Auth
 
-#### Status
+#### Challenge
 
-Checking the status of batch processing (with UPO after finalization)
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1challenge/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Common\Status\StatusRequest;
-
-$response = $client->common()->status(
-    new StatusRequest(...)
-)->object();
+$response = $client->auth()->challenge()->object();
 ```
 
-### Online
+#### Xades Signature
 
-#### Session
-
-##### Authorisation challenge
-
-Initialize the authentication and authorization mechanism.
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1xades-signature/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Session\AuthorisationChallenge\AuthorisationChallengeRequest;
+use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureRequest;
 
-$response = $client->online()->session()->authorisationChallenge(
-    new AuthorisationChallengeRequest(...)
-)->object();
-```
-
-##### Init token
-
-Initializing an interactive session. KSeF public key encrypted document http://ksef.mf.gov.pl/schema/gtw/svc/online/auth/request/2021/10/01/0001/InitSessionTokenRequest
-
-```php
-use N1ebieski\KSEFClient\Requests\Online\Session\InitToken\InitTokenRequest;
-
-$response = $client->online()->session()->initToken(
-    new InitTokenRequest(...)
-)->object();
-```
-
-##### Init signed
-
-Initializing an interactive session. Signed document http://ksef.mf.gov.pl/schema/gtw/svc/online/auth/request/2021/10/01/0001/InitSessionSignedRequest
-
-```php
-use N1ebieski\KSEFClient\Requests\Online\Session\InitSigned\InitSignedRequest;
-
-$response = $client->online()->session()->initSigned(
-    new InitSignedRequest(...)
+$response = $client->auth()->xadesSignature(
+    new XadesSignatureRequest(...)
 )->object();
 ```
 
 or:
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Session\InitSigned\InitSignedXmlRequest;
+use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureXmlRequest;
 
-$response = $client->online()->session()->initSigned(
-    new InitSignedXmlRequest($signedXml)
+$response = $client->auth()->xadesSignature(
+    new XadesSignatureXmlRequest(...)
 )->object();
 ```
 
-##### Session status
+#### Auth Status
 
-Checking the status of current interactive processing or based on the reference number.
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1%7BreferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Session\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Auth\Status\StatusRequest;
 
-$response = $client->online()->session()->status(
+$response = $client->auth()->status(
     new StatusRequest(...)
 )->object();
 ```
 
-##### Terminate
+#### Token
 
-Forcing the closing of an active interactive session
+##### Redeem
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1token~1redeem/post
 
 ```php
-$response = $client->online()->session()->terminate()->object();
+$response = $client->auth()->token()->redeem()->object();
 ```
 
-#### Invoice
+##### Refresh
 
-##### Get an invoice
-
-Invoice download.
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1token~1refresh/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Invoice\Get\GetRequest;
-
-$response = $client->online()->invoice()->get(
-    new GetRequest(...)
-)->body();
+$response = $client->auth()->token()->refresh()->object();
 ```
 
-##### Send an invoice
+### Certificates
+
+#### Limits
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1limits/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Invoice\Send\SendRequest;
+$response = $client->certificates()->limits()->object();
+```
 
-$response = $client->online()->invoice()->send(
+#### Enrollments
+
+##### Enrollments Data
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1enrollments~1data/get
+
+```php
+$response = $client->certificates()->enrollments()->data()->object();
+```
+
+##### Enrollments Send
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1enrollments/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Certificates\Enrollments\Send\SendRequest;
+
+$response = $client->certificates()->enrollments()->send(
     new SendRequest(...)
-)->object();
+);
 ```
 
-##### Invoice status
+##### Enrollments Status
 
-Checking the status of a sent invoice.
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1enrollments~1%7BreferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Invoice\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Enrollments\Status\StatusRequest;
 
-$response = $client->online()->invoice()->status(
+$response = $client->certificates()->enrollments()->status(
     new StatusRequest(...)
-)->object();
+);
 ```
 
-#### Query
+#### Certificates Retrieve
 
-##### Invoice
-
-###### Sync
-
-Search and filter invoices
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1retrieve/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Query\Invoice\Sync\SyncRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Retrieve\RetrieveRequest;
 
-$response = $client->online()->query()->invoice()->sync(
-    new SyncRequest(...)
-)->object();
+$response = $client->certificates()->retrieve(
+    new RetrieveRequest(...)
+);
 ```
 
-###### Async
+#### Certificates Revoke
 
-###### Fetch init
-
-Initialization of invoice fetch request
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1%7BcertificateSerialNumber%7D~1revoke/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Query\Invoice\Async\Init\InitRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Revoke\RevokeRequest;
 
-$response = $client->online()->query()->invoice()->async()->init(
-    new InitRequest(...)
-)->object();
+$response = $client->certificates()->revoke(
+    new RevokeRequest(...)
+);
 ```
 
-###### Fetch status
+#### Certificates Query
 
-Checking the status of invoice fetch request
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1query/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Query\Invoice\Async\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Query\QueryRequest;
 
-$response = $client->online()->query()->invoice()->async()->status(
-    new StatusRequest(...)
-)->object();
+$response = $client->certificates()->query(
+    new QueryRequest(...)
+);
 ```
 
-###### Fetch invoices
+### Testdata
 
-Downloading invoice query results
+#### Person
+
+##### Person Create
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1api~1v2~1testdata~1person/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Online\Query\Invoice\Async\Fetch\FetchRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Person\Create\CreateRequest;
 
-$response = $client->online()->query()->invoice()->async()->fetch(
-    new FetchRequest(...)
-)->body();
+$response = $client->testdata()->person()->create(
+    new CreateRequest(...)
+);
+```
+
+##### Person Remove
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1api~1v2~1testdata~1person~1remove/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Testdata\Person\Remove\RemoveRequest;
+
+$response = $client->testdata()->person()->remove(
+    new RemoveRequest(...)
+);
 ```
 
 ## Examples
 
 ### Send an invoice and check for UPO
 
-```php
-use N1ebieski\KSEFClient\ClientBuilder;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Online\Invoice\Send\SendFakturaSprzedazyTowaruRequestFixture;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
-
-$client = new ClientBuilder()
-    ->withMode(Mode::Test)
-    ->withApiToken($_ENV['KSEF_KEY'])
-    ->withLogPath(__DIR__ . '/../var/logs/monolog.log')
-    ->withKSEFPublicKeyPath(__DIR__ . '/../config/keys/publicKey.pem')
-    ->build();
-
-Utility::retry(function () use ($client) {
-    $statusResponse = $client->online()->session()->status()->object();
-
-    if ($statusResponse->processingCode === 315) {
-        return $statusResponse;
-    }
-});
-
-// Send an invoice
-$sendResponse = $client->online()->invoice()->send(
-    new SendFakturaSprzedazyTowaruRequestFixture()->withTodayDate()->data
-)->object();
-
-// Check status of invoice generation
-Utility::retry(function () use ($client, $sendResponse) {
-    $statusResponse = $client->online()->invoice()->status([
-        'invoiceElementReferenceNumber' => $sendResponse->elementReferenceNumber
-    ])->object();
-
-    if ($statusResponse->processingCode === 200) {
-        return $statusResponse;
-    }
-});
-
-// Close session (only then will the UPO be generated)
-$client->online()->session()->terminate();
-
-// We don't need to authorize for UPO
-$client = new ClientBuilder()
-    ->withMode(Mode::Test)
-    ->withKSEFPublicKeyPath(__DIR__ . '/../config/keys/publicKey.pem')
-    ->build();
-
-// Check status of UPO generation
-$commonStatus = Utility::retry(function () use ($client, $sendResponse) {
-    $commonStatus = $client->common()->status([
-        'referenceNumber' => $sendResponse->referenceNumber
-    ])->object();
-
-    if ($commonStatus->processingCode === 200) {
-        return $commonStatus;
-    }
-});
-
-$xml = base64_decode($commonStatus->upo);
-```
-
 ### Fetch invoices using encryption key
-
-```php
-use N1ebieski\KSEFClient\ClientBuilder;
-use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Online\Query\Invoice\Async\Init\InitRequestFixture;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
-
-$encryptionKey = EncryptionKeyFactory::makeRandom();
-
-$client = new ClientBuilder()
-    ->withMode(Mode::Test)
-    ->withApiToken($_ENV['KSEF_KEY'])
-    ->withKSEFPublicKeyPath(__DIR__ . '/../config/keys/publicKey.pem')
-    ->withLogPath(__DIR__ . '/../var/logs/monolog.log')    
-    ->withEncryptionKey($encryptionKey)
-    ->build();
-
-Utility::retry(function () use ($client) {
-    $statusResponse = $client->online()->session()->status()->object();
-
-    if ($statusResponse->processingCode === 315) {
-        return $statusResponse;
-    }
-});
-
-// Firstly we need to init the preparation of the invoice package based on the query parameters
-$initResponse = $client->online()->query()->invoice()->async()->init(
-    new InitRequestFixture()->withRange('-2 weeks')->withSubjectType('subject1')->data
-)->object();
-
-// Preparing invoice packs is asynchronous so it's better to save SessionToken 
-// and queryElementReferenceNumber, go for coffee and come back in a while :)
-$sessionToken = $client->getSessionToken();
-$queryElementReferenceNumber = $initResponse->elementReferenceNumber;
-
-// Ok after a few minutes...
-
-$client = new ClientBuilder()
-    ->withMode(Mode::Test)
-    ->withSessionToken($sessionToken)
-    ->withKSEFPublicKeyPath(__DIR__ . '/../config/keys/publicKey.pem')
-    ->withLogPath(__DIR__ . '/../var/logs/monolog.log')    
-    ->withEncryptionKey($encryptionKey)
-    ->build();
-
-// Check if packages are ready to download
-$statusResponse = Utility::retry(function () use ($client, $queryElementReferenceNumber) {
-    $statusResponse = $client->online()->query()->invoice()->async()->status([
-        'queryElementReferenceNumber' => $queryElementReferenceNumber
-    ])->object();
-
-    if ($statusResponse->processingCode === 200) {
-        return $statusResponse;
-    }
-});
-
-// Downloading...
-foreach ($statusResponse->partList as $part) {
-    $fetchResponse = $client->online()->query()->invoice()->async()->fetch([
-        'queryElementReferenceNumber' => $queryElementReferenceNumber,
-        'partElementReferenceNumber' => $part->partReferenceNumber
-    ])->body();
-
-    file_put_contents(__DIR__ . "/../var/zip/{$part->partReferenceNumber}.zip", $fetchResponse);
-}
-
-$client->online()->session()->terminate();
-```
 
 ## Testing
 

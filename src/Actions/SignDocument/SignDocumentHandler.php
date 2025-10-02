@@ -12,6 +12,7 @@ use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandle
 use N1ebieski\KSEFClient\Actions\SignDocument\SignDocumentAction;
 use N1ebieski\KSEFClient\Requests\ValueObjects\XmlNamespace;
 use N1ebieski\KSEFClient\Support\Str;
+use N1ebieski\KSEFClient\ValueObjects\PrivateKeyType;
 use RuntimeException;
 
 /**
@@ -186,7 +187,7 @@ final readonly class SignDocumentHandler extends AbstractHandler
         }
 
         // If private key type is EC, convert DER to raw. Don't ask me why, but it works
-        if ($action->getPrivateKeyType() === OPENSSL_KEYTYPE_EC) {
+        if ($action->certificate->getPrivateKeyType()->isEquals(PrivateKeyType::EC)) {
             $actualDigest = $this->convertEcdsaDerToRawHandler->handle(
                 new ConvertEcdsaDerToRawAction($actualDigest, 32)
             );

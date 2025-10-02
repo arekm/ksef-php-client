@@ -32,9 +32,11 @@ final readonly class Response implements ResponseInterface
             return;
         }
 
+        $exceptionResponse = ! empty($this->contents) ? $this->object() : null;
+
         $this->exceptionHandler->handle(
             //@phpstan-ignore-next-line
-            ExceptionFactory::make($this->statusCode, $this->object())
+            ExceptionFactory::make($this->statusCode, $exceptionResponse)
         );
     }
 

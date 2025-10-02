@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\ValueObjects;
+namespace N1ebieski\KSEFClient\Requests\Testdata\Person\Create\ValueObjects;
 
 use N1ebieski\KSEFClient\Contracts\FromInterface;
 use N1ebieski\KSEFClient\Contracts\ValueAwareInterface;
@@ -11,15 +11,14 @@ use N1ebieski\KSEFClient\Validator\Rules\String\RegexRule;
 use N1ebieski\KSEFClient\Validator\Validator;
 use Stringable;
 
-final readonly class InternalId extends AbstractValueObject implements FromInterface, Stringable, ValueAwareInterface
+final readonly class Pesel extends AbstractValueObject implements FromInterface, Stringable, ValueAwareInterface
 {
     public string $value;
 
     public function __construct(string $value)
     {
         Validator::validate($value, [
-            // @see https://ksef-test.mf.gov.pl/docs/v2/schemas/authv2.xsd
-            new RegexRule('/[1-9]((\d[1-9])|([1-9]\d))\d{7}-\d{5}/'),
+            new RegexRule('/^[0-9]{11}$/'),
         ]);
 
         $this->value = $value;

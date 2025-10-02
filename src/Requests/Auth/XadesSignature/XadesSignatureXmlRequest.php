@@ -7,6 +7,7 @@ namespace N1ebieski\KSEFClient\Requests\Auth\XadesSignature;
 use N1ebieski\KSEFClient\Contracts\ParametersInterface;
 use N1ebieski\KSEFClient\Contracts\XmlSerializableInterface;
 use N1ebieski\KSEFClient\Requests\AbstractRequest;
+use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\Concerns\HasToParameters;
 use N1ebieski\KSEFClient\Support\Optional;
 
 final readonly class XadesSignatureXmlRequest extends AbstractRequest implements XmlSerializableInterface, ParametersInterface

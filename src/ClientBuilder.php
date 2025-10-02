@@ -50,6 +50,7 @@ use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use RuntimeException;
 
 final class ClientBuilder
 {
@@ -61,7 +62,7 @@ final class ClientBuilder
 
     private ApiUrl $apiUrl;
 
-    private ?KsefToken $apiToken = null;
+    private ?KsefToken $ksefToken = null;
 
     private ?AccessToken $accessToken = null;
 
@@ -70,8 +71,6 @@ final class ClientBuilder
     private ?CertificatePath $certificatePath = null;
 
     private NIP $identifier;
-
-    private ?KSEFPublicKeyPath $ksefPublicKeyPath = null;
 
     private ?EncryptionKey $encryptionKey = null;
 
@@ -134,15 +133,15 @@ final class ClientBuilder
         return $this;
     }
 
-    public function withApiToken(KsefToken | string $apiToken): self
+    public function withKsefToken(KsefToken | string $ksefToken): self
     {
-        if ($apiToken instanceof KsefToken === false) {
-            $apiToken = KsefToken::from($apiToken);
+        if ($ksefToken instanceof KsefToken === false) {
+            $ksefToken = KsefToken::from($ksefToken);
         }
 
         $this->certificatePath = null;
 
-        $this->apiToken = $apiToken;
+        $this->ksefToken = $ksefToken;
 
         return $this;
     }
@@ -183,7 +182,7 @@ final class ClientBuilder
             $certificatePath = CertificatePath::from($certificatePath, $passphrase);
         }
 
-        $this->apiToken = null;
+        $this->ksefToken = null;
 
         $this->certificatePath = $certificatePath;
 
@@ -211,17 +210,6 @@ final class ClientBuilder
         }
 
         $this->identifier = $identifier;
-
-        return $this;
-    }
-
-    public function withKSEFPublicKeyPath(KSEFPublicKeyPath | string $ksefPublicKeyPath): self
-    {
-        if ($ksefPublicKeyPath instanceof KSEFPublicKeyPath === false) {
-            $ksefPublicKeyPath = KSEFPublicKeyPath::from($ksefPublicKeyPath);
-        }
-
-        $this->ksefPublicKeyPath = $ksefPublicKeyPath;
 
         return $this;
     }
@@ -289,7 +277,8 @@ final class ClientBuilder
                             subjectIdentifierType: SubjectIdentifierType::CertificateSubject
                         )
                     )
-                )
+                ),
+                // TODO: add KSEF tokens support
             };
 
             /** @var object{referenceNumber: string, authenticationToken: object{token: string}} $authorisationAccessResponse */
@@ -302,8 +291,15 @@ final class ClientBuilder
                     new StatusRequest(ReferenceNumber::from($authorisationAccessResponse->referenceNumber))
                 )->object();
 
-                if ($authorisationStatusResponse->status->code === 200 || $authorisationStatusResponse->status->code > 400) {
+                if ($authorisationStatusResponse->status->code === 200) {
                     return $authorisationStatusResponse;
+                }
+
+                if ($authorisationStatusResponse->status->code >= 400) {
+                    throw new RuntimeException(
+                        $authorisationStatusResponse->status->description,
+                        $authorisationStatusResponse->status->code
+                    );
                 }
             });
 
@@ -327,7 +323,7 @@ final class ClientBuilder
     private function isAuthorisation(): bool
     {
         return ! $this->accessToken instanceof AccessToken && (
-            $this->apiToken instanceof KsefToken || $this->certificatePath instanceof CertificatePath
+            $this->ksefToken instanceof KsefToken || $this->certificatePath instanceof CertificatePath
         );
     }
 }

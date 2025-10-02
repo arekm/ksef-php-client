@@ -28,7 +28,7 @@ final readonly class Certificate extends AbstractValueObject
     /**
      * @return array{bits: int, key: string, rsa: array, dsa: array, dh: array, ec: array, type: int}
      */
-    public function getPrivateKeyDetails(): array
+    private function getPrivateKeyDetails(): array
     {
         $details = openssl_pkey_get_details($this->privateKey);
 
@@ -37,6 +37,11 @@ final readonly class Certificate extends AbstractValueObject
         }
 
         return $details;
+    }
+
+    public function getPrivateKeyType(): PrivateKeyType
+    {
+        return PrivateKeyType::fromType($this->getPrivateKeyDetails()['type']);
     }
 
     public function getFingerPrint(): string

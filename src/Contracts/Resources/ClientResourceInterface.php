@@ -7,6 +7,7 @@ namespace N1ebieski\KSEFClient\Contracts\Resources;
 use DateTimeInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Auth\AuthResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Certificates\CertificatesResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Testdata\TestdataResourceInterface;
 use N1ebieski\KSEFClient\ValueObjects\AccessToken;
 use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
 
@@ -23,4 +24,6 @@ interface ClientResourceInterface
     public function auth(): AuthResourceInterface;
 
     public function certificates(): CertificatesResourceInterface;
+
+    public function testdata(): TestdataResourceInterface;
 }

@@ -6,11 +6,14 @@ namespace N1ebieski\KSEFClient\ValueObjects;
 
 use DateTimeInterface;
 use N1ebieski\KSEFClient\Support\AbstractValueObject;
+use N1ebieski\KSEFClient\ValueObjects\Concerns\HasExpired;
 use SensitiveParameter;
 use Stringable;
 
 final readonly class RefreshToken extends AbstractValueObject implements Stringable
 {
+    use HasExpired;
+
     public function __construct(
         #[SensitiveParameter]
         public string $token,
@@ -27,11 +30,5 @@ final readonly class RefreshToken extends AbstractValueObject implements Stringa
     public static function from(string $token, ?DateTimeInterface $validUntil = null): self
     {
         return new self($token, $validUntil);
-    }
-
-    public function isExpired(): bool
-    {
-        return $this->validUntil instanceof DateTimeInterface
-            && $this->validUntil < new \DateTimeImmutable(timezone: new \DateTimeZone('UTC'));
     }
 }
