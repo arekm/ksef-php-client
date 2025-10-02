@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Http\Discovery\Psr18ClientDiscovery;
 use InvalidArgumentException;
+use N1ebieski\KSEFClient\Contracts\Resources\ClientResourceInterface;
 use N1ebieski\KSEFClient\DTOs\Config;
 use N1ebieski\KSEFClient\Factories\LoggerFactory;
 use N1ebieski\KSEFClient\HttpClient\DTOs\Config as HttpClientConfig;
@@ -232,7 +233,7 @@ final class ClientBuilder
         return $this;
     }
 
-    public function build(): ClientResource
+    public function build(): ClientResourceInterface
     {
         // if ( ! $this->ksefPublicKeyPath instanceof KSEFPublicKeyPath) {
         //     throw new InvalidArgumentException('KSEF public key path is required.');

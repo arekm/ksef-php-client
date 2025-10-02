@@ -50,6 +50,7 @@ Main features:
             - [Person Create](#person-create)
             - [Person Remove](#person-remove)
 - [Examples](#examples)
+    - [Generate a KSEF certificate and save to .p12 file](#generate-a-ksef-certificate-and-save-to-p12-file)
     - [Send an invoice and check for UPO](#send-an-invoice-and-check-for-upo)
     - [Fetch invoices using encryption key](#fetch-invoices-using-encryption-key)
 - [Testing](#testing)
@@ -380,6 +381,80 @@ $response = $client->testdata()->person()->remove(
 ```
 
 ## Examples
+
+### Generate a KSEF certificate and save to .p12 file
+
+```php
+use N1ebieski\KSEFClient\Actions\ConvertDerToPem\ConvertDerToPemAction;
+use N1ebieski\KSEFClient\Actions\ConvertDerToPem\ConvertDerToPemHandler;
+use N1ebieski\KSEFClient\Actions\ConvertPemToDer\ConvertPemToDerAction;
+use N1ebieski\KSEFClient\Actions\ConvertPemToDer\ConvertPemToDerHandler;
+use N1ebieski\KSEFClient\Actions\SaveCertificateToPkcs12\SaveCertificateToPkcs12Action;
+use N1ebieski\KSEFClient\Actions\SaveCertificateToPkcs12\SaveCertificateToPkcs12Handler;
+use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\DTOs\DN;
+use N1ebieski\KSEFClient\Factories\CSRFactory;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\ValueObjects\Certificate;
+use N1ebieski\KSEFClient\ValueObjects\Mode;
+use N1ebieski\KSEFClient\ValueObjects\PrivateKeyType;
+
+$client = new ClientBuilder()
+    ->withIdentifier('NIP_NUMBER')
+    // To generate the KSEF certificate, we must authorize the qualified certificate the first time
+    ->withCertificatePath($_ENV['PATH_TO_CERTIFICATE'], $_ENV['CERTIFICATE_PASSPHRASE'])
+    ->build();
+
+$dataResponse = $client->certificates()->enrollments()->data()->json();
+
+$dn = DN::from($dataResponse);
+
+// You can choose beetween EC or RSA private key type
+$csr = CSRFactory::make($dn, PrivateKeyType::EC);
+
+$csrToDer = new ConvertPemToDerHandler()->handle(new ConvertPemToDerAction($csr->raw));
+
+$sendResponse = $client->certificates()->enrollments()->send([
+    'certificateName' => 'My first certificate',
+    'certificateType' => 'Authentication',
+    'csr' => base64_encode($csrToDer),
+])->object();
+
+$statusResponse = Utility::retry(function () use ($client, $sendResponse) {
+    $statusResponse = $client->certificates()->enrollments()->status([
+        'referenceNumber' => $sendResponse->referenceNumber
+    ])->object();
+
+    if ($statusResponse->status->code === 200) {
+        return $statusResponse;
+    }
+
+    if ($statusResponse->status->code >= 400) {
+        throw new RuntimeException(
+            $statusResponse->status->description,
+            $statusResponse->status->code
+        );
+    }
+});
+
+$retrieveResponse = $client->certificates()->retrieve([
+    'certificateSerialNumbers' => [$statusResponse->certificateSerialNumber]
+])->object();
+
+$certificate = base64_decode($retrieveResponse->certificates[0]->certificate);
+
+$certificateToPem = new ConvertDerToPemHandler()->handle(
+    new ConvertDerToPemAction($certificate, 'KSEF CERTIFICATE')
+);
+
+$saveCertificateToPkcs12Action = new SaveCertificateToPkcs12Action(
+    certificate: new Certificate($certificateToPem, [], $csr->privateKey),
+    path: $_ENV['PATH_TO_KSEF_CERTIFICATE'], // .p12 file
+    passphrase: $_ENV['KSEF_CERTIFICATE_PASSPHRASE']
+);
+
+new SaveCertificateToPkcs12Handler()->handle($saveCertificateToPkcs12Action);
+```
 
 ### Send an invoice and check for UPO
 

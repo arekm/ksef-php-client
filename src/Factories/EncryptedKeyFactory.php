@@ -4,22 +4,16 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Factories;
 
-use N1ebieski\KSEFClient\Requests\Online\Session\ValueObjects\EncryptedKey;
+use N1ebieski\KSEFClient\Requests\Sessions\ValueObjects\EncryptedKey;
 use N1ebieski\KSEFClient\ValueObjects\EncryptionKey;
-use N1ebieski\KSEFClient\ValueObjects\KSEFPublicKeyPath;
+use N1ebieski\KSEFClient\ValueObjects\KsefPublicKey;
 use RuntimeException;
 
 final readonly class EncryptedKeyFactory extends AbstractFactory
 {
-    public static function make(EncryptionKey $encryptionKey, KSEFPublicKeyPath $ksefPublicKeyPath): EncryptedKey
+    public static function make(EncryptionKey $encryptionKey, KsefPublicKey $ksefPublicKey): EncryptedKey
     {
-        $ksefPublicKey = file_get_contents($ksefPublicKeyPath->value);
-
-        if ($ksefPublicKey === false) {
-            throw new RuntimeException('Unable to read KSEF public key');
-        }
-
-        $encryptKey = openssl_public_encrypt($encryptionKey->key, $encryptedKey, $ksefPublicKey, OPENSSL_PKCS1_PADDING);
+        $encryptKey = openssl_public_encrypt($encryptionKey->key, $encryptedKey, $ksefPublicKey->value, OPENSSL_PKCS1_PADDING);
 
         if ($encryptKey === false) {
             throw new RuntimeException('Unable to encrypt key');

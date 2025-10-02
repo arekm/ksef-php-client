@@ -19,7 +19,7 @@ interface ResponseInterface extends ArrayableInterface
      */
     public function json(): array;
 
-    public function object(): object;
+    public function object(): object | array;
 
     public function body(): string;
 

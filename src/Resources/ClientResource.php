@@ -10,11 +10,15 @@ use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Auth\AuthResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Certificates\CertificatesResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\ClientResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Security\SecurityResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Sessions\SessionsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Testdata\TestdataResourceInterface;
 use N1ebieski\KSEFClient\DTOs\Config;
 use N1ebieski\KSEFClient\Resources\AbstractResource;
 use N1ebieski\KSEFClient\Resources\Auth\AuthResource;
 use N1ebieski\KSEFClient\Resources\Certificates\CertificatesResource;
+use N1ebieski\KSEFClient\Resources\Security\SecurityResource;
+use N1ebieski\KSEFClient\Resources\Sessions\SessionsResource;
 use N1ebieski\KSEFClient\Resources\Testdata\TestdataResource;
 use N1ebieski\KSEFClient\ValueObjects\AccessToken;
 use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
@@ -94,6 +98,16 @@ final class ClientResource extends AbstractResource implements ClientResourceInt
     public function auth(): AuthResourceInterface
     {
         return new AuthResource($this->client);
+    }
+
+    public function security(): SecurityResourceInterface
+    {
+        return new SecurityResource($this->client);
+    }
+
+    public function sessions(): SessionsResourceInterface
+    {
+        return new SessionsResource($this->client);
     }
 
     public function certificates(): CertificatesResourceInterface

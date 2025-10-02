@@ -50,7 +50,7 @@ final readonly class Response implements ResponseInterface
         return $this->contents;
     }
 
-    public function object(): object
+    public function object(): object | array
     {
         /** @var object */
         return json_decode($this->contents, flags: JSON_THROW_ON_ERROR);
