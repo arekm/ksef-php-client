@@ -16,3 +16,39 @@ if ( ! function_exists('value')) {
         return $value instanceof Closure ? $value(...$args) : $value;
     }
 }
+
+if ( ! function_exists('var_path')) {
+    /**
+     * Get the path to the var folder.
+     *
+     * @param  string  $path
+     */
+    function var_path($path = ''): string
+    {
+        return realpath(__DIR__ . '/../../var/' . $path);
+    }
+}
+
+if ( ! function_exists('config_path')) {
+    /**
+     * Get the path to the config folder.
+     *
+     * @param  string  $path
+     */
+    function config_path($path = ''): string
+    {
+        return realpath(__DIR__ . '/../../config/' . $path);
+    }
+}
+
+if ( ! function_exists('base_path')) {
+    /**
+     * Get the path to the base of the install.
+     *
+     * @param  string  $path
+     */
+    function base_path($path = ''): string
+    {
+        return realpath(__DIR__ . '/../../' . $path);
+    }
+}
