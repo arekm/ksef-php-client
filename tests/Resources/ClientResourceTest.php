@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\Tests\Resources;
 
 use DateTimeImmutable;
-use DG\BypassFinals;
 use N1ebieski\KSEFClient\Testing\AbstractTestCase;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Auth\Token\Refresh\RefreshResponseFixture;
 use N1ebieski\KSEFClient\ValueObjects\AccessToken;
@@ -31,5 +30,18 @@ final class ClientResourceTest extends AbstractTestCase
         $this->assertFalse($newAccessToken->isEquals($accessToken));
 
         $this->assertTrue($newAccessToken->isEquals($responseFixture->getAccessToken()));
+    }
+
+    public function testThrowExceptionIfAccessTokenIsExpired(): void
+    {
+        $accessToken = new AccessToken('access-token', new DateTimeImmutable('-15 minutes'));
+
+        $clientStub = $this->getClientStub(new RefreshResponseFixture())
+            ->withAccessToken($accessToken);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Access token and refresh token are expired.');
+
+        $clientStub->sessions();
     }
 }
