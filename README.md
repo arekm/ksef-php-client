@@ -698,7 +698,7 @@ use N1ebieski\KSEFClient\Factories\EncryptedKeyFactory;
 use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
 use N1ebieski\KSEFClient\Support\Utility;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Sessions\Online\Send\SendFakturaSprzedazyTowaruRequestFixture;
-use N1ebieski\KSEFClient\Requests\Security\PublicKeyCertificates\ValueObjects\PublicKeyCertificateUsage;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Security\PublicKeyCertificates\PublicKeyCertificateUsage;
 use N1ebieski\KSEFClient\ValueObjects\KsefPublicKey;
 use N1ebieski\KSEFClient\ValueObjects\Mode;
 
