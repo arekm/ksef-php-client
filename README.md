@@ -709,7 +709,6 @@ use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Online\Faktura;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Sessions\Online\Send\SendFakturaSprzedazyTowaruRequestFixture;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Security\PublicKeyCertificates\PublicKeyCertificateUsage;
 use N1ebieski\KSEFClient\ValueObjects\KsefPublicKey;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
 
 $encryptionKey = EncryptionKeyFactory::makeRandom();
 
@@ -783,7 +782,6 @@ $generateQRCodesHandler = new GenerateQRCodesHandler(
 
 /** @var QRCodes $qrCodes */
 $qrCodes = $generateQRCodesHandler->handle(GenerateQRCodesAction::from([
-    'mode' => Mode::Test,
     'nip' => $faktura->podmiot1->daneIdentyfikacyjne->nip,
     'invoiceCreatedAt' => $faktura->fa->p_1->value,
     'document' => $faktura->toXml(),    
@@ -811,7 +809,6 @@ use N1ebieski\KSEFClient\Factories\CertificateFactory;
 use N1ebieski\KSEFClient\Support\Utility;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Sessions\Online\Send\SendFakturaSprzedazyTowaruRequestFixture;
 use N1ebieski\KSEFClient\ValueObjects\CertificatePath;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
 
 $nip = 'NIP_NUMBER';
 
@@ -834,7 +831,6 @@ $generateQRCodesHandler = new GenerateQRCodesHandler(
 
 /** @var QRCodes $qrCodes */
 $qrCodes = $generateQRCodesHandler->handle(GenerateQRCodesAction::from([
-    'mode' => Mode::Test,
     'nip' => $faktura->podmiot1->daneIdentyfikacyjne->nip,
     'invoiceCreatedAt' => $faktura->fa->p_1->value,
     'document' => $faktura->toXml(),

@@ -17,11 +17,11 @@ use SensitiveParameter;
 final readonly class GenerateQRCodesAction extends AbstractAction
 {
     public function __construct(
-        public Mode $mode,
         public NIP $nip,
         public DateTimeInterface $invoiceCreatedAt,
         #[SensitiveParameter]
         public string $document,
+        public Mode $mode = Mode::Production,
         #[SensitiveParameter]
         public ?KsefNumber $ksefNumber = null,
         #[SensitiveParameter]
