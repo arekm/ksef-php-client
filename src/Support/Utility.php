@@ -6,7 +6,6 @@ namespace N1ebieski\KSEFClient\Support;
 
 use Closure;
 use RuntimeException;
-use SensitiveParameter;
 
 final class Utility
 {
@@ -29,26 +28,6 @@ final class Utility
 
             sleep($backoff);
         }
-    }
-
-    /**
-     * @return array{hashSHA: array{algorithm: string, encoding: string, value: string}, fileSize: int}
-     */
-    public static function hash(
-        #[SensitiveParameter]
-        string $document,
-    ): array {
-        $hashSHA = base64_encode(hash('sha256', $document, true));
-        $fileSize = strlen($document);
-
-        return [
-            'hashSHA' => [
-                'algorithm' => 'SHA-256',
-                'encoding' => 'Base64',
-                'value' => $hashSHA,
-            ],
-            'fileSize' => $fileSize,
-        ];
     }
 
     /**

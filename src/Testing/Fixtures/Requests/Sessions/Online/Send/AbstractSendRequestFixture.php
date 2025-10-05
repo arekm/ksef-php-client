@@ -9,6 +9,11 @@ use N1ebieski\KSEFClient\Testing\Fixtures\Requests\AbstractRequestFixture;
 
 abstract class AbstractSendRequestFixture extends AbstractRequestFixture
 {
+    public function getFaktura(): array
+    {
+        return $this->data['faktura'];
+    }
+
     public function withTodayDate(): self
     {
         $todayDate = new DateTimeImmutable()->format('Y-m-d');

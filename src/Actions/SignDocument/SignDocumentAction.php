@@ -16,8 +16,6 @@ final readonly class SignDocumentAction extends AbstractAction
         public Certificate $certificate,
         #[SensitiveParameter]
         public string $document,
-        #[SensitiveParameter]
-        public string | int $algorithm = OPENSSL_ALGO_SHA1
     ) {
     }
 
@@ -27,15 +25,6 @@ final readonly class SignDocumentAction extends AbstractAction
             PrivateKeyType::RSA => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
             PrivateKeyType::EC => 'http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256',
             default => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-        };
-    }
-
-    public function getAlgorithm(): int | string
-    {
-        return match ($this->certificate->getPrivateKeyType()) {
-            PrivateKeyType::RSA => 'sha256WithRSAEncryption',
-            PrivateKeyType::EC => OPENSSL_ALGO_SHA256,
-            default => OPENSSL_ALGO_SHA256,
         };
     }
 }

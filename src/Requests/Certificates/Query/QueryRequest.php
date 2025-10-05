@@ -9,7 +9,7 @@ use N1ebieski\KSEFClient\Contracts\BodyInterface;
 use N1ebieski\KSEFClient\Contracts\ParametersInterface;
 use N1ebieski\KSEFClient\Requests\AbstractRequest;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Certificates\CertificateName;
-use N1ebieski\KSEFClient\ValueObjects\Requests\Certificates\CertificateSerialNumber;
+use N1ebieski\KSEFClient\ValueObjects\CertificateSerialNumber;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Certificates\CertificateStatus;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Certificates\CertificateType;
 use N1ebieski\KSEFClient\ValueObjects\Requests\PageOffset;

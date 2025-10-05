@@ -10,9 +10,9 @@ use N1ebieski\KSEFClient\Actions\AbstractHandler;
 use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawAction;
 use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandler;
 use N1ebieski\KSEFClient\Actions\SignDocument\SignDocumentAction;
-use N1ebieski\KSEFClient\ValueObjects\Requests\XmlNamespace;
 use N1ebieski\KSEFClient\Support\Str;
 use N1ebieski\KSEFClient\ValueObjects\PrivateKeyType;
+use N1ebieski\KSEFClient\ValueObjects\Requests\XmlNamespace;
 use RuntimeException;
 
 /**
@@ -179,7 +179,7 @@ final readonly class SignDocumentHandler extends AbstractHandler
             $signedInfo->C14N(),
             $actualDigest,
             $action->certificate->privateKey,
-            $action->getAlgorithm()
+            $action->certificate->getAlgorithm()
         );
 
         if ($sign === false) {

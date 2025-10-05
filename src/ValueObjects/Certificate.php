@@ -44,6 +44,15 @@ final readonly class Certificate extends AbstractValueObject
         return PrivateKeyType::fromType($this->getPrivateKeyDetails()['type']);
     }
 
+    public function getAlgorithm(): int | string
+    {
+        return match ($this->getPrivateKeyType()) {
+            PrivateKeyType::RSA => 'sha256WithRSAEncryption',
+            PrivateKeyType::EC => OPENSSL_ALGO_SHA256,
+            default => OPENSSL_ALGO_SHA256,
+        };
+    }
+
     public function getFingerPrint(): string
     {
         return base64_encode(hash('sha256', base64_decode($this->raw), true));

@@ -63,7 +63,8 @@ Main features:
             - [Person Remove](#person-remove)
 - [Examples](#examples)
     - [Generate a KSEF certificate and convert to .p12 file](#generate-a-ksef-certificate-and-convert-to-p12-file)
-    - [Send an invoice and check for UPO](#send-an-invoice-and-check-for-upo)
+    - [Send an invoice, check for UPO and generate QR code](#send-an-invoice-check-for-upo-and-generate-qr-code)
+    - [Create an offline invoice and generate both QR codes](#create-an-offline-invoice-and-generate-both-qr-codes)
     - [Fetch invoices using encryption key](#fetch-invoices-using-encryption-key)
 - [Testing](#testing)
 - [Roadmap](#roadmap)
@@ -687,16 +688,23 @@ file_put_contents(Utility::basePath('config/certificates/ksef-certificate.p12'),
 
 <details>
     <summary>
-        <h3>Send an invoice and check for UPO</h3>
+        <h3>Send an invoice, check for UPO and generate QR code</h3>
     </summary>
 
 ```php
+use Endroid\QrCode\Builder\Builder as QrCodeBuilder;
+use Endroid\QrCode\RoundBlockSizeMode;
+use N1ebieski\KSEFClient\ClientBuilder;
 use N1ebieski\KSEFClient\Actions\ConvertDerToPem\ConvertDerToPemAction;
 use N1ebieski\KSEFClient\Actions\ConvertDerToPem\ConvertDerToPemHandler;
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesAction;
+use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesHandler;
+use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandler;
 use N1ebieski\KSEFClient\Factories\EncryptedKeyFactory;
 use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
 use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\DTOs\QRCodes;
+use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Online\Faktura;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Sessions\Online\Send\SendFakturaSprzedazyTowaruRequestFixture;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Security\PublicKeyCertificates\PublicKeyCertificateUsage;
 use N1ebieski\KSEFClient\ValueObjects\KsefPublicKey;
@@ -729,11 +737,12 @@ $openResponse = $client->sessions()->online()->open([
     'encryptedKey' => $encryptedKey
 ])->object();
 
+$fixture = new SendFakturaSprzedazyTowaruRequestFixture()
+    ->withTodayDate()
+    ->withRandomInvoiceNumber();
+
 $sendResponse = $client->sessions()->online()->send([
-    ...new SendFakturaSprzedazyTowaruRequestFixture()
-        ->withTodayDate()
-        ->withRandomInvoiceNumber()
-        ->data,
+    ...$fixture->data,
     'referenceNumber' => $openResponse->referenceNumber,
 ])->object();
 
@@ -763,7 +772,83 @@ $upo = $client->sessions()->invoices()->upo([
     'referenceNumber' => $openResponse->referenceNumber,
     'invoiceReferenceNumber' => $sendResponse->referenceNumber
 ])->body();
+
+$faktura = Faktura::from($fixture->getFaktura());
+
+$generateQRCodesHandler = new GenerateQRCodesHandler(
+    qrCodeBuilder: new QrCodeBuilder(roundBlockSizeMode: RoundBlockSizeMode::Enlarge),
+    convertEcdsaDerToRawHandler: new ConvertEcdsaDerToRawHandler()
+);
+
+/** @var QRCodes $qrCodes */
+$qrCodes = $generateQRCodesHandler->handle(new GenerateQRCodesAction([
+    'mode' => Mode::Test,
+    'nip' => $faktura->podmiot1->daneIdentyfikacyjne->nip,
+    'invoiceCreatedAt' => $faktura->fa->p_1->value,
+    'document' => $faktura->toXml(),    
+]));
+
+file_put_contents(Utility::basePath("var/qr/code1.png"), $qrCodes->code1);
 ```
+</details>
+
+<details>
+    <summary>
+        <h3>Create an offline invoice and generate both QR codes</h3>
+    </summary>
+
+```php
+use Endroid\QrCode\Builder\Builder as QrCodeBuilder;
+use Endroid\QrCode\RoundBlockSizeMode;
+use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandler;
+use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesAction;
+use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesHandler;
+use N1ebieski\KSEFClient\DTOs\QRCodes;
+use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Online\Faktura;
+use N1ebieski\KSEFClient\Factories\CertificateFactory;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Sessions\Online\Send\SendFakturaSprzedazyTowaruRequestFixture;
+use N1ebieski\KSEFClient\ValueObjects\CertificatePath;
+use N1ebieski\KSEFClient\ValueObjects\Mode;
+
+$nip = '1111111111';
+
+// From https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1query/post
+$certificateSerialNumber = '01F20A5D352AE590';
+$certificate = CertificateFactory::make(
+    CertificatePath::from(Utility::basePath('config/certificates/certificate.p12'), 'password')
+);
+
+$fixture = new SendFakturaSprzedazyTowaruRequestFixture()
+    ->withTodayDate()
+    ->withRandomInvoiceNumber();
+
+$faktura = Faktura::from($fixture->getFaktura());
+
+$generateQRCodesHandler = new GenerateQRCodesHandler(
+    qrCodeBuilder: new QrCodeBuilder(roundBlockSizeMode: RoundBlockSizeMode::Enlarge),
+    convertEcdsaDerToRawHandler: new ConvertEcdsaDerToRawHandler()
+);
+
+/** @var QRCodes $qrCodes */
+$qrCodes = $generateQRCodesHandler->handle(GenerateQRCodesAction::from([
+    'mode' => Mode::Test,
+    'nip' => $faktura->podmiot1->daneIdentyfikacyjne->nip,
+    'invoiceCreatedAt' => $faktura->fa->p_1->value,
+    'document' => $faktura->toXml(),
+    'certificate' => $certificate,
+    'certificateSerialNumber' => $certificateSerialNumber,
+    'contextIdentifierGroup' => [
+        'identifierGroup' => [
+            'nip' => $nip
+        ]
+    ]
+]));
+
+file_put_contents(Utility::basePath("var/qr/code1.png"), $qrCodes->code1);
+file_put_contents(Utility::basePath("var/qr/code2.png"), $qrCodes->code2);
+```
+
 </details>
 
 <details>
@@ -777,6 +862,7 @@ $upo = $client->sessions()->invoices()->upo([
 The package uses unit tests via [Pest](https://pestphp.com). 
 
 Pest configuration is located in ```tests/Pest```
+
 TestCase is located in ```tests/AbstractTestCase```
 
 Fake request and responses fixtures for resources are located in ```src/Testing/Fixtures/Requests```

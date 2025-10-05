@@ -17,6 +17,24 @@ enum Mode: string implements EnumInterface
 
     case Production = 'production';
 
+    public function getClientAppInvoiceUrl(): Url
+    {
+        return match ($this) {
+            self::Test => Url::from('https://ksef-test.mf.gov.pl/client-app/invoice'),
+            self::Demo => Url::from('https://ksef-demo.mf.gov.pl/client-app/invoice'),
+            self::Production => Url::from('https://ksef.mf.gov.pl/client-app/invoice'),
+        };
+    }
+
+    public function getClientAppCertificateUrl(): Url
+    {
+        return match ($this) {
+            self::Test => Url::from('https://ksef-test.mf.gov.pl/client-app/certificate'),
+            self::Demo => Url::from('https://ksef-demo.mf.gov.pl/client-app/certificate'),
+            self::Production => Url::from('https://ksef.mf.gov.pl/client-app/certificate'),
+        };
+    }
+
     public function getApiUrl(): ApiUrl
     {
         return match ($this) {
