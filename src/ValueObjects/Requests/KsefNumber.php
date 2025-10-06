@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\ValueObjects\Requests;
 
 use N1ebieski\KSEFClient\Contracts\FromInterface;
+use N1ebieski\KSEFClient\Contracts\ValueAwareInterface;
 use N1ebieski\KSEFClient\Support\AbstractValueObject;
 use Stringable;
 
-final readonly class KsefNumber extends AbstractValueObject implements Stringable, FromInterface
+final readonly class KsefNumber extends AbstractValueObject implements ValueAwareInterface, Stringable, FromInterface
 {
     public function __construct(public string $value)
     {

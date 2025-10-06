@@ -2,24 +2,22 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Requests\Online\Query\Invoice\ValueObjects;
+namespace N1ebieski\KSEFClient\ValueObjects\Requests\Invoices;
 
 use N1ebieski\KSEFClient\Contracts\ValueAwareInterface;
 use N1ebieski\KSEFClient\Support\AbstractValueObject;
-use N1ebieski\KSEFClient\Validator\Rules\String\MaxRule;
-use N1ebieski\KSEFClient\Validator\Rules\String\MinRule;
+use N1ebieski\KSEFClient\Validator\Rules\String\CurrencyRule;
 use N1ebieski\KSEFClient\Validator\Validator;
 use Stringable;
 
-final readonly class InvoiceNumber extends AbstractValueObject implements ValueAwareInterface, Stringable
+final readonly class CurrencyCode extends AbstractValueObject implements ValueAwareInterface, Stringable
 {
     public string $value;
 
     public function __construct(string $value)
     {
         Validator::validate($value, [
-            new MinRule(1),
-            new MaxRule(256),
+            new CurrencyRule(),
         ]);
 
         $this->value = $value;

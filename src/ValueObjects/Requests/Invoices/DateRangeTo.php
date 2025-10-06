@@ -2,18 +2,16 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Requests\Online\Query\Invoice\ValueObjects;
+namespace N1ebieski\KSEFClient\ValueObjects\Requests\Invoices;
 
 use DateTimeImmutable;
 use DateTimeInterface;
 use N1ebieski\KSEFClient\Contracts\OriginalInterface;
 use N1ebieski\KSEFClient\Contracts\ValueAwareInterface;
 use N1ebieski\KSEFClient\Support\AbstractValueObject;
-use N1ebieski\KSEFClient\Validator\Rules\Date\AfterRule;
-use N1ebieski\KSEFClient\Validator\Validator;
 use Stringable;
 
-final readonly class InvoicingDateFrom extends AbstractValueObject implements ValueAwareInterface, Stringable, OriginalInterface
+final readonly class DateRangeTo extends AbstractValueObject implements ValueAwareInterface, Stringable, OriginalInterface
 {
     public DateTimeInterface $value;
 
@@ -22,10 +20,6 @@ final readonly class InvoicingDateFrom extends AbstractValueObject implements Va
         if ($value instanceof DateTimeInterface === false) {
             $value = new DateTimeImmutable($value);
         }
-
-        Validator::validate($value, [
-            new AfterRule(new DateTimeImmutable('2022-01-01')),
-        ]);
 
         $this->value = $value;
     }

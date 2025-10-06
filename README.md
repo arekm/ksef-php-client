@@ -479,6 +479,24 @@ use N1ebieski\KSEFClient\Requests\Invoices\Download\DownloadRequest;
 
 $response = $client->invoices()->download(
     new DownloadRequest(...)
+)->body();
+```
+</details>
+
+#### Query
+
+<details>
+    <summary>
+        <h5>Query Metadata</h5>
+    </summary>
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Pobieranie-faktur/paths/~1api~1v2~1invoices~1query~1metadata/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Invoices\Query\Metadata\MetadataRequest;
+
+$response = $client->invoices()->query()->metadata(
+    new MetadataRequest(...)
 )->object();
 ```
 </details>

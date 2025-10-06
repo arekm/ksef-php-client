@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
+use function N1ebieski\KSEFClient\Tests\getClientStub;
 use N1ebieski\KSEFClient\Requests\Invoices\Download\DownloadRequest;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Error\ErrorResponseFixture;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Invoices\Download\DownloadRequestFixture;
-use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Invoices\Download\DownloadResponseFixture;
 
-use function N1ebieski\KSEFClient\Tests\getClientStub;
+use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Invoices\Download\DownloadResponseFixture;
 
 /**
  * @return array<string, array{DownloadRequestFixture, DownloadResponseFixture}>
@@ -53,6 +53,6 @@ test('invalid response', function () {
 
         $clientStub = getClientStub($responseFixture);
 
-        $clientStub->auth()->ksefToken($requestFixture->data);
+        $clientStub->invoices()->download($requestFixture->data);
     })->toBeExceptionFixture($responseFixture->data);
 });

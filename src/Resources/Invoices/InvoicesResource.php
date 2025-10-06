@@ -7,10 +7,12 @@ namespace N1ebieski\KSEFClient\Resources\Invoices;
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Invoices\InvoicesResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Invoices\Query\QueryResourceInterface;
 use N1ebieski\KSEFClient\DTOs\Config;
 use N1ebieski\KSEFClient\Requests\Invoices\Download\DownloadHandler;
 use N1ebieski\KSEFClient\Requests\Invoices\Download\DownloadRequest;
 use N1ebieski\KSEFClient\Resources\AbstractResource;
+use N1ebieski\KSEFClient\Resources\Invoices\Query\QueryResource;
 use Psr\Log\LoggerInterface;
 
 final class InvoicesResource extends AbstractResource implements InvoicesResourceInterface
@@ -29,5 +31,10 @@ final class InvoicesResource extends AbstractResource implements InvoicesResourc
         }
 
         return new DownloadHandler($this->client)->handle($request);
+    }
+
+    public function query(): QueryResourceInterface
+    {
+        return new QueryResource($this->client, $this->config, $this->logger);
     }
 }
