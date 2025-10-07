@@ -5,7 +5,7 @@
 
 > **This package is not production ready yet!**
 
-PHP API client that allows you to interact with the [KSEF API](https://ksef.podatki.gov.pl) Krajowy System e-Faktur
+PHP API client that allows you to interact with the [KSEF API](https://ksef-test.mf.gov.pl/docs/v2/index.html) Krajowy System e-Faktur
 
 Main features:
 
