@@ -6,6 +6,7 @@ use N1ebieski\KSEFClient\Requests\Invoices\Exports\Init\InitRequest;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Error\ErrorResponseFixture;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Invoices\Exports\Init\InitRequestFixture;
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Invoices\Exports\Init\InitResponseFixture;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\EncryptedKey;
 
 use function N1ebieski\KSEFClient\Tests\getClientStub;
 
@@ -34,7 +35,9 @@ dataset('validResponseProvider', function (): array {
 });
 
 test('valid response', function (InitRequestFixture $requestFixture, InitResponseFixture $responseFixture): void {
-    $clientStub = getClientStub($responseFixture);
+    $encryptedKey = EncryptedKey::from('string', 'string');
+
+    $clientStub = getClientStub($responseFixture)->withEncryptedKey($encryptedKey);
 
     $request = InitRequest::from($requestFixture->data);
 
@@ -44,6 +47,15 @@ test('valid response', function (InitRequestFixture $requestFixture, InitRespons
 
     expect($response)->toBeFixture($responseFixture->data);
 })->with('validResponseProvider');
+
+test('invalid response without EncryptedKey', function (): void {
+    $requestFixture = new InitRequestFixture();
+    $responseFixture = new InitResponseFixture();
+
+    $clientStub = getClientStub($responseFixture);
+
+    $clientStub->invoices()->exports()->init($requestFixture->data)->object();
+})->throws(RuntimeException::class, 'Encrypted key is required to open session.');
 
 test('invalid response', function (): void {
     $responseFixture = new ErrorResponseFixture();

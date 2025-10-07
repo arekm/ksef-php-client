@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Resources;
 
-use RuntimeException;
 use DateTimeImmutable;
 use DateTimeInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
@@ -27,7 +26,9 @@ use N1ebieski\KSEFClient\Resources\Testdata\TestdataResource;
 use N1ebieski\KSEFClient\Resources\Tokens\TokensResource;
 use N1ebieski\KSEFClient\ValueObjects\AccessToken;
 use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\EncryptedKey;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
 final class ClientResource extends AbstractResource implements ClientResourceInterface
 {
@@ -46,6 +47,14 @@ final class ClientResource extends AbstractResource implements ClientResourceInt
     public function getRefreshToken(): ?RefreshToken
     {
         return $this->config->refreshToken;
+    }
+
+    public function withEncryptedKey(EncryptedKey $encryptedKey): self
+    {
+        $this->client = $this->client->withEncryptedKey($encryptedKey);
+        $this->config = $this->config->withEncryptedKey($encryptedKey);
+
+        return $this;
     }
 
     public function withAccessToken(AccessToken | string $accessToken, DateTimeInterface | string | null $validUntil = null): self
@@ -121,7 +130,7 @@ final class ClientResource extends AbstractResource implements ClientResourceInt
     {
         $this->refreshTokenIfExpired();
 
-        return new InvoicesResource($this->client);
+        return new InvoicesResource($this->client, $this->config);
     }
 
     public function certificates(): CertificatesResourceInterface

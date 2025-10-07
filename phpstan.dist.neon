@@ -17,3 +17,4 @@ parameters:
 		- '#^Call to an undefined method Pest\\Expectation<([a-zA-Z0-9\\]+)\|null>::toBeFixture\(\).$#'
 		- '#^Call to an undefined method Pest\\Expectation<array<string, mixed>\|object\|null>::toBeFixture\(\).$#'
 		- '#^Call to an undefined method Pest\\Expectation<\(Closure\)\|null>::toBeExceptionFixture\(\).$#'
+		- '#^Call to an undefined method Pest\\PendingCalls\\TestCall\|Pest\\Support\\HigherOrderTapProxy::throws\(\).$#'

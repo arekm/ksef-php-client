@@ -13,10 +13,6 @@ final class InitRequestFixture extends AbstractRequestFixture
      * @var array<string, mixed>
      */
     public array $data = [
-        'encryptedKey' => [
-            'key' => 'string',
-            'iv' => 'string'
-        ],
         'filters' => [
             'subjectType' => 'Subject1',
             'dateRange' => [

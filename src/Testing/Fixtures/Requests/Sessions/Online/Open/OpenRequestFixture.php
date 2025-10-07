@@ -13,9 +13,5 @@ final class OpenRequestFixture extends AbstractRequestFixture
      */
     public array $data = [
         'formCode' => 'FA (3)',
-        'encryptedKey' => [
-            'key' => 'key',
-            'iv' => 'iv'
-        ]
     ];
 }

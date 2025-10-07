@@ -14,12 +14,15 @@ use N1ebieski\KSEFClient\Contracts\Resources\Testdata\TestdataResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Tokens\TokensResourceInterface;
 use N1ebieski\KSEFClient\ValueObjects\AccessToken;
 use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\EncryptedKey;
 
 interface ClientResourceInterface
 {
     public function getAccessToken(): ?AccessToken;
 
     public function getRefreshToken(): ?RefreshToken;
+
+    public function withEncryptedKey(EncryptedKey $encryptedKey): self;
 
     public function withAccessToken(AccessToken | string $accessToken, DateTimeInterface | string | null $validUntil = null): self;
 

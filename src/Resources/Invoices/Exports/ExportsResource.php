@@ -7,6 +7,7 @@ namespace N1ebieski\KSEFClient\Resources\Invoices\Exports;
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Invoices\Exports\ExportsResourceInterface;
+use N1ebieski\KSEFClient\DTOs\Config;
 use N1ebieski\KSEFClient\Requests\Invoices\Exports\Init\InitHandler;
 use N1ebieski\KSEFClient\Requests\Invoices\Exports\Init\InitRequest;
 use N1ebieski\KSEFClient\Requests\Invoices\Exports\Status\StatusHandler;
@@ -16,7 +17,8 @@ use N1ebieski\KSEFClient\Resources\AbstractResource;
 final class ExportsResource extends AbstractResource implements ExportsResourceInterface
 {
     public function __construct(
-        private readonly HttpClientInterface $client
+        private readonly HttpClientInterface $client,
+        private readonly Config $config
     ) {
     }
 
@@ -26,7 +28,7 @@ final class ExportsResource extends AbstractResource implements ExportsResourceI
             $request = InitRequest::from($request);
         }
 
-        return new InitHandler($this->client)->handle($request);
+        return new InitHandler($this->client, $this->config)->handle($request);
     }
 
     public function status(StatusRequest | array $request): ResponseInterface

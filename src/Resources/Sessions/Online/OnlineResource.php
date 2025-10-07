@@ -11,11 +11,11 @@ use N1ebieski\KSEFClient\Contracts\Resources\Sessions\Online\OnlineResourceInter
 use N1ebieski\KSEFClient\DTOs\Config;
 use N1ebieski\KSEFClient\Requests\Sessions\Online\Close\CloseHandler;
 use N1ebieski\KSEFClient\Requests\Sessions\Online\Close\CloseRequest;
+use N1ebieski\KSEFClient\Requests\Sessions\Online\Open\OpenHandler;
+use N1ebieski\KSEFClient\Requests\Sessions\Online\Open\OpenRequest;
 use N1ebieski\KSEFClient\Requests\Sessions\Online\Send\SendHandler;
 use N1ebieski\KSEFClient\Requests\Sessions\Online\Send\SendRequest;
 use N1ebieski\KSEFClient\Requests\Sessions\Online\Send\SendXmlRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Online\Open\OpenHandler;
-use N1ebieski\KSEFClient\Requests\Sessions\Online\Open\OpenRequest;
 use N1ebieski\KSEFClient\Resources\AbstractResource;
 use Psr\Log\LoggerInterface;
 
@@ -34,7 +34,7 @@ final class OnlineResource extends AbstractResource implements OnlineResourceInt
             $request = OpenRequest::from($request);
         }
 
-        return new OpenHandler($this->client)->handle($request);
+        return new OpenHandler($this->client, $this->config)->handle($request);
     }
 
     public function close(CloseRequest | array $request): ResponseInterface

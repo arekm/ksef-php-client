@@ -15,6 +15,7 @@ use N1ebieski\KSEFClient\Contracts\Resources\ClientResourceInterface;
 use N1ebieski\KSEFClient\DTOs\Config;
 use N1ebieski\KSEFClient\DTOs\Requests\Auth\ContextIdentifierGroup;
 use N1ebieski\KSEFClient\DTOs\Requests\Auth\XadesSignature;
+use N1ebieski\KSEFClient\Factories\EncryptedKeyFactory;
 use N1ebieski\KSEFClient\Factories\EncryptedTokenFactory;
 use N1ebieski\KSEFClient\Factories\LoggerFactory;
 use N1ebieski\KSEFClient\HttpClient\HttpClient;
@@ -41,6 +42,7 @@ use N1ebieski\KSEFClient\ValueObjects\Requests\Auth\Challenge;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Auth\SubjectIdentifierType;
 use N1ebieski\KSEFClient\ValueObjects\Requests\ReferenceNumber;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Security\PublicKeyCertificates\PublicKeyCertificateUsage;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\EncryptedKey;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -235,6 +237,10 @@ final class ClientBuilder
 
         $client = new ClientResource($httpClient, $config, $this->logger);
 
+        if ($this->encryptionKey instanceof EncryptionKey) {
+            $client = $client->withEncryptedKey($this->handleEncryptedKey($client));
+        }
+
         if ($this->isAuthorisation()) {
             $authorisationAccessResponse = match (true) { //@phpstan-ignore-line
                 $this->certificatePath instanceof CertificatePath => $this->handleAuthorisationByCertificate($client),
@@ -286,6 +292,32 @@ final class ClientBuilder
         return ! $this->accessToken instanceof AccessToken && (
             $this->ksefToken instanceof KsefToken || $this->certificatePath instanceof CertificatePath
         );
+    }
+
+    private function handleEncryptedKey(ClientResourceInterface $client): EncryptedKey
+    {
+        if ($this->encryptionKey instanceof EncryptionKey === false) {
+            throw new RuntimeException('Encryption key is not set');
+        }
+
+        $securityResponse = $client->security()->publicKeyCertificates();
+
+        $firstSymmetricKeyEncryptionCertificate = $securityResponse->getFirstByPublicKeyCertificateUsage(PublicKeyCertificateUsage::SymmetricKeyEncryption);
+
+        if ($firstSymmetricKeyEncryptionCertificate === null) {
+            throw new RuntimeException('Symmetric key encryption certificate is not found');
+        }
+
+        $symmetricKeyEncryptionCertificate = base64_decode($firstSymmetricKeyEncryptionCertificate);
+
+        $certificate = new ConvertDerToPemHandler()->handle(new ConvertDerToPemAction(
+            der: $symmetricKeyEncryptionCertificate,
+            name: 'CERTIFICATE'
+        ));
+
+        $ksefPublicKey = KsefPublicKey::from($certificate);
+
+        return EncryptedKeyFactory::make($this->encryptionKey, $ksefPublicKey);
     }
 
     private function handleAuthorisationByCertificate(ClientResourceInterface $client): ResponseInterface

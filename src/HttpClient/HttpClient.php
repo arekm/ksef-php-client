@@ -11,6 +11,7 @@ use N1ebieski\KSEFClient\DTOs\Config;
 use N1ebieski\KSEFClient\DTOs\HttpClient\Request;
 use N1ebieski\KSEFClient\Exceptions\ExceptionHandler;
 use N1ebieski\KSEFClient\ValueObjects\AccessToken;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\EncryptedKey;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\LoggerInterface;
 
@@ -21,6 +22,15 @@ final readonly class HttpClient implements HttpClientInterface
         private Config $config,
         private ?LoggerInterface $logger = null
     ) {
+    }
+
+    public function withEncryptedKey(EncryptedKey $encryptedKey): self
+    {
+        return new self(
+            client: $this->client,
+            config: $this->config->withEncryptedKey($encryptedKey),
+            logger: $this->logger
+        );
     }
 
     public function withAccessToken(AccessToken $accessToken): self

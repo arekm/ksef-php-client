@@ -132,6 +132,7 @@ function getClientStub(AbstractResponseFixture $response): ClientResourceInterfa
 
     $httpClientStub = Mockery::mock(HttpClientInterface::class);
     $httpClientStub->shouldReceive('withAccessToken')->andReturnSelf();
+    $httpClientStub->shouldReceive('withEncryptedKey')->andReturnSelf();
 
     /** @var ResponseInterface $responseStub */
     $httpClientStub->shouldReceive('sendRequest')->andReturn(new Response($responseStub, new ExceptionHandler()));
