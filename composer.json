@@ -57,6 +57,10 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
+        "build": [
+            "Composer\\Config::disableProcessTimeout",
+            "bash ./build.sh"
+        ],
         "phpstan": [
             "Composer\\Config::disableProcessTimeout",
             "vendor/bin/phpstan analyse > var/logs/phpstan.log"
