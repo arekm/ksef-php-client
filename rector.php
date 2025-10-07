@@ -42,4 +42,5 @@ return \Rector\Config\RectorConfig::configure()
         carbon: true,
         phpunitCodeQuality: true
     )
-    ->withPhpSets();
+    ->withDowngradeSets(php81: true)
+    ->withPhpSets(php81: true);
