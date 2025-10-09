@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Requests\Security\PublicKeyCertificates;
 
+use DateTimeZone;
 use DateTimeImmutable;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Security\PublicKeyCertificates\PublicKeyCertificateUsage;
@@ -29,11 +30,11 @@ final class PublicKeyCertificatesResponse implements ResponseInterface
                 continue;
             }
 
-            if (new DateTimeImmutable($certificate->validTo) < new DateTimeImmutable()) {
+            if (new DateTimeImmutable($certificate->validTo) < new DateTimeImmutable(timezone: new DateTimeZone('UTC'))) {
                 continue;
             }
 
-            if (new DateTimeImmutable($certificate->validFrom) > new DateTimeImmutable()) {
+            if (new DateTimeImmutable($certificate->validFrom) > new DateTimeImmutable(timezone: new DateTimeZone('UTC'))) {
                 continue;
             }
 
