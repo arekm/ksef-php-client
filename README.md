@@ -118,8 +118,8 @@ $client = (new ClientBuilder())
     ->withHttpClient(new \GuzzleHttp\Client(...)) // Optional PSR-18 implementation, default is set by Psr18ClientDiscovery::find()
     ->withLogger(new \Monolog\Logger(...)) // Optional PSR-3 implementation, default is set by PsrDiscovery\Discover::log()
     ->withLogPath($_ENV['PATH_TO_LOG_FILE'], $_ENV['LOG_LEVEL']) // Optional, level: null disables logging
-    ->withAccessToken($_ENV['ACCESS_TOKEN']) // Optional, if present, auto authorization is skipped
-    ->withRefreshToken($_ENV['REFRESH_TOKEN']) // Optional, if present, auto refresh access token is enabled
+    ->withAccessToken($_ENV['ACCESS_TOKEN'], $_ENV['VALID_UNTIL']) // Optional, if present, auto authorization is skipped
+    ->withRefreshToken($_ENV['REFRESH_TOKEN'], $_ENV['VALID_UNTIL']) // Optional, if present, auto refresh access token is enabled
     ->withKsefToken($_ENV['KSEF_TOKEN']) // Required for API Token authorization. Optional otherwise
     ->withCertificatePath($_ENV['PATH_TO_CERTIFICATE'], $_ENV['CERTIFICATE_PASSPHRASE']) // Required .p12 file for Certificate authorization. Optional otherwise
     ->withVerifyCertificateChain(true) // Optional. Explanation https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1xades-signature/post
