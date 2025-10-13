@@ -97,6 +97,8 @@ final class HttpClient implements HttpClientInterface
             exceptionHandler: new ExceptionHandler($this->logger)
         );
 
+        $response->throwExceptionIfError();
+
         if ($this->logger instanceof LoggerInterface) {
             $this->logger->debug('Received response from KSEF', $response->toArray());
         }
@@ -137,11 +139,10 @@ final class HttpClient implements HttpClientInterface
             }
 
             return $responses;
-        } catch (AsyncClientNotSupportedException) {
+        } catch (AsyncClientNotSupportedException $asyncClientNotSupportedException) {
             if ($this->logger instanceof LoggerInterface) {
-                $this->logger->debug(
-                    'Async sending requests to KSEF is not supported. Sending requests one by one.',
-                );
+                $this->logger->debug($asyncClientNotSupportedException->getMessage());
+                $this->logger->debug('Sending requests one by one...');
             }
         }
 

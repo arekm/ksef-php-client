@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\Contracts\Resources\Auth;
 
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Auth\Sessions\SessionsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Auth\Token\TokenResourceInterface;
 use N1ebieski\KSEFClient\Requests\Auth\KsefToken\KsefTokenRequest;
 use N1ebieski\KSEFClient\Requests\Auth\Status\StatusRequest;
@@ -31,4 +32,6 @@ interface AuthResourceInterface
     public function status(StatusRequest | array $request): ResponseInterface;
 
     public function token(): TokenResourceInterface;
+
+    public function sessions(): SessionsResourceInterface;
 }

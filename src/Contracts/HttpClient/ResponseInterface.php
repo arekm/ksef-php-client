@@ -12,6 +12,8 @@ use Psr\Http\Message\ResponseInterface as BaseResponseInterface;
  */
 interface ResponseInterface extends ArrayableInterface
 {
+    public function throwExceptionIfError(): void;
+
     public function status(): int;
 
     /**

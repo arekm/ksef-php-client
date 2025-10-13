@@ -12,6 +12,7 @@ use function N1ebieski\KSEFClient\Tests\getClientStub;
  * @return array<int, array<int, string>>
  */
 dataset('resourceProvider', fn (): array => [
+    ['auth'],
     ['sessions'],
     ['invoices'],
     ['certificates'],

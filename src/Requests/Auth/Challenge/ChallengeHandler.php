@@ -7,9 +7,9 @@ namespace N1ebieski\KSEFClient\Requests\Auth\Challenge;
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 use N1ebieski\KSEFClient\DTOs\HttpClient\Request;
+use N1ebieski\KSEFClient\Requests\AbstractHandler;
 use N1ebieski\KSEFClient\ValueObjects\HttpClient\Method;
 use N1ebieski\KSEFClient\ValueObjects\HttpClient\Uri;
-use N1ebieski\KSEFClient\Requests\AbstractHandler;
 
 final class ChallengeHandler extends AbstractHandler
 {
@@ -20,9 +20,11 @@ final class ChallengeHandler extends AbstractHandler
 
     public function handle(): ResponseInterface
     {
-        return $this->client->sendRequest(new Request(
-            method: Method::Post,
-            uri: Uri::from('auth/challenge')
-        ));
+        return $this->client
+            ->withoutAccessToken()
+            ->sendRequest(new Request(
+                method: Method::Post,
+                uri: Uri::from('auth/challenge')
+            ));
     }
 }

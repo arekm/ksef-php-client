@@ -9,6 +9,7 @@ use N1ebieski\KSEFClient\Actions\SignDocument\SignDocumentHandler;
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Auth\AuthResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Auth\Sessions\SessionsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Auth\Token\TokenResourceInterface;
 use N1ebieski\KSEFClient\Requests\Auth\Challenge\ChallengeHandler;
 use N1ebieski\KSEFClient\Requests\Auth\KsefToken\KsefTokenHandler;
@@ -19,12 +20,13 @@ use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureHandler;
 use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureRequest;
 use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureXmlRequest;
 use N1ebieski\KSEFClient\Resources\AbstractResource;
+use N1ebieski\KSEFClient\Resources\Auth\Sessions\SessionsResource;
 use N1ebieski\KSEFClient\Resources\Auth\Token\TokenResource;
 
 final class AuthResource extends AbstractResource implements AuthResourceInterface
 {
     public function __construct(
-        private readonly HttpClientInterface $client
+        private readonly HttpClientInterface $client,
     ) {
     }
 
@@ -66,5 +68,10 @@ final class AuthResource extends AbstractResource implements AuthResourceInterfa
     public function token(): TokenResourceInterface
     {
         return new TokenResource($this->client);
+    }
+
+    public function sessions(): SessionsResourceInterface
+    {
+        return new SessionsResource($this->client);
     }
 }

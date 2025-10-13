@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Requests\Testdata\Person\Create;
+namespace N1ebieski\KSEFClient\Requests\Auth\Sessions\List;
 
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
@@ -11,21 +11,20 @@ use N1ebieski\KSEFClient\Requests\AbstractHandler;
 use N1ebieski\KSEFClient\ValueObjects\HttpClient\Method;
 use N1ebieski\KSEFClient\ValueObjects\HttpClient\Uri;
 
-final class CreateHandler extends AbstractHandler
+final class ListHandler extends AbstractHandler
 {
     public function __construct(
         private readonly HttpClientInterface $client,
     ) {
     }
 
-    public function handle(CreateRequest $request): ResponseInterface
+    public function handle(ListRequest $request): ResponseInterface
     {
-        return $this->client
-            ->withoutAccessToken()
-            ->sendRequest(new Request(
-                method: Method::Post,
-                uri: Uri::from('testdata/person'),
-                body: $request->toBody()
-            ));
+        return $this->client->sendRequest(new Request(
+            method: Method::Get,
+            uri: Uri::from('auth/sessions'),
+            headers: $request->toHeaders(),
+            parameters: $request->toParameters()
+        ));
     }
 }

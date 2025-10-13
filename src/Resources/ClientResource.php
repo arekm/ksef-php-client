@@ -16,6 +16,7 @@ use N1ebieski\KSEFClient\Contracts\Resources\Sessions\SessionsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Testdata\TestdataResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Tokens\TokensResourceInterface;
 use N1ebieski\KSEFClient\DTOs\Config;
+use N1ebieski\KSEFClient\Requests\Auth\Token\Refresh\RefreshHandler;
 use N1ebieski\KSEFClient\Resources\AbstractResource;
 use N1ebieski\KSEFClient\Resources\Auth\AuthResource;
 use N1ebieski\KSEFClient\Resources\Certificates\CertificatesResource;
@@ -90,12 +91,12 @@ final class ClientResource extends AbstractResource implements ClientResourceInt
 
     private function refreshTokenIfExpired(): void
     {
-        if ($this->config->accessToken?->isExpired() === true) {
+        if ($this->config->accessToken?->isExpired('-1 minute') === true) {
             if ($this->config->refreshToken?->isExpired() === false) {
                 $this->withAccessToken(AccessToken::from($this->config->refreshToken->token));
 
                 /** @var object{accessToken: object{token: string, validUntil: string}} $authorisationTokenResponse */
-                $authorisationTokenResponse = $this->auth()->token()->refresh()->object();
+                $authorisationTokenResponse = (new RefreshHandler($this->client))->handle()->object();
 
                 $this->withAccessToken(AccessToken::from(
                     token: $authorisationTokenResponse->accessToken->token,
@@ -111,6 +112,8 @@ final class ClientResource extends AbstractResource implements ClientResourceInt
 
     public function auth(): AuthResourceInterface
     {
+        $this->refreshTokenIfExpired();
+
         return new AuthResource($this->client);
     }
 

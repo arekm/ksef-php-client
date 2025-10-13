@@ -24,11 +24,9 @@ final class Response implements ResponseInterface
     ) {
         $this->contents = $baseResponse->getBody()->getContents();
         $this->statusCode = $baseResponse->getStatusCode();
-
-        $this->throwExceptionIfError();
     }
 
-    private function throwExceptionIfError(): void
+    public function throwExceptionIfError(): void
     {
         if ($this->statusCode < 400) {
             return;

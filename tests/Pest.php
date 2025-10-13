@@ -125,20 +125,20 @@ function toBeFixture(array $data, ?object $object = null): void
     }
 }
 
-function getResponseStub(AbstractResponseFixture $response): MockInterface & ResponseInterface
+function getResponseStub(AbstractResponseFixture $responseFixture): MockInterface & ResponseInterface
 {
     $streamStub = Mockery::mock(StreamInterface::class);
-    $streamStub->shouldReceive('getContents')->andReturn($response->toContents());
+    $streamStub->shouldReceive('getContents')->andReturn($responseFixture->toContents());
 
     $responseStub = Mockery::mock(ResponseInterface::class);
-    $responseStub->shouldReceive('getStatusCode')->andReturn($response->statusCode);
+    $responseStub->shouldReceive('getStatusCode')->andReturn($responseFixture->statusCode);
     $responseStub->shouldReceive('getBody')->andReturn($streamStub);
 
     /** @var MockInterface&ResponseInterface */
     return $responseStub;
 }
 
-function getHttpClientStub(AbstractResponseFixture $response): MockInterface & HttpClientInterface
+function getHttpClientStub(AbstractResponseFixture $responseFixture): MockInterface & HttpClientInterface
 {
     $httpClientStub = Mockery::mock(HttpClientInterface::class);
     $httpClientStub->shouldReceive('withAccessToken')->andReturnSelf();
@@ -146,18 +146,21 @@ function getHttpClientStub(AbstractResponseFixture $response): MockInterface & H
     $httpClientStub->shouldReceive('withEncryptedKey')->andReturnSelf();
 
     /** @var MockInterface&ResponseInterface $responseStub */
-    $responseStub = getResponseStub($response);
+    $responseStub = getResponseStub($responseFixture);
 
-    $httpClientStub->shouldReceive('sendRequest')->andReturn(new Response($responseStub, new ExceptionHandler()));
+    $response = new Response($responseStub, new ExceptionHandler());
+    $response->throwExceptionIfError();
+
+    $httpClientStub->shouldReceive('sendRequest')->andReturn($response);
 
     /** @var MockInterface&HttpClientInterface */
     return $httpClientStub;
 }
 
-function getClientStub(AbstractResponseFixture $response): ClientResourceInterface
+function getClientStub(AbstractResponseFixture $responseFixture): ClientResourceInterface
 {
     /** @var MockInterface&HttpClientInterface $httpClientStub */
-    $httpClientStub = getHttpClientStub($response);
+    $httpClientStub = getHttpClientStub($responseFixture);
 
     return new ClientResource($httpClientStub, new Config(
         baseUri: new BaseUri(Mode::Test->getApiUrl()->value),

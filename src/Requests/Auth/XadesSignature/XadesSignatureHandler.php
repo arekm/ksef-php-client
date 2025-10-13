@@ -35,15 +35,17 @@ final class XadesSignatureHandler extends AbstractHandler
             );
         }
 
-        return $this->client->sendRequest(new Request(
-            method: Method::Post,
-            uri: Uri::from('auth/xades-signature'),
-            headers: [
-                'Content-Type' => 'application/xml',
-                'Accept' => 'application/json',
-            ],
-            parameters: $request->toParameters(),
-            body: $signedXml
-        ));
+        return $this->client
+            ->withoutAccessToken()
+            ->sendRequest(new Request(
+                method: Method::Post,
+                uri: Uri::from('auth/xades-signature'),
+                headers: [
+                    'Content-Type' => 'application/xml',
+                    'Accept' => 'application/json',
+                ],
+                parameters: $request->toParameters(),
+                body: $signedXml
+            ));
     }
 }

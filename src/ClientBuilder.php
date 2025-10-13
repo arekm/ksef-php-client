@@ -270,10 +270,13 @@ final class ClientBuilder
                 $this->ksefToken instanceof KsefToken => $this->handleAuthorisationByKsefToken($client),
             };
 
-            /** @var object{referenceNumber: string, authenticationToken: object{token: string}} $authorisationAccessResponse */
+            /** @var object{referenceNumber: string, authenticationToken: object{token: string, validUntil: string}} $authorisationAccessResponse */
             $authorisationAccessResponse = $authorisationAccessResponse->object();
 
-            $client = $client->withAccessToken(AccessToken::from($authorisationAccessResponse->authenticationToken->token));
+            $client = $client->withAccessToken(AccessToken::from(
+                $authorisationAccessResponse->authenticationToken->token,
+                new DateTimeImmutable($authorisationAccessResponse->authenticationToken->validUntil)
+            ));
 
             Utility::retry(function () use ($client, $authorisationAccessResponse) {
                 /** @var object{status: object{code: int, description: string}} $authorisationStatusResponse */

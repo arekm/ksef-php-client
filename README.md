@@ -33,40 +33,44 @@ Main features:
     - [Manual authorization](#manual-authorization)
 - [Resources](#resources)
     - [Auth](#auth)
-        - [Challenge](#challenge)
-        - [Xades Signature](#xades-signature)
+        - [Auth Challenge](#auth-challenge)
+        - [Auth Xades Signature](#auth-xades-signature)
         - [Auth Status](#auth-status)
-        - [Token](#token)
-            - [Redeem](#redeem)
-            - [Refresh](#refresh)
+        - [Auth Token](#auth-token)
+            - [Auth Token Redeem](#auth-token-redeem)
+            - [Auth Token Refresh](#auth-token-refresh)
+        - [Auth Sessions](#auth-sessions)
+            - [Auth Session List](#auth-sessions-list)
+            - [Auth Session Revoke Current](#auth-sessions-revoke-current)
+            - [Auth Session Revoke](#auth-sessions-revoke)
     - [Security](#security)
-        - [Public Key Certificates](#public-key-certificates)
+        - [Security Public Key Certificates](#security-public-key-certificates)
     - [Sessions](#sessions)
         - [Sessions Invoices](#sessions-invoices)
-            - [Upo](#upo)
-            - [Ksef Upo](#ksef-upo)
-            - [Invoices Status](#invoices-status)
-        - [Online](#online)
-            - [Open](#open)
-            - [Close](#close)
-            - [Invoices Send](#invoices-send)
-        - [Batch](#batch)
-            - [Batch open (and batch send multiple invoices)](#batch-open-and-batch-send-multiple-invoices)
-            - [Batch close](#batch-close)
+            - [Sessions Invoices Upo](#sessions-invoices-upo)
+            - [Sessions Invoices Ksef Upo](#sessions-invoices-ksef-upo)
+            - [Sessions Invoices Status](#sessions-invoices-status)
+        - [Sessions Online](#sessions-online)
+            - [Sessions Online Open](#sessions-online-open)
+            - [Sessions Online Close](#sessions-online-close)
+            - [Sessions Online Send invoices](#sessions-online-send-invoices)
+        - [Sessions Batch](#sessions-batch)
+            - [Sessions Batch Open (and send multiple invoices)](#sessions-batch-open-and-send-multiple-invoices)
+            - [Sessions Batch Close](#sessions-batch-close)
         - [Sessions Status](#sessions-status)
     - [Invoices](#invoices)
         - [Invoices Download](#invoices-download)
-        - [Query](#query)
-            - [Query Metadata](#query-metadata)
-        - [Exports](#exports)
-            - [Exports Init](#exports-init)
-            - [Exposts Status](#exports-status)
+        - [Invoices Query](#invoices-query)
+            - [Invoices Query Metadata](#invoices-query-metadata)
+        - [Invoices Exports](#invoices-exports)
+            - [Invoices Exports Init](#invoices-exports-init)
+            - [Invoices Exposts Status](#invoices-exports-status)
     - [Certificates](#certificates)
-        - [Limits](#limits)
-        - [Enrollments](#enrollments)
-            - [Enrollments Data](#enrollments-data)
-            - [Enrollments Send](#enrollments-send)
-            - [Enrollments Status](#enrollments-status)
+        - [Certificates Limits](#certificates-limits)
+        - [Certificates Enrollments](#certificates-enrollments)
+            - [Certificates Enrollments Data](#certificates-enrollments-data)
+            - [Certificates Enrollments Send](#certificates-enrollments-send)
+            - [Certificates Enrollments Status](#certificates-enrollments-status)
         - [Certificates Retrieve](#certificates-retrieve)
         - [Certificates Revoke](#certificates-revoke)
         - [Certificates Query](#certificates-query)
@@ -76,9 +80,9 @@ Main features:
         - [Tokens Status](#tokens-status)
         - [Tokens Revoke](#tokens-revoke)
     - [Testdata](#testdata)
-        - [Person](#person)
-            - [Person Create](#person-create)
-            - [Person Remove](#person-remove)
+        - [Testdata Person](#testdata-person)
+            - [Testdata Person Create](#testdata-person-create)
+            - [Testdata Person Remove](#testdata-person-remove)
 - [Examples](#examples)
     - [Generate a KSEF certificate and convert to .p12 file](#generate-a-ksef-certificate-and-convert-to-p12-file)
     - [Send an invoice, check for UPO and generate QR code](#send-an-invoice-check-for-upo-and-generate-qr-code)
@@ -260,7 +264,7 @@ $client = $client
 
 <details>
     <summary>
-        <h4>Challenge</h4>
+        <h4>Auth Challenge</h4>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1challenge/post
@@ -272,7 +276,7 @@ $response = $client->auth()->challenge()->object();
 
 <details>
     <summary>
-        <h4>Xades Signature</h4>
+        <h4>Auth Xades Signature</h4>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1xades-signature/post
@@ -312,11 +316,11 @@ $response = $client->auth()->status(
 ```
 </details>
 
-#### Token
+#### Auth Token
 
 <details>
     <summary>
-        <h5>Redeem</h5>
+        <h5>Auth Token Redeem</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1token~1redeem/post
@@ -328,7 +332,7 @@ $response = $client->auth()->token()->redeem()->object();
 
 <details>
     <summary>
-        <h5>Refresh</h5>
+        <h5>Auth Token Refresh</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1api~1v2~1auth~1token~1refresh/post
@@ -338,11 +342,57 @@ $response = $client->auth()->token()->refresh()->object();
 ```
 </details>
 
+#### Auth Sessions
+
+<details>
+    <summary>
+        <h5>Auth Sessions list</h5>
+    </summary>
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Aktywne-sesje/paths/~1api~1v2~1auth~1sessions/get
+
+```php
+use N1ebieski\KSEFClient\Requests\Auth\Sessions\List\ListRequest;
+
+$response = $client->auth()->sessions()->list(
+    new ListRequest(...)
+)->object();
+```
+</details>
+
+<details>
+    <summary>
+        <h5>Auth Sessions revoke current</h5>
+    </summary>
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Aktywne-sesje/paths/~1api~1v2~1auth~1sessions~1current/delete
+
+```php
+$response = $client->auth()->sessions()->revokeCurrent()->object();
+```
+</details>
+
+<details>
+    <summary>
+        <h5>Auth Sessions revoke</h5>
+    </summary>
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Aktywne-sesje/paths/~1api~1v2~1auth~1sessions~1%7BreferenceNumber%7D/delete
+
+```php
+use N1ebieski\KSEFClient\Requests\Auth\Sessions\Revoke\RevokeRequest;
+
+$response = $client->auth()->sessions()->revoke(
+    new RevokeRequest(...)
+)->object();
+```
+</details>
+
 ### Security
 
 <details>
     <summary>
-        <h4>Public Key Certificates</h4>
+        <h4>Security Public Key Certificates</h4>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty-klucza-publicznego/paths/~1api~1v2~1security~1public-key-certificates/get
@@ -358,7 +408,7 @@ $response = $client->security()->publicKeyCertificates()->object();
 
 <details>
     <summary>
-        <h5>Upo</h5>
+        <h5>Sessions Invoices Upo</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1api~1v2~1sessions~1%7BreferenceNumber%7D~1invoices~1%7BinvoiceReferenceNumber%7D~1upo/get
@@ -374,7 +424,7 @@ $response = $client->sessions()->invoices()->upo(
 
 <details>
     <summary>
-        <h5>Ksef Upo</h5>
+        <h5>Sessions Invoices Ksef Upo</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1api~1v2~1sessions~1%7BreferenceNumber%7D~1invoices~1ksef~1%7BksefNumber%7D~1upo/get
@@ -390,7 +440,7 @@ $response = $client->sessions()->invoices()->ksefUpo(
 
 <details>
     <summary>
-        <h5>Invoices Status</h5>
+        <h5>Sessions Invoices Status</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1api~1v2~1sessions~1%7BreferenceNumber%7D~1invoices~1%7BinvoiceReferenceNumber%7D/get
@@ -404,11 +454,11 @@ $response = $client->sessions()->invoices()->status(
 ```
 </details>
 
-#### Online
+#### Sessions Online
 
 <details>
     <summary>
-        <h5>Open</h5>
+        <h5>Sessions Online Open</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Wysylka-interaktywna/paths/~1api~1v2~1sessions~1online/post
@@ -424,7 +474,7 @@ $response = $client->sessions()->online()->open(
 
 <details>
     <summary>
-        <h5>Close</h5>
+        <h5>Sessions Online Close</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Wysylka-interaktywna/paths/~1api~1v2~1sessions~1online~1%7BreferenceNumber%7D~1close/post
@@ -440,7 +490,7 @@ $response = $client->sessions()->online()->close(
 
 <details>
     <summary>
-        <h5>Invoices send</h5>
+        <h5>Sessions Online Send invoices</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Wysylka-interaktywna/paths/~1api~1v2~1sessions~1online~1%7BreferenceNumber%7D~1invoices/post
@@ -466,11 +516,11 @@ $response = $client->sessions()->online()->send(
 ```
 </details>
 
-#### Batch
+#### Sessions Batch
 
 <details>
     <summary>
-        <h5>Batch open (and batch send multiple invoices)</h5>
+        <h5>Sessions Batch Open (and send multiple invoices)</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Wysylka-wsadowa/paths/~1api~1v2~1sessions~1batch/post
@@ -508,7 +558,7 @@ $response = $client->sessions()->batch()->openAndSend(
 
 <details>
     <summary>
-        <h5>Batch Close</h5>
+        <h5>Sessions Batch Close</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Wysylka-wsadowa/paths/~1api~1v2~1sessions~1batch~1%7BreferenceNumber%7D~1close/post
@@ -556,11 +606,11 @@ $response = $client->invoices()->download(
 ```
 </details>
 
-#### Query
+#### Invoices Query
 
 <details>
     <summary>
-        <h5>Query Metadata</h5>
+        <h5>Invoices Query Metadata</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Pobieranie-faktur/paths/~1api~1v2~1invoices~1query~1metadata/post
@@ -574,11 +624,11 @@ $response = $client->invoices()->query()->metadata(
 ```
 </details>
 
-#### Exports
+#### Invoices Exports
 
 <details>
     <summary>
-        <h5>Exports Init</h5>
+        <h5>Invoices Exports Init</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Pobieranie-faktur/paths/~1api~1v2~1invoices~1exports/post
@@ -594,7 +644,7 @@ $response = $client->invoices()->exports()->init(
 
 <details>
     <summary>
-        <h5>Exports Status</h5>
+        <h5>Invoices Exports Status</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Pobieranie-faktur/paths/~1api~1v2~1invoices~1exports~1%7BoperationReferenceNumber%7D/get
@@ -612,7 +662,7 @@ $response = $client->invoices()->exports()->status(
 
 <details>
     <summary>
-        <h4>Limits</h4>
+        <h4>Certificates Limits</h4>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1limits/get
@@ -622,11 +672,11 @@ $response = $client->certificates()->limits()->object();
 ```
 </details>
 
-#### Enrollments
+#### Certificates Enrollments
 
 <details>
     <summary>
-        <h5>Enrollments Data</h5>
+        <h5>Certificates Enrollments Data</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1enrollments~1data/get
@@ -638,7 +688,7 @@ $response = $client->certificates()->enrollments()->data()->object();
 
 <details>
     <summary>
-        <h5>Enrollments Send</h5>
+        <h5>Certificates Enrollments Send</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1enrollments/post
@@ -654,7 +704,7 @@ $response = $client->certificates()->enrollments()->send(
 
 <details>
     <summary>
-        <h5>Enrollments Status</h5>
+        <h5>Certificates Enrollments Status</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1api~1v2~1certificates~1enrollments~1%7BreferenceNumber%7D/get
@@ -784,11 +834,11 @@ $response = $client->tokens()->revoke(
 
 ### Testdata
 
-#### Person
+#### Testdata Person
 
 <details>
     <summary>
-        <h5>Person Create</h5>
+        <h5>Testdata Person Create</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1api~1v2~1testdata~1person/post
@@ -804,7 +854,7 @@ $response = $client->testdata()->person()->create(
 
 <details>
     <summary>
-        <h5>Person Remove</h5>
+        <h5>Testdata Person Remove</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1api~1v2~1testdata~1person~1remove/post

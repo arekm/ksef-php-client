@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Requests\Security\PublicKeyCertificates;
 
-use DateTimeZone;
 use DateTimeImmutable;
+use DateTimeZone;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Security\PublicKeyCertificates\PublicKeyCertificateUsage;
 use N1ebieski\KSEFClient\ValueObjects\Support\KeyType;
@@ -42,6 +42,11 @@ final class PublicKeyCertificatesResponse implements ResponseInterface
         }
 
         return null;
+    }
+
+    public function throwExceptionIfError(): void
+    {
+        $this->response->throwExceptionIfError();
     }
 
     public function status(): int
