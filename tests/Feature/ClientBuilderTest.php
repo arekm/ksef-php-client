@@ -40,7 +40,7 @@ test('auto authorization via certificate .p12', function (): void {
     expect($refreshToken)->toBeInstanceOf(RefreshToken::class);
     expect($refreshToken?->validUntil)->toBeGreaterThan(new DateTimeImmutable('+6 days'));
 
-    $this->revokeCurrentSession();
+    $this->revokeCurrentSession($client);
 });
 
 test('auto authorization via KSEF certificate .p12', function (PrivateKeyType $privateKeyType): void {
@@ -104,6 +104,8 @@ test('auto authorization via KSEF certificate .p12', function (PrivateKeyType $p
 
     file_put_contents(Utility::basePath($_ENV['KSEF_AUTH_CERTIFICATE_PATH']), $certificateToPkcs12);
 
+    $this->revokeCurrentSession($client);
+
     $client = (new ClientBuilder())
         ->withMode(Mode::Test)
         ->withIdentifier($_ENV['NIP'])
@@ -125,7 +127,7 @@ test('auto authorization via KSEF certificate .p12', function (PrivateKeyType $p
 
     expect($revokeCertificate)->toBe(204);
 
-    $this->revokeCurrentSession();
+    $this->revokeCurrentSession($client);
 })->with('privateKeyTypeProvider');
 
 test('auto authorization via KSEF Token', function (): void {
@@ -144,6 +146,8 @@ test('auto authorization via KSEF Token', function (): void {
         'description' => 'testing',
     ])->object();
 
+    $this->revokeCurrentSession($client);
+
     $client = (new ClientBuilder())
         ->withMode(Mode::Test)
         ->withIdentifier($_ENV['NIP'])
@@ -160,5 +164,5 @@ test('auto authorization via KSEF Token', function (): void {
     expect($refreshToken?->validUntil)->toBeGreaterThan(new DateTimeImmutable('+6 days'));
 
     $this->revokeKsefToken($response->referenceNumber);
-    $this->revokeCurrentSession();
+    $this->revokeCurrentSession($client);
 });
