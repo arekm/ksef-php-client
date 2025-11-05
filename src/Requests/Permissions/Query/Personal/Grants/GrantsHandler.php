@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Requests\Permissions\Subunits\Grants;
+namespace N1ebieski\KSEFClient\Requests\Permissions\Query\Personal\Grants;
 
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
@@ -22,7 +22,7 @@ final class GrantsHandler extends AbstractHandler
     {
         return $this->client->sendRequest(new Request(
             method: Method::Post,
-            uri: Uri::from('permissions/subunits/grants'),
+            uri: Uri::from('permissions/query/personal/grants'),
             body: $request->toBody()
         ));
     }

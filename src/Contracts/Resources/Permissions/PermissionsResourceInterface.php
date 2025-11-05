@@ -11,6 +11,7 @@ use N1ebieski\KSEFClient\Contracts\Resources\Permissions\EuEntities\EuEntitiesRe
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Indirect\IndirectResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Operations\OperationsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Persons\PersonsResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Query\QueryResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Subunits\SubunitsResourceInterface;
 
 interface PermissionsResourceInterface
@@ -30,4 +31,6 @@ interface PermissionsResourceInterface
     public function euEntities(): EuEntitiesResourceInterface;
 
     public function operations(): OperationsResourceInterface;
+
+    public function query(): QueryResourceInterface;
 }

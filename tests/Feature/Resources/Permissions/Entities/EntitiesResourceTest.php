@@ -44,13 +44,13 @@ test('give InvoiceWrite permission and send invoice', function (): void {
     /** @var AbstractTestCase $this */
     /** @var array<string, string> $_ENV */
 
-    $client = $this->createClient(
+    $clientNip2 = $this->createClient(
         identifier: $_ENV['NIP_2'],
         certificatePath: $_ENV['CERTIFICATE_PATH_2'],
         certificatePassphrase: $_ENV['CERTIFICATE_PASSPHRASE_2']
     );
 
-    $grantsResponse = $client->permissions()->entities()->grants([
+    $grantsResponse = $clientNip2->permissions()->entities()->grants([
         'subjectIdentifierGroup' => [
             'nip' => $_ENV['NIP_1']
         ],
@@ -62,8 +62,8 @@ test('give InvoiceWrite permission and send invoice', function (): void {
         'description' => 'Give InvoiceWrite permission TO NIP_1'
     ])->object();
 
-    $statusResponse = Utility::retry(function (int $attempts) use ($client, $grantsResponse) {
-        $statusResponse = $client->permissions()->operations()->status([
+    Utility::retry(function (int $attempts) use ($clientNip2, $grantsResponse) {
+        $statusResponse = $clientNip2->permissions()->operations()->status([
             'referenceNumber' => $grantsResponse->referenceNumber,
         ])->object();
 
@@ -78,18 +78,14 @@ test('give InvoiceWrite permission and send invoice', function (): void {
         }
     });
 
-    expect($statusResponse->status->code)->toBe(200);
-
-    $this->revokeCurrentSession($client);
-
     $encryptionKey = EncryptionKeyFactory::makeRandom();
 
-    $client = $this->createClient(
+    $clientNip1 = $this->createClient(
         identifier: $_ENV['NIP_2'],
         encryptionKey: $encryptionKey
     );
 
-    $openResponse = $client->sessions()->online()->open([
+    $openResponse = $clientNip1->sessions()->online()->open([
         'formCode' => 'FA (3)',
     ])->object();
 
@@ -100,17 +96,17 @@ test('give InvoiceWrite permission and send invoice', function (): void {
 
     $fixture = (new SendRequestFixture())->withFakturaFixture($fakturaFixture);
 
-    $sendResponse = $client->sessions()->online()->send([
+    $sendResponse = $clientNip1->sessions()->online()->send([
         ...$fixture->data,
         'referenceNumber' => $openResponse->referenceNumber,
     ])->object();
 
-    $client->sessions()->online()->close([
+    $clientNip1->sessions()->online()->close([
         'referenceNumber' => $openResponse->referenceNumber
     ]);
 
-    $statusResponse = Utility::retry(function (int $attempts) use ($client, $openResponse, $sendResponse) {
-        $statusResponse = $client->sessions()->invoices()->status([
+    Utility::retry(function (int $attempts) use ($clientNip1, $openResponse, $sendResponse) {
+        $statusResponse = $clientNip1->sessions()->invoices()->status([
             'referenceNumber' => $openResponse->referenceNumber,
             'invoiceReferenceNumber' => $sendResponse->referenceNumber
         ])->object();
@@ -126,9 +122,40 @@ test('give InvoiceWrite permission and send invoice', function (): void {
         }
     });
 
-    // $revokeSession = $client->permissions()->common()->revoke([
+    $queryResponse = $clientNip1->permissions()->query()->personal()->grants([
+        'contextIdentifierGroup' => [
+            'nip' => $_ENV['NIP_2']
+        ],
+    ])->object();
 
-    // ])->object();
+    expect($queryResponse)->toHaveProperty('permissions');
 
-    $this->revokeCurrentSession($client);
-});
+    expect($queryResponse->permissions)->toBeArray()->not->toBeEmpty();
+
+    expect($queryResponse->permissions[0])->toHaveProperty('id');
+
+    expect($queryResponse->permissions[0]->id)->toBeString();
+
+    $revokePermissionResponse = $clientNip2->permissions()->common()->revoke([
+        'permissionId' => $queryResponse->permissions[0]->id
+    ])->object();
+
+    Utility::retry(function (int $attempts) use ($clientNip2, $revokePermissionResponse) {
+        $statusResponse = $clientNip2->permissions()->operations()->status([
+            'referenceNumber' => $revokePermissionResponse->referenceNumber,
+        ])->object();
+
+        try {
+            expect($statusResponse->status->code)->toBe(200);
+
+            return $statusResponse;
+        } catch (Throwable $exception) {
+            if ($attempts > 2) {
+                throw $exception;
+            }
+        }
+    });
+
+    $this->revokeCurrentSession($clientNip1);
+    $this->revokeCurrentSession($clientNip2);
+})->only();

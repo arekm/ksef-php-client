@@ -14,6 +14,7 @@ use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Indirect\IndirectResour
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Operations\OperationsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\PermissionsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Persons\PersonsResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Query\QueryResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\Subunits\SubunitsResourceInterface;
 use N1ebieski\KSEFClient\Resources\AbstractResource;
 use N1ebieski\KSEFClient\Resources\Permissions\Authorizations\AuthorizationsResource;
@@ -23,6 +24,7 @@ use N1ebieski\KSEFClient\Resources\Permissions\EuEntities\EuEntitiesResource;
 use N1ebieski\KSEFClient\Resources\Permissions\Indirect\IndirectResource;
 use N1ebieski\KSEFClient\Resources\Permissions\Operations\OperationsResource;
 use N1ebieski\KSEFClient\Resources\Permissions\Persons\PersonsResource;
+use N1ebieski\KSEFClient\Resources\Permissions\Query\QueryResource;
 use N1ebieski\KSEFClient\Resources\Permissions\Subunits\SubunitsResource;
 use Throwable;
 
@@ -101,6 +103,15 @@ final class PermissionsResource extends AbstractResource implements PermissionsR
     {
         try {
             return new OperationsResource($this->client, $this->exceptionHandler);
+        } catch (Throwable $throwable) {
+            throw $this->exceptionHandler->handle($throwable);
+        }
+    }
+
+    public function query(): QueryResourceInterface
+    {
+        try {
+            return new QueryResource($this->client, $this->exceptionHandler);
         } catch (Throwable $throwable) {
             throw $this->exceptionHandler->handle($throwable);
         }
