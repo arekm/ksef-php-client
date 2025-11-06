@@ -80,10 +80,10 @@ test('send an invoice, check for UPO and generate QR code', function (): void {
 
     /** @var QRCodes $qrCodes */
     $qrCodes = $generateQRCodesHandler->handle(new GenerateQRCodesAction(
-        mode: Mode::Test,
         nip: $faktura->podmiot1->daneIdentyfikacyjne->nip,
         invoiceCreatedAt: $faktura->fa->p_1->value,
         document: $faktura->toXml(),
+        mode: Mode::Test,
         ksefNumber: $ksefNumber
     ));
 

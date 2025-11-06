@@ -37,9 +37,9 @@ final class GrantsRequest extends AbstractRequest implements BodyInterface
         if ( ! $this->targetIdentifierGroup instanceof Optional) {
             $data['targetIdentifier'] = [
                 'type' => $this->targetIdentifierGroup->getIdentifier()->getType(),
-                ...( ! $this->targetIdentifierGroup instanceof TargetIdentifierTypeGroup ? [
+                ...( $this->targetIdentifierGroup instanceof TargetIdentifierTypeGroup ? [] : [
                     'value' => (string) $this->targetIdentifierGroup->getIdentifier()
-                ] : []),
+                ]),
             ];
         }
 

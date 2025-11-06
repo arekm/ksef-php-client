@@ -28,7 +28,7 @@ abstract class AbstractTestCase extends TestCase
                 $certificatePassphrase ?? $_ENV['CERTIFICATE_PASSPHRASE_1']
             );
 
-        if ($encryptionKey !== null) {
+        if ($encryptionKey instanceof EncryptionKey) {
             $client = $client->withEncryptionKey($encryptionKey);
         }
 
