@@ -21,8 +21,6 @@ final class Certificate extends AbstractValueObject
     ) {
     }
 
-
-
     /**
      * @return array{bits: int, key: string, rsa: array, dsa: array, dh: array, ec: array, type: int}
      */
@@ -75,6 +73,5 @@ final class Certificate extends AbstractValueObject
     public function getRaw(): string
     {
         return trim(str_replace(['-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n"], '', $this->certificate));
-        ;
     }
 }
