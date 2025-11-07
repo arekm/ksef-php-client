@@ -67,6 +67,8 @@ final class GenerateQRCodesHandler extends AbstractHandler
             ];
 
             $certificateLink = implode('/', $code2Parts);
+
+            /** @var string $certificateLinkToSign */
             $certificateLinkToSign = preg_replace('#^https://#', '', rtrim($certificateLink, '/'));
 
             $signature = match ($action->certificate->getPrivateKeyType()) {
@@ -80,7 +82,7 @@ final class GenerateQRCodesHandler extends AbstractHandler
                 ),
             };
 
-            $signatureBase64 = Str::base64URLEncode($signature); //@phpstan-ignore-line
+            $signatureBase64 = Str::base64URLEncode($signature);
 
             $certificateLink .= "/{$signatureBase64}";
 
@@ -107,15 +109,15 @@ final class GenerateQRCodesHandler extends AbstractHandler
         }
 
         /** @var PrivateKey $private */
+        //@phpstan-ignore-next-line
         $private = PublicKeyLoader::loadPrivateKey($privateKeyAsString);
 
-        $signature = $private->withPadding(RSA::SIGNATURE_PSS)
+        //@phpstan-ignore-next-line
+        return $private->withPadding(RSA::SIGNATURE_PSS)
             ->withHash('sha256')
             ->withMGFHash('sha256')
             ->withSaltLength(32)
             ->sign($data);
-
-        return $signature;
     }
 
     private function handleSignDataByECPrivateKey(string $data, OpenSSLAsymmetricKey $privateKey): string
@@ -133,10 +135,8 @@ final class GenerateQRCodesHandler extends AbstractHandler
             throw new RuntimeException('Unable to sign link');
         }
 
-        $signature = $this->convertEcdsaDerToRawHandler->handle(
+        return $this->convertEcdsaDerToRawHandler->handle(
             new ConvertEcdsaDerToRawAction($signature, 32) //@phpstan-ignore-line
         );
-
-        return $signature;
     }
 }
