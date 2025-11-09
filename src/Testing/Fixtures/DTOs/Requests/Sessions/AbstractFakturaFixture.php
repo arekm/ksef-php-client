@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use N1ebieski\KSEFClient\Testing\Fixtures\AbstractFixture as BaseAbstractFixture;
 
 /**
@@ -12,17 +13,24 @@ use N1ebieski\KSEFClient\Testing\Fixtures\AbstractFixture as BaseAbstractFixture
  */
 abstract class AbstractFakturaFixture extends BaseAbstractFixture
 {
-    public function withTodayDate(): self
+    public function withDate(DateTimeInterface | string $date): self
     {
-        $todayDate = (new DateTimeImmutable())->format('Y-m-d');
+        if ( ! $date instanceof DateTimeInterface) {
+            $date = new DateTimeImmutable($date);
+        }
 
-        $this->data['fa']['p_1'] = $todayDate;
+        $this->data['fa']['p_1'] = $date->format('Y-m-d');
 
         if (isset($this->data['fa']['p_6Group']['p_6'])) {
-            $this->data['fa']['p_6Group']['p_6'] = $todayDate;
+            $this->data['fa']['p_6Group']['p_6'] = $date->format('Y-m-d');
         }
 
         return $this;
+    }
+
+    public function withTodayDate(): self
+    {
+        return $this->withDate(new DateTimeImmutable());
     }
 
     public function withRandomInvoiceNumber(): self

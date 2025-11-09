@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Tests\Feature;
 
+use GuzzleHttp\Client;
 use N1ebieski\KSEFClient\ClientBuilder;
 use N1ebieski\KSEFClient\Contracts\Resources\ClientResourceInterface;
 use N1ebieski\KSEFClient\Support\Utility;
@@ -13,6 +14,15 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractTestCase extends TestCase
 {
+    public Client $client;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->client = new Client();
+    }
+
     public function createClient(
         ?string $identifier = null,
         ?string $certificatePath = null,

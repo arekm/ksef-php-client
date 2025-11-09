@@ -21,6 +21,8 @@
         <env name="CERTIFICATE_PASSPHRASE_1" value="password" />
         <env name="KSEF_AUTH_CERTIFICATE_PATH_1" value="config/certificates/testing/6669666921/ksef-auth-certificate.p12" />
         <env name="KSEF_AUTH_CERTIFICATE_PASSPHRASE_1" value="password" />
+        <env name="KSEF_OFFLINE_CERTIFICATE_PATH_1" value="config/certificates/testing/6669666921/ksef-offline-certificate.p12" />
+        <env name="KSEF_OFFLINE_CERTIFICATE_PASSPHRASE_1" value="password" />        
 
         <env name="NIP_2" value="6669666922" />
         <env name="CERTIFICATE_PATH_2" value="config/certificates/testing/6669666922/certificate.p12" />
