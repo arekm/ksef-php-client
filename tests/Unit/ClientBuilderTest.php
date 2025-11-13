@@ -9,7 +9,7 @@ use N1ebieski\KSEFClient\Tests\Unit\AbstractTestCase;
 
 /** @var AbstractTestCase $this */
 
-test('If an exception handler is passed to the client resource', function (): void {
+test('If custom exception handler is passed to the client resource', function (): void {
     /** @var AbstractTestCase $this */
 
     /** @var MockInterface&ExceptionHandlerInterface $exceptionHandler */
