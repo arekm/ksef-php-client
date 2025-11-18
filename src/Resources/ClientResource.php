@@ -110,10 +110,8 @@ final class ClientResource extends AbstractResource implements ClientResourceInt
     {
         if ($this->config->accessToken?->isExpired('-1 minute') === true) {
             if ($this->config->refreshToken?->isExpired() === false) {
-                $this->withAccessToken(AccessToken::from($this->config->refreshToken->token));
-
                 /** @var object{accessToken: object{token: string, validUntil: string}} $authorisationTokenResponse */
-                $authorisationTokenResponse = (new RefreshHandler($this->client))->handle()->object();
+                $authorisationTokenResponse = (new RefreshHandler($this->client, $this->config))->handle()->object();
 
                 $this->withAccessToken(AccessToken::from(
                     token: $authorisationTokenResponse->accessToken->token,

@@ -14,8 +14,10 @@ use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
  */
 dataset('resourceProvider', fn (): array => [
     ['auth'],
+    ['limits'],
     ['sessions'],
     ['invoices'],
+    ['permissions'],
     ['certificates'],
     ['tokens']
 ]);

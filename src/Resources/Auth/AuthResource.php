@@ -90,7 +90,7 @@ final class AuthResource extends AbstractResource implements AuthResourceInterfa
     public function token(): TokenResourceInterface
     {
         try {
-            return new TokenResource($this->client, $this->exceptionHandler);
+            return new TokenResource($this->client, $this->config, $this->exceptionHandler);
         } catch (Throwable $throwable) {
             throw $this->exceptionHandler->handle($throwable);
         }
