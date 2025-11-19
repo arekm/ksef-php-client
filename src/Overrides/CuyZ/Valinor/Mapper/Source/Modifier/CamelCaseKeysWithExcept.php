@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Overrides\CuyZ\Valinor\Mapper\Source\Modifier;
 
-use IteratorAggregate;
-use Traversable;
-
 use function is_iterable;
+use IteratorAggregate;
+
+use Traversable;
 
 /**
  * @api
@@ -20,11 +20,11 @@ final class CamelCaseKeysWithExcept implements IteratorAggregate
 
     /**
      * @param iterable<mixed> $source
-     * @param array<int, string> $except
+     * @param array<int, string> $keyTypeExcept
      */
     public function __construct(
         iterable $source,
-        private readonly array $except = []
+        private readonly array $keyTypeExcept = []
     ) {
         $this->source = $this->replace($source);
     }
@@ -47,7 +47,7 @@ final class CamelCaseKeysWithExcept implements IteratorAggregate
                 continue;
             }
 
-            if (array_filter($this->except, fn (string $except): bool => str_starts_with($key, $except)) !== []) {
+            if (array_filter($this->keyTypeExcept, fn (string $except): bool => str_starts_with($key, $except)) !== []) {
                 $result[$key] = $value;
                 continue;
             }
