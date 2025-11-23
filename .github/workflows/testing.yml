@@ -45,7 +45,7 @@ jobs:
             mkdir -p ./scripts
             mkdir -p ./config/certificates/testing
 
-            for i in 2 3 4; do
+            for i in 4 2 3; do
               NIP="666966692$i"
               VAR_NAME="SIGNATURE_NIP_$i"
               echo "${!VAR_NAME}" > ./scripts/signature-nip.txt
@@ -71,7 +71,8 @@ jobs:
         env:
           SIGNATURE_NIP_1: ${{ vars.SIGNATURE_NIP_1 }}
           SIGNATURE_NIP_2: ${{ vars.SIGNATURE_NIP_2 }}
-          SIGNATURE_NIP_3: ${{ vars.SIGNATURE_NIP_3 }}    
+          SIGNATURE_NIP_3: ${{ vars.SIGNATURE_NIP_3 }}
+          SIGNATURE_NIP_4: ${{ vars.SIGNATURE_NIP_4 }}      
 
       - name: Install Composer dependencies
         run: composer update --no-interaction --prefer-dist --optimize-autoloader
