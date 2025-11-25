@@ -1527,6 +1527,9 @@ file_put_contents(Utility::basePath("var/qr/code1.png"), $qrCodes->code1->raw);
         <h3>Generate PDF for the invoice and the UPO file</h3>
     </summary>
 
+[PDF invoice example.pdf](https://github.com/user-attachments/files/23744618/ONLINE.pdf)
+[UPO-example.pdf](https://github.com/user-attachments/files/23747747/UPO-20251124-EE-4148363000-80035B5E1C-6A.pdf)
+
 Install [lukasz-wojtanowski-softvig/ksef-pdf-generator](https://github.com/N1ebieski/ksef-pdf-generator/tree/feature/cli)
 
 ```php
@@ -1552,9 +1555,6 @@ $pdfs = (new GeneratePDFHandler())->handle(new GeneratePDFAction(
 file_put_contents(Utility::basePath("var/pdf/{$ksefNumber->value}.pdf"), $pdfs->invoice);
 file_put_contents(Utility::basePath("var/pdf/UPO-{$sendResponse->referenceNumber}.pdf"), $pdfs->upo);
 ```
-
-[PDF invoice example.pdf](https://github.com/user-attachments/files/23744618/ONLINE.pdf)
-[UPO-example.pdf](https://github.com/user-attachments/files/23747747/UPO-20251124-EE-4148363000-80035B5E1C-6A.pdf)
 
 </details>
 
@@ -1701,6 +1701,9 @@ file_put_contents(Utility::basePath("var/qr/code2.png"), $qrCodes->code2->raw);
         <h3>Generate PDF for the offline invoice file with both QR codes</h3>
     </summary>
 
+[PDF offline invoice EC certificate example.pdf](https://github.com/user-attachments/files/23744619/OFFLINE-CERTYFIKAT-EC.pdf)
+[PDF offline invoice RSA certificate example.pdf](https://github.com/user-attachments/files/23744620/OFFLINE-CERTYFIKAT-RSA.pdf)
+
 Install [lukasz-wojtanowski-softvig/ksef-pdf-generator](https://github.com/N1ebieski/ksef-pdf-generator/tree/feature/cli)
 
 ```php
@@ -1723,9 +1726,6 @@ $pdfs = (new GeneratePDFHandler())->handle(new GeneratePDFAction(
 
 file_put_contents(Utility::basePath("var/pdf/{$faktura->fa->p_2->value}.pdf"), $pdfs->invoice);
 ```
-
-[PDF offline invoice EC certificate example.pdf](https://github.com/user-attachments/files/23744619/OFFLINE-CERTYFIKAT-EC.pdf)
-[PDF offline invoice RSA certificate example.pdf](https://github.com/user-attachments/files/23744620/OFFLINE-CERTYFIKAT-RSA.pdf)
 
 </details>
 
