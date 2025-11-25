@@ -17,6 +17,7 @@ Main features:
 - Automatic XML document validation based on XSD schemas
 - CSR (Certificate Signing Request) handling
 - KSeF exception handling
+- PDF invoice nad UPO generation
 - QR codes generation
 
 |  KSEF Version  |     Branch     | Release Version |
@@ -1526,8 +1527,7 @@ file_put_contents(Utility::basePath("var/qr/code1.png"), $qrCodes->code1->raw);
         <h3>Generate PDF for the invoice and the UPO file</h3>
     </summary>
 
-1. Install [lukasz-wojtanowski-softvig/ksef-pdf-generator](https://github.com/lukasz-wojtanowski-softvig/ksef-pdf-generator/tree/feature/cli)
-2. Install [Setasign/FPDI](https://github.com/Setasign/FPDI)
+Install [lukasz-wojtanowski-softvig/ksef-pdf-generator](https://github.com/N1ebieski/ksef-pdf-generator/tree/feature/cli)
 
 ```php
 use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFAction;
@@ -1542,15 +1542,13 @@ use setasign\Fpdi\Fpdi;
 
 $ksefFeInvoiceConverterPath = KsefFeInvoiceConverterPath::from(Utility::basePath('../ksef-fe-invoice-converter/dist/cli/index.js'));
 
-$pdfs = (new GeneratePDFHandler(new Fpdi()))->handle(
-    new GeneratePDFAction(
-        invoiceDocument $faktura->toXml(),
-        upoDocument: $upo,
-        ksefFeInvoiceConverterPath: $ksefFeInvoiceConverterPath,
-        qrCodes: $qrCodes,
-        ksefNumber: $ksefNumber
-    )
-);
+$pdfs = (new GeneratePDFHandler())->handle(new GeneratePDFAction(
+    invoiceDocument $faktura->toXml(),
+    upoDocument: $upo,
+    ksefFeInvoiceConverterPath: $ksefFeInvoiceConverterPath,
+    qrCodes: $qrCodes,
+    ksefNumber: $ksefNumber
+));
 
 file_put_contents(Utility::basePath("var/pdf/{$ksefNumber->value}.pdf"), $pdfs->invoice);
 file_put_contents(Utility::basePath("var/pdf/UPO-{$sendResponse->referenceNumber}.pdf"), $pdfs->upo);
@@ -1701,8 +1699,7 @@ file_put_contents(Utility::basePath("var/qr/code2.png"), $qrCodes->code2->raw);
         <h3>Generate PDF for the offline invoice file with both QR codes</h3>
     </summary>
 
-1. Install [lukasz-wojtanowski-softvig/ksef-pdf-generator](https://github.com/lukasz-wojtanowski-softvig/ksef-pdf-generator/tree/feature/cli)
-2. Install [Setasign/FPDI](https://github.com/Setasign/FPDI)
+Install [lukasz-wojtanowski-softvig/ksef-pdf-generator](https://github.com/N1ebieski/ksef-pdf-generator/tree/feature/cli)
 
 ```php
 use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFAction;
@@ -1717,13 +1714,11 @@ use setasign\Fpdi\Fpdi;
 
 $ksefFeInvoiceConverterPath = KsefFeInvoiceConverterPath::from(Utility::basePath('../ksef-fe-invoice-converter/dist/cli/index.js'));
 
-$pdfs = (new GeneratePDFHandler(new Fpdi()))->handle(
-    new GeneratePDFAction(
-        invoiceDocument: $faktura->toXml(),
-        ksefFeInvoiceConverterPath: $ksefFeInvoiceConverterPath,
-        qrCodes: $qrCodes
-    )
-);
+$pdfs = (new GeneratePDFHandler())->handle(new GeneratePDFAction(
+    invoiceDocument: $faktura->toXml(),
+    ksefFeInvoiceConverterPath: $ksefFeInvoiceConverterPath,
+    qrCodes: $qrCodes
+));
 
 file_put_contents(Utility::basePath("var/pdf/{$faktura->fa->p_2->value}.pdf"), $pdfs->invoice);
 ```
