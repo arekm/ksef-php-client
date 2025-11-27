@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\Support;
 
 use Closure;
-use RuntimeException;
+use N1ebieski\KSEFClient\Exceptions\RetryTimeoutException;
 
 final class Utility
 {
@@ -26,7 +26,7 @@ final class Utility
             $seconds += $backoff;
 
             if ($seconds > $retryUntil) {
-                throw new RuntimeException("Operation did not return a result after retrying for {$retryUntil} seconds.");
+                throw new RetryTimeoutException("Operation did not return a result after retrying for {$retryUntil} seconds.");
             }
 
             sleep($backoff);
