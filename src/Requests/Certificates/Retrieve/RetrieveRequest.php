@@ -21,9 +21,11 @@ final class RetrieveRequest extends AbstractRequest implements BodyInterface
      */
     public readonly array $certificateSerialNumbers;
 
-    public function __construct(
-        array $certificateSerialNumbers,
-    ) {
+    /**
+     * @param array<int, CertificateSerialNumber> $certificateSerialNumbers
+     */
+    public function __construct(array $certificateSerialNumbers)
+    {
         Validator::validate([
             'certificateSerialNumbers' => $certificateSerialNumbers
         ], [
