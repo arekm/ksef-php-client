@@ -39,7 +39,7 @@ afterAll(function (): void {
 
     foreach (['NIP_2', 'NIP_3'] as $nip) {
         $client->testdata()->subject()->remove([
-            'nip' => $_ENV['NIP_2'],
+            'nip' => $_ENV[$nip],
         ]);
     }
 });

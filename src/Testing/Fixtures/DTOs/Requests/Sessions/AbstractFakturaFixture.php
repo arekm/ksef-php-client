@@ -33,16 +33,28 @@ abstract class AbstractFakturaFixture extends BaseAbstractFixture
         return $this->withDate(new DateTimeImmutable());
     }
 
-    public function withRandomInvoiceNumber(): self
+    public function withInvoiceNumber(string $invoiceNumber): self
     {
-        $this->data['fa']['p_2'] = strtoupper(uniqid("INV-"));
+        $this->data['fa']['p_2'] = $invoiceNumber;
 
         return $this;
+    }
+
+    public function withRandomInvoiceNumber(): self
+    {
+        return $this->withInvoiceNumber(strtoupper(uniqid("INV-")));
     }
 
     public function withNip(string $nip): self
     {
         $this->data['podmiot1']['daneIdentyfikacyjne']['nip'] = $nip;
+
+        return $this;
+    }
+
+    public function withForNip(string $nip): self
+    {
+        $this->data['podmiot2']['daneIdentyfikacyjne']['idGroup']['nip'] = $nip;
 
         return $this;
     }
