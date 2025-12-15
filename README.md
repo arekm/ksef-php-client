@@ -1038,17 +1038,17 @@ $response = $client->permissions()->operations()->status(
 ```
 </details>
 
-#### Attachments
+#### Permissions Attachments
 
 <details>
     <summary>
-        <h5>Attachments Status</h5>
+        <h5>Permissions Attachments Status</h5>
     </summary>
 
 https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Operacje/paths/~1api~1v2~1permissions~1attachments~1status/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Attachments\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Permissions\Attachments\Status\StatusRequest;
 
 $response = $client->permissions()->attachments()->status(
     new StatusRequest(...)
