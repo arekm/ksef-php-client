@@ -16,6 +16,4 @@ enum SubjectIdentifierType: string implements EnumInterface
     case Pesel = 'Pesel';
 
     case Fingerprint = 'Fingerprint';
-
-    case Token = 'Token';
 }

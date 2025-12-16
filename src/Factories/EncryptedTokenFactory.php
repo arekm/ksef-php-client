@@ -17,13 +17,15 @@ final class EncryptedTokenFactory extends AbstractFactory
 {
     public static function make(
         KsefToken $ksefToken,
-        DateTimeInterface $timestamp,
+        DateTimeInterface | int $timestamp,
         KsefPublicKey $ksefPublicKey,
     ): EncryptedToken {
-        $secondsWithMicro = (float) $timestamp->format('U.u');
-        $timestampAsMiliseconds = (int) floor($secondsWithMicro * 1000);
+        if ($timestamp instanceof DateTimeInterface) {
+            $secondsWithMicro = (float) $timestamp->format('U.u');
+            $timestamp = (int) floor($secondsWithMicro * 1000);
+        }
 
-        $data = "{$ksefToken->value}|{$timestampAsMiliseconds}";
+        $data = "{$ksefToken->value}|{$timestamp}";
 
         /** @var RSAPublicKey $pub */
         $pub = PublicKeyLoader::load($ksefPublicKey->value);

@@ -19,7 +19,7 @@ final class PageSize extends AbstractValueObject implements FromInterface, Value
     {
         Validator::validate($value, [
             new MinRule(10),
-            new MaxRule(500)
+            new MaxRule(1000)
         ]);
 
         $this->value = $value;

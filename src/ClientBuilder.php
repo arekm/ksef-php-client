@@ -425,7 +425,7 @@ final class ClientBuilder
             throw new RuntimeException('KSEF token is not set');
         }
 
-        /** @var object{challenge: string, timestamp: string} $challengeResponse */
+        /** @var object{challenge: string, timestamp: string, timestampMs: int} $challengeResponse */
         $challengeResponse = $client->auth()->challenge()->object();
 
         $securityResponse = $client->security()->publicKeyCertificates();
@@ -448,7 +448,7 @@ final class ClientBuilder
 
         $encryptedToken = EncryptedTokenFactory::make(
             ksefToken: $this->ksefToken,
-            timestamp: new DateTimeImmutable($challengeResponse->timestamp),
+            timestamp: $challengeResponse->timestampMs,
             ksefPublicKey: $ksefPublicKey
         );
 

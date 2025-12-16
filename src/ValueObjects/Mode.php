@@ -20,27 +20,27 @@ enum Mode: string implements EnumInterface
     public function getClientAppInvoiceUrl(): Url
     {
         return match ($this) {
-            self::Test => Url::from('https://ksef-test.mf.gov.pl/client-app/invoice'),
-            self::Demo => Url::from('https://ksef-demo.mf.gov.pl/client-app/invoice'),
-            self::Production => Url::from('https://ksef.mf.gov.pl/client-app/invoice'),
+            self::Test => Url::from('https://qr-test.ksef.mf.gov.pl/invoice'),
+            self::Demo => Url::from('https://qr-demo.ksef.mf.gov.pl/invoice'),
+            self::Production => Url::from('https://qr.ksef.mf.gov.pl/invoice'),
         };
     }
 
     public function getClientAppCertificateUrl(): Url
     {
         return match ($this) {
-            self::Test => Url::from('https://ksef-test.mf.gov.pl/client-app/certificate'),
-            self::Demo => Url::from('https://ksef-demo.mf.gov.pl/client-app/certificate'),
-            self::Production => Url::from('https://ksef.mf.gov.pl/client-app/certificate'),
+            self::Test => Url::from('https://qr-test.ksef.mf.gov.pl/certificate'),
+            self::Demo => Url::from('https://qr-demo.ksef.mf.gov.pl/certificate'),
+            self::Production => Url::from('https://qr.ksef.mf.gov.pl/certificate'),
         };
     }
 
     public function getApiUrl(): ApiUrl
     {
         return match ($this) {
-            self::Test => ApiUrl::from('https://ksef-test.mf.gov.pl/api/v2'),
-            self::Demo => ApiUrl::from('https://ksef-demo.mf.gov.pl/api/v2'),
-            self::Production => ApiUrl::from('https://ksef.mf.gov.pl/api/v2'),
+            self::Test => ApiUrl::from('https://api-test.ksef.mf.gov.pl/v2'),
+            self::Demo => ApiUrl::from('https://api-demo.ksef.mf.gov.pl/v2'),
+            self::Production => ApiUrl::from('https://api.ksef.mf.gov.pl/v2'),
         };
     }
 }
