@@ -1648,6 +1648,8 @@ file_put_contents(Utility::basePath("var/pdf/UPO-{$sendResponse->referenceNumber
         <h3>Generate PDF for the transaction confirmation with both QR codes</h3>
     </summary>
 
+[PDF confirmation example.pdf](https://github.com/user-attachments/files/24212098/CONFIRMATION-INV-6942913FCDB55.pdf)
+
 Install [n1ebieski/ksef-pdf-generator](https://github.com/N1ebieski/ksef-pdf-generator/tree/feature/cli)
 
 ```php
