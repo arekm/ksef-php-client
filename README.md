@@ -1593,6 +1593,9 @@ $generateQRCodesHandler = new GenerateQRCodesHandler(
 
 $ksefNumber = KsefNumber::from($statusResponse->ksefNumber);
 
+// For generating QR code by document use GenerateQRCodesAction
+// Forgenerating QR code by invoice hash use GenerateQRCodesByInvoiceHashAction
+
 /** @var QRCodes $qrCodes */
 $qrCodes = $generateQRCodesHandler->handle(new GenerateQRCodesAction(
     mode: Mode::Test,
@@ -1798,6 +1801,9 @@ $generateQRCodesHandler = new GenerateQRCodesHandler(
 );
 
 $contextIdentifierGroup = ContextIdentifierGroup::fromIdentifier(NIP::from($nip));
+
+// For generating QR codes by document use GenerateQRCodesAction
+// Forgenerating QR codes by invoice hash use GenerateQRCodesByInvoiceHashAction
 
 /** @var QRCodes $qrCodes */
 $qrCodes = $generateQRCodesHandler->handle(new GenerateQRCodesAction(

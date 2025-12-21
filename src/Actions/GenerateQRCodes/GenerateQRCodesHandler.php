@@ -29,9 +29,9 @@ final class GenerateQRCodesHandler extends AbstractHandler
     ) {
     }
 
-    public function handle(GenerateQRCodesAction $action): QRCodes
+    public function handle(GenerateQRCodesAction | GenerateQRCodesByInvoiceHashAction $action): QRCodes
     {
-        $invoiceBase64 = Str::base64URLEncode(hash('sha256', $action->document, true));
+        $invoiceBase64 = Str::base64URLEncode($action->getInvoiceHash());
 
         $code1Parts = [
             (string) $action->mode->getClientAppInvoiceUrl(),

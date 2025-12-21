@@ -14,12 +14,12 @@ use N1ebieski\KSEFClient\ValueObjects\Mode;
 use N1ebieski\KSEFClient\ValueObjects\NIP;
 use N1ebieski\KSEFClient\ValueObjects\Requests\KsefNumber;
 
-final class GenerateQRCodesAction extends AbstractAction implements InvoiceHashInterface
+final class GenerateQRCodesByInvoiceHashAction extends AbstractAction implements InvoiceHashInterface
 {
     public function __construct(
         public readonly NIP $nip,
         public readonly DateTimeInterface $invoiceCreatedAt,
-        public readonly string $document,
+        public readonly string $invoiceHash,
         public readonly Mode $mode = Mode::Production,
         public readonly ?KsefNumber $ksefNumber = null,
         public readonly ?Certificate $certificate = null,
@@ -31,6 +31,6 @@ final class GenerateQRCodesAction extends AbstractAction implements InvoiceHashI
 
     public function getInvoiceHash(): string
     {
-        return hash('sha256', $this->document, true);
+        return $this->invoiceHash;
     }
 }
