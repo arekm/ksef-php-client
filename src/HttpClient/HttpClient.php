@@ -122,7 +122,7 @@ final class HttpClient implements HttpClientInterface
                 );
             }
 
-            $clientRequests = array_map([$this, 'createClientRequest'], $requests);
+            $clientRequests = array_map($this->createClientRequest(...), $requests);
 
             $clientResponses = $this->client->sendAsyncRequest($clientRequests, $this->config->asyncMaxConcurrency);
 
