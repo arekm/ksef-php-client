@@ -8,6 +8,7 @@ use N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\FakturaSprzedaz
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Sessions\Online\Send\SendRequestFixture;
 use N1ebieski\KSEFClient\Tests\Feature\AbstractTestCase;
 use N1ebieski\KSEFClient\ValueObjects\Mode;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Permissions\Query\Personal\PersonalPermissionType;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Testdata\Subject\SubjectType;
 
 /** @var AbstractTestCase $this */
@@ -145,13 +146,18 @@ test('send invoice as NIP_2 when NIP_2 gave InvoiceWrite permission', function (
 
     expect($queryResponse->permissions)->toBeArray()->not->toBeEmpty();
 
-    expect($queryResponse->permissions[0])->toHaveProperty('id');
+    $permission = array_find(
+        $queryResponse->permissions,
+        fn (object $permission) => $permission->permissionScope === PersonalPermissionType::InvoiceWrite->value
+    );
 
-    expect($queryResponse->permissions[0]->id)->toBeString();
+    expect($permission)->toHaveProperty('id');
+
+    expect($permission->id)->toBeString();
 
     /** @var object{referenceNumber: string} $revokePermissionResponse */
     $revokePermissionResponse = $clientNip2->permissions()->common()->revoke([
-        'permissionId' => $queryResponse->permissions[0]->id
+        'permissionId' => $permission->id
     ])->object();
 
     Utility::retry(function (int $attempts) use ($clientNip2, $revokePermissionResponse) {

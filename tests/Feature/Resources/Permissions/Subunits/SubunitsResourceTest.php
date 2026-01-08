@@ -9,6 +9,7 @@ use N1ebieski\KSEFClient\ValueObjects\AccessToken;
 use N1ebieski\KSEFClient\ValueObjects\Mode;
 use N1ebieski\KSEFClient\ValueObjects\NIP;
 use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Permissions\Query\Personal\PersonalPermissionType;
 
 /** @var AbstractTestCase $this */
 
@@ -109,13 +110,18 @@ test('create InternalId for person', function (): void {
 
     expect($queryResponse->permissions)->toBeArray()->not->toBeEmpty();
 
-    expect($queryResponse->permissions[0])->toHaveProperty('id');
+    $permission = array_find(
+        $queryResponse->permissions,
+        fn (object $permission) => $permission->permissionScope === PersonalPermissionType::CredentialsManage->value
+    );
 
-    expect($queryResponse->permissions[0]->id)->toBeString();
+    expect($permission)->toHaveProperty('id');
+
+    expect($permission->id)->toBeString();
 
     /** @var object{referenceNumber: string} $revokePermissionResponse */
     $revokePermissionResponse = $clientNip1->permissions()->common()->revoke([
-        'permissionId' => $queryResponse->permissions[0]->id
+        'permissionId' => $permission->id
     ])->object();
 
     Utility::retry(function (int $attempts) use ($clientNip1, $revokePermissionResponse) {
