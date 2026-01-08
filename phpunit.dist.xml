@@ -25,6 +25,9 @@
         <env name="KSEF_OFFLINE_CERTIFICATE_PASSPHRASE_1" value="password" />        
 
         <env name="NIP_2" value="6669666922" />
+        <env name="PESEL_2" value="90051701232" />
+        <env name="FIRST_NAME_2" value="Bożydar" />
+        <env name="LAST_NAME_2" value="Kowalski" />
         <env name="CERTIFICATE_PATH_2" value="config/certificates/testing/6669666922/certificate.p12" />
         <env name="CERTIFICATE_PASSPHRASE_2" value="password" />
 
