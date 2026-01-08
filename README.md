@@ -95,8 +95,10 @@ Main features:
         - [Permissions Common](#permissions-common)
             - [Permissions Common Grants Revoke](#permissions-common-grants-revoke)
         - [Permissions Query](#permissions-query)
-            - [Permissions Query Personal](#permissions-querypersonal)
+            - [Permissions Query Personal](#permissions-query-personal)
                 - [Permissions Query Personal Grants](#permissions-query-personal-grants)
+            - [Permissions Query Subunits](#permissions-query-subunits)
+                - [Permissions Query Subunits Grants](#permissions-query-subunits-grants)                
         - [Permissions Operations](#permissions-operations)
             - [Permissions Operations Status](#permissions-operations-status)
         - [Permissions Attachments](#permissions-attachments)
@@ -1016,6 +1018,24 @@ https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawni
 use N1ebieski\KSEFClient\Requests\Permissions\Query\Personal\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->personal()->grants(
+    new GrantsRequest(...)
+)->object();
+```
+</details>
+
+##### Permissions Query Subunits
+
+<details>
+    <summary>
+        <h5>Permissions Query Subunits Grants</h5>
+    </summary>
+
+https://ksef-test.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1subunits~1grants/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Subunits\Grants\GrantsRequest;
+
+$response = $client->permissions()->query()->subunits()->grants(
     new GrantsRequest(...)
 )->object();
 ```

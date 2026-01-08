@@ -2,16 +2,13 @@
 
 use N1ebieski\KSEFClient\ClientBuilder;
 use N1ebieski\KSEFClient\Exceptions\HttpClient\BadRequestException;
-use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
 use N1ebieski\KSEFClient\Factories\InternalIdFactory;
-use N1ebieski\KSEFClient\Support\InternalId;
 use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\FakturaSprzedazyTowaruFixture;
-use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Sessions\Online\Send\SendRequestFixture;
 use N1ebieski\KSEFClient\Tests\Feature\AbstractTestCase;
+use N1ebieski\KSEFClient\ValueObjects\AccessToken;
 use N1ebieski\KSEFClient\ValueObjects\Mode;
 use N1ebieski\KSEFClient\ValueObjects\NIP;
-use N1ebieski\KSEFClient\ValueObjects\Requests\Testdata\Subject\SubjectType;
+use N1ebieski\KSEFClient\ValueObjects\RefreshToken;
 
 /** @var AbstractTestCase $this */
 
@@ -49,13 +46,15 @@ test('create InternalId for person', function (): void {
 
     $clientNip1 = $this->createClient();
 
+    $internalId = InternalIdFactory::make(NIP::from($_ENV['NIP_1']), '1234');
+
     /** @var object{referenceNumber: string} $grantsResponse */
     $grantsResponse = $clientNip1->permissions()->subunits()->grants([
         'subjectIdentifierGroup' => [
             'pesel' => $_ENV['PESEL_2']
         ],
         'contextIdentifierGroup' => [
-            'internalId' => InternalIdFactory::make(NIP::from($_ENV['NIP_1']), '1234')
+            'internalId' => $internalId
         ],
         'description' => 'Create InternalId for PESEL_2',
         'subunitName' => 'Subunit for PESEL_2',
@@ -85,15 +84,24 @@ test('create InternalId for person', function (): void {
     });
 
     $clientNip2 = $this->createClient(
-        identifier: $_ENV['NIP_2'],
+        identifier: $internalId,
         certificatePath: $_ENV['CERTIFICATE_PATH_2'],
         certificatePassphrase: $_ENV['CERTIFICATE_PASSPHRASE_2']
     );
 
+    $accessToken = $clientNip2->getAccessToken();
+    $refreshToken = $clientNip2->getRefreshToken();
+
+    expect($accessToken)->toBeInstanceOf(AccessToken::class);
+    expect($accessToken?->validUntil)->toBeGreaterThan(new DateTimeImmutable());
+
+    expect($refreshToken)->toBeInstanceOf(RefreshToken::class);
+    expect($refreshToken?->validUntil)->toBeGreaterThan(new DateTimeImmutable('+6 days'));
+
     /** @var object{permissions: array<int, object{id: string}>} $queryResponse */
-    $queryResponse = $clientNip2->permissions()->query()->personal()->grants([
-        'contextIdentifierGroup' => [
-            'nip' => $_ENV['NIP_1']
+    $queryResponse = $clientNip1->permissions()->query()->subunits()->grants([
+        'subunitIdentifierGroup' => [
+            'internalId' => $internalId
         ],
     ])->object();
 
@@ -106,13 +114,13 @@ test('create InternalId for person', function (): void {
     expect($queryResponse->permissions[0]->id)->toBeString();
 
     /** @var object{referenceNumber: string} $revokePermissionResponse */
-    $revokePermissionResponse = $clientNip2->permissions()->common()->revoke([
+    $revokePermissionResponse = $clientNip1->permissions()->common()->revoke([
         'permissionId' => $queryResponse->permissions[0]->id
     ])->object();
 
-    Utility::retry(function (int $attempts) use ($clientNip2, $revokePermissionResponse) {
+    Utility::retry(function (int $attempts) use ($clientNip1, $revokePermissionResponse) {
         /** @var object{status: object{code: int}, referenceNumber: string} $statusResponse */
-        $statusResponse = $clientNip2->permissions()->operations()->status([
+        $statusResponse = $clientNip1->permissions()->operations()->status([
             'referenceNumber' => $revokePermissionResponse->referenceNumber,
         ])->object();
 
@@ -129,4 +137,4 @@ test('create InternalId for person', function (): void {
 
     $this->revokeCurrentSession($clientNip1);
     $this->revokeCurrentSession($clientNip2);
-})->only();
+});

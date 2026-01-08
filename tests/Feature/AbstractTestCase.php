@@ -9,7 +9,9 @@ use N1ebieski\KSEFClient\ClientBuilder;
 use N1ebieski\KSEFClient\Contracts\Resources\ClientResourceInterface;
 use N1ebieski\KSEFClient\Support\Utility;
 use N1ebieski\KSEFClient\ValueObjects\EncryptionKey;
+use N1ebieski\KSEFClient\ValueObjects\InternalId;
 use N1ebieski\KSEFClient\ValueObjects\Mode;
+use N1ebieski\KSEFClient\ValueObjects\NIP;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractTestCase extends TestCase
@@ -24,7 +26,7 @@ abstract class AbstractTestCase extends TestCase
     }
 
     public function createClient(
-        ?string $identifier = null,
+        NIP|InternalId|string|null $identifier = null,
         ?string $certificatePath = null,
         ?string $certificatePassphrase = null,
         ?EncryptionKey $encryptionKey = null
