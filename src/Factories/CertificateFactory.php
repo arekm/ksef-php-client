@@ -19,7 +19,7 @@ final class CertificateFactory extends AbstractFactory
     }
 
     #[Deprecated('Use makeFromPkcs8 instead')]
-    public static function makeFromString(string $certificate, OpenSSLAsymmetricKey | string $privateKey, ?string $passphrase = null): Certificate
+    public static function makeFromString(string $certificate, OpenSSLAsymmetricKey | string $privateKey, #[\SensitiveParameter] ?string $passphrase = null): Certificate
     {
         return self::makeFromPkcs8($certificate, $privateKey, $passphrase);
     }
@@ -35,7 +35,7 @@ final class CertificateFactory extends AbstractFactory
         return self::makeFromPkcs12($pkcs12, $certificatePath->passphrase);
     }
 
-    public static function makeFromPkcs8(string $certificate, OpenSSLAsymmetricKey | string $privateKey, ?string $passphrase = null): Certificate
+    public static function makeFromPkcs8(string $certificate, OpenSSLAsymmetricKey | string $privateKey, #[\SensitiveParameter] ?string $passphrase = null): Certificate
     {
         if ( ! $privateKey instanceof OpenSSLAsymmetricKey) {
             $privateKey = openssl_pkey_get_private($privateKey, $passphrase);

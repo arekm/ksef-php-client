@@ -181,7 +181,7 @@ final class ClientBuilder
         return $this;
     }
 
-    public function withCertificatePath(CertificatePath | string $certificatePath, ?string $passphrase = null): self
+    public function withCertificatePath(CertificatePath | string $certificatePath, #[\SensitiveParameter] ?string $passphrase = null): self
     {
         if ($certificatePath instanceof CertificatePath === false) {
             $certificatePath = CertificatePath::from($certificatePath, $passphrase);
@@ -192,7 +192,7 @@ final class ClientBuilder
         return $this->withCertificate($certificate);
     }
 
-    public function withCertificate(Certificate | string $certificate, ?string $privateKey = null, ?string $passphrase = null): self
+    public function withCertificate(Certificate | string $certificate, ?string $privateKey = null, #[\SensitiveParameter] ?string $passphrase = null): self
     {
         if ($certificate instanceof Certificate === false) {
             if ($privateKey === null) {

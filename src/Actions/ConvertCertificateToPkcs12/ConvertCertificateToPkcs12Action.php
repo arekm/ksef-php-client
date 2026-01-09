@@ -11,7 +11,7 @@ final class ConvertCertificateToPkcs12Action extends AbstractAction
 {
     public function __construct(
         public readonly Certificate $certificate,
-        public readonly string $passphrase
+		#[\SensitiveParameter] public readonly string $passphrase
     ) {
     }
 }
