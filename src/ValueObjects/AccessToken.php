@@ -14,7 +14,7 @@ final class AccessToken extends AbstractValueObject implements Stringable
     use HasExpired;
 
     public function __construct(
-        public readonly string $token,
+        #[\SensitiveParameter] public readonly string $token,
         public readonly ?DateTimeInterface $validUntil = null
     ) {
     }
@@ -24,7 +24,7 @@ final class AccessToken extends AbstractValueObject implements Stringable
         return $this->token;
     }
 
-    public static function from(string $token, ?DateTimeInterface $validUntil = null): self
+    public static function from(#[\SensitiveParameter] string $token, ?DateTimeInterface $validUntil = null): self
     {
         return new self($token, $validUntil);
     }

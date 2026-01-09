@@ -16,8 +16,8 @@ final class EncryptionKey extends AbstractValueObject
     public readonly string $iv;
 
     public function __construct(
-        string $key,
-        string $iv
+        #[\SensitiveParameter] string $key,
+        #[\SensitiveParameter] string $iv
     ) {
         Validator::validate([
             'key' => $key,
@@ -31,7 +31,7 @@ final class EncryptionKey extends AbstractValueObject
         $this->iv = $iv;
     }
 
-    public static function from(string $key, string $iv): self
+    public static function from(#[\SensitiveParameter] string $key, #[\SensitiveParameter] string $iv): self
     {
         return new self($key, $iv);
     }

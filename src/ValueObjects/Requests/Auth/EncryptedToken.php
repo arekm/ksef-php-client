@@ -12,7 +12,7 @@ use Stringable;
 final class EncryptedToken extends AbstractValueObject implements FromInterface, ValueAwareInterface, Stringable
 {
     public function __construct(
-        public readonly string $value
+        #[\SensitiveParameter] public readonly string $value
     ) {
     }
 
@@ -21,7 +21,7 @@ final class EncryptedToken extends AbstractValueObject implements FromInterface,
         return $this->value;
     }
 
-    public static function from(string $value): self
+    public static function from(#[\SensitiveParameter] string $value): self
     {
         return new self($value);
     }

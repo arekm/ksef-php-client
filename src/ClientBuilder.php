@@ -112,7 +112,7 @@ final class ClientBuilder
     }
 
 
-    public function withEncryptionKey(EncryptionKey | string $encryptionKey, ?string $iv = null): self
+    public function withEncryptionKey(#[\SensitiveParameter] EncryptionKey | string $encryptionKey, #[\SensitiveParameter] ?string $iv = null): self
     {
         if (is_string($encryptionKey)) {
             if ($iv === null) {
@@ -138,7 +138,7 @@ final class ClientBuilder
         return $this;
     }
 
-    public function withKsefToken(KsefToken | string $ksefToken): self
+    public function withKsefToken(#[\SensitiveParameter] KsefToken | string $ksefToken): self
     {
         if ($ksefToken instanceof KsefToken === false) {
             $ksefToken = KsefToken::from($ksefToken);
@@ -151,7 +151,7 @@ final class ClientBuilder
         return $this;
     }
 
-    public function withAccessToken(AccessToken | string $accessToken, DateTimeInterface | string | null $validUntil = null): self
+    public function withAccessToken(#[\SensitiveParameter] AccessToken | string $accessToken, DateTimeInterface | string | null $validUntil = null): self
     {
         if ($accessToken instanceof AccessToken === false) {
             if (is_string($validUntil)) {
@@ -166,7 +166,7 @@ final class ClientBuilder
         return $this;
     }
 
-    public function withRefreshToken(RefreshToken | string $refreshToken, DateTimeInterface | string | null $validUntil = null): self
+    public function withRefreshToken(#[\SensitiveParameter] RefreshToken | string $refreshToken, DateTimeInterface | string | null $validUntil = null): self
     {
         if ($refreshToken instanceof RefreshToken === false) {
             if (is_string($validUntil)) {
@@ -192,7 +192,7 @@ final class ClientBuilder
         return $this->withCertificate($certificate);
     }
 
-    public function withCertificate(Certificate | string $certificate, ?string $privateKey = null, #[\SensitiveParameter] ?string $passphrase = null): self
+    public function withCertificate(Certificate | string $certificate, #[\SensitiveParameter] ?string $privateKey = null, #[\SensitiveParameter] ?string $passphrase = null): self
     {
         if ($certificate instanceof Certificate === false) {
             if ($privateKey === null) {
