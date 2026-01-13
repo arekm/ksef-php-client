@@ -12,7 +12,7 @@ use RuntimeException;
 final class Certificate extends AbstractValueObject
 {
     /**
-     * @param array{issuer: array<string, string>, serialNumberHex: string} $info
+     * @param array{issuer: array<string, string>, serialNumberHex: string, extensions: array{keyUsage: string}} $info
      */
     public function __construct(
         public readonly string $certificate,
@@ -22,7 +22,7 @@ final class Certificate extends AbstractValueObject
     }
 
     /**
-     * @param array{issuer: array<string, string>, serialNumberHex: string} $info
+     * @param array{issuer: array<string, string>, serialNumberHex: string, extensions: array{keyUsage: string}} $info
      */
     public static function from(
         string $certificate,
