@@ -27,7 +27,6 @@ final class Stopka extends AbstractDTO implements DomSerializableInterface
     /**
      * @param Optional|array<int, Informacje> $informacje Pozostałe dane
      * @param Optional|array<int, Rejestry> $rejestry
-     * @return void
      */
     public function __construct(
         Optional | array $informacje = new Optional(),

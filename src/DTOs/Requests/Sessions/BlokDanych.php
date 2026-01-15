@@ -31,7 +31,6 @@ final class BlokDanych extends AbstractDTO implements DomSerializableInterface
      * @param array<int, MetaDane> $metaDane Dane opisowe bloku danych
      * @param Optional|Tekst $tekst Część tekstowa bloku danych
      * @param Optional|array<int, Tabela> $tabela Tabele
-     * @return void
      */
     public function __construct(
         array $metaDane,

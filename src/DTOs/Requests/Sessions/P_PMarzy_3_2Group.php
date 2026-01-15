@@ -14,7 +14,6 @@ final class P_PMarzy_3_2Group extends AbstractDTO implements DomSerializableInte
 {
     /**
      * @param P_PMarzy_3_2 $p_PMarzy_3_2 Znacznik dostawy dzieł sztuki dla których podstawę opodatkowania stanowi marża, zgodnie z art. 120 ustawy, a faktura dokumentująca dostawę zawiera wyrazy "procedura marży - dzieła sztuki"
-     * @return void
      */
     public function __construct(
         public readonly P_PMarzy_3_2 $p_PMarzy_3_2 = P_PMarzy_3_2::Default,

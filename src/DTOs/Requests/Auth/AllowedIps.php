@@ -13,7 +13,6 @@ final class AllowedIps extends AbstractDTO
      * @param Optional|array<int, string> $ip4Addresses
      * @param Optional|array<int, string> $ip4Ranges
      * @param Optional|array<int, string> $ip4Masks
-     * @return void
      */
     public function __construct(
         public readonly Optional | array $ip4Addresses,

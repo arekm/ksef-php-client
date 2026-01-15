@@ -30,7 +30,6 @@ final class Tabela extends AbstractDTO implements DomSerializableInterface
      * @param TNaglowek $tNaglowek Nagłówek tabeli
      * @param Optional|array<int, TMetaDane> $tMetaDane Dane opisowe dotyczące tabeli
      * @param array<int, Wiersz> $wiersz Wiersze tabeli
-     * @return void
      */
     public function __construct(
         public readonly TNaglowek $tNaglowek,

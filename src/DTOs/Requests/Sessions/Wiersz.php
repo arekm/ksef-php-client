@@ -22,7 +22,6 @@ final class Wiersz extends AbstractDTO implements DomSerializableInterface
 
     /**
      * @param array<int, WKom> $wKom Zawartość pola
-     * @return void
      */
     public function __construct(
         array $wKom,

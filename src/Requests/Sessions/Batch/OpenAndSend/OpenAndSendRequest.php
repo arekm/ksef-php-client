@@ -17,7 +17,6 @@ final class OpenAndSendRequest extends AbstractRequest implements BodyInterface
 
     /**
      * @param array<int, Faktura> $faktury
-     * @return void
      */
     public function __construct(
         public readonly FormCode $formCode,

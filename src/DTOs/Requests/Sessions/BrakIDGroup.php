@@ -14,7 +14,6 @@ final class BrakIDGroup extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param BrakID $brakID Podmiot nie posiada identyfikatora podatkowego lub identyfikator nie występuje na fakturze: 1- tak
-     * @return void
      */
     public function __construct(
         public readonly BrakID $brakID,

@@ -20,7 +20,6 @@ final class GrantsRequest extends AbstractRequest implements BodyInterface
 {
     /**
      * @param Optional|array<int, PersonalPermissionType> $permissionTypes
-     * @return void
      */
     public function __construct(
         public readonly Optional | ContextIdentifierNipGroup $contextIdentifierGroup = new Optional(),

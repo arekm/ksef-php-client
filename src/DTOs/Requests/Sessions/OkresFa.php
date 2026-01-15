@@ -16,7 +16,6 @@ final class OkresFa extends AbstractDTO implements DomSerializableInterface
     /**
      * @param P_6_Od $p_6_Od Data początkowa okresu, którego dotyczy faktura
      * @param P_6_Do $p_6_Do Data końcowa okresu, którego dotyczy faktura - data dokonania lub zakończenia dostawy towarów lub wykonania usługi
-     * @return void
      */
     public function __construct(
         public readonly P_6_Od $p_6_Od,

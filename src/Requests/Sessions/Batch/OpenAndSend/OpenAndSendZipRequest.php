@@ -14,9 +14,6 @@ final class OpenAndSendZipRequest extends AbstractRequest implements BodyInterfa
 {
     use HasToBody;
 
-    /**
-     * @return void
-     */
     public function __construct(
         public readonly FormCode $formCode,
         public readonly string $faktury,

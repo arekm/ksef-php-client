@@ -22,7 +22,6 @@ final class Tekst extends AbstractDTO implements DomSerializableInterface
 
     /**
      * @param array<int, Akapit> $akapit Akapit stanowiący część tekstową bloku danych
-     * @return void
      */
     public function __construct(
         array $akapit,

@@ -45,7 +45,6 @@ final class WarunkiTransakcji extends AbstractDTO implements DomSerializableInte
      * @param Optional|WarunkiDostawy $warunkiDostawy Warunki dostawy towarów - w przypadku istnienia pomiędzy stronami transakcji, umowy określającej warunki dostawy tzw. Incoterms
      * @param Optional|array<int, Transport> $transport
      * @param Optional|PodmiotPosredniczacy $podmiotPosredniczacy Wartość "1" oznacza dostawę dokonaną przez podmiot, o którym mowa w art. 22 ust. 2d ustawy. Pole dotyczy przypadku, w którym podmiot uczestniczy w transakcji łańcuchowej innej niż procedura trójstronna uproszczona, o której mowa w art. 135 ust. 1 pkt 4 ustawy
-     * @return void
      */
     public function __construct(
         Optional | array $umowy = new Optional(),

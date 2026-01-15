@@ -21,7 +21,6 @@ final class Zalacznik extends AbstractDTO implements DomSerializableInterface
 
     /**
      * @param array<int, BlokDanych> $blokDanych Szczegółowe dane załącznika do faktury (bloki danych)
-     * @return void
      */
     public function __construct(
         array $blokDanych,

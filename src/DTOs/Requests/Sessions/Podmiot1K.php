@@ -17,7 +17,6 @@ final class Podmiot1K extends AbstractDTO implements DomSerializableInterface
      * @param Podmiot1KDaneIdentyfikacyjne $daneIdentyfikacyjne Dane identyfikujące podatnika
      * @param Adres $adres Adres podatnika
      * @param PrefiksPodatnika|Optional $prefiksPodatnika Kod (prefiks) podatnika VAT UE dla przypadków określonych w art. 97 ust. 10 pkt 2 i 3 ustawy oraz w przypadku, o którym mowa w art. 136 ust. 1 pkt 3 ustawy
-     * @return void
      */
     public function __construct(
         public readonly Podmiot1KDaneIdentyfikacyjne $daneIdentyfikacyjne,

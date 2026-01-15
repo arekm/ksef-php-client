@@ -14,7 +14,6 @@ final class P_PMarzy_3_3Group extends AbstractDTO implements DomSerializableInte
 {
     /**
      * @param P_PMarzy_3_3 $p_PMarzy_3_3 Znacznik dostawy przedmiotów kolekcjonerskich i antyków, dla których podstawę opodatkowania stanowi marża, zgodnie z art. 120 ustawy, a faktura dokumentująca dostawę zawiera wyrazy "procedura marży - przedmioty kolekcjonerskie i antyki"
-     * @return void
      */
     public function __construct(
         public readonly P_PMarzy_3_3 $p_PMarzy_3_3 = P_PMarzy_3_3::Default,

@@ -17,7 +17,6 @@ final class DodatkowyOpis extends AbstractDTO implements DomSerializableInterfac
 {
     /**
      * @param NrWiersza|Optional $nrWiersza Numer wiersza podany w polu NrWierszaFa lub NrWierszaZam, jeśli informacja odnosi się wyłącznie do danej pozycji faktury
-     * @return void
      */
     public function __construct(
         public readonly Klucz $klucz,

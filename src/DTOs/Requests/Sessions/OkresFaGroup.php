@@ -13,7 +13,6 @@ final class OkresFaGroup extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param OkresFa $okresFa Okres, którego dotyczy faktura w przypadkach, o których mowa w art. 19a ust. 3 zdanie pierwsze i ust. 4 oraz ust. 5 pkt 4 ustawy
-     * @return void
      */
     public function __construct(
         public readonly OkresFa $okresFa,

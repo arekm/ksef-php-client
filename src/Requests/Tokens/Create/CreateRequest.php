@@ -12,7 +12,6 @@ final class CreateRequest extends AbstractRequest implements BodyInterface
 {
     /**
      * @param array<int, TokenPermissionType> $permissions
-     * @return void
      */
     public function __construct(
         public readonly array $permissions,

@@ -16,7 +16,6 @@ final class ZaplataGroup extends AbstractDTO implements DomSerializableInterface
     /**
      * @param Zaplacono $zaplacono Znacznik informujący, że kwota należności wynikająca z faktury została zapłacona: 1 - zapłacono
      * @param DataZaplaty $dataZaplaty Data zapłaty, jeśli do wystawienia faktury płatność została dokonana
-     * @return void
      */
     public function __construct(
         public readonly DataZaplaty $dataZaplaty,

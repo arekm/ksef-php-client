@@ -14,7 +14,6 @@ final class P_PMarzyNGroup extends AbstractDTO implements DomSerializableInterfa
 {
     /**
      * @param P_PMarzyN $p_PMarzyN Znacznik braku wystąpienia procedur marży, o których mowa w art. 119 lub art. 120 ustawy
-     * @return void
      */
     public function __construct(
         public readonly P_PMarzyN $p_PMarzyN = P_PMarzyN::Default,

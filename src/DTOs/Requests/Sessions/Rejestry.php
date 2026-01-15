@@ -19,7 +19,6 @@ final class Rejestry extends AbstractDTO implements DomSerializableInterface
     /**
      * @param KRS|Optional $krs Numer Krajowego Rejestru Sądowego
      * @param BDO|Optional $bdo Numer w Bazie Danych o Odpadach
-     * @return void
      */
     public function __construct(
         public readonly Optional | PelnaNazwa $pelnaNazwa = new Optional(),

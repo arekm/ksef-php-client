@@ -14,7 +14,6 @@ final class P_19BGroup extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param P_19B $p_19B Jeśli pole P_19 równa się "1" - należy wskazać przepis dyrektywy 2006/112/WE, który zwalnia od podatku taką dostawę towarów lub takie świadczenie usług
-     * @return void
      */
     public function __construct(
         public readonly P_19B $p_19B,

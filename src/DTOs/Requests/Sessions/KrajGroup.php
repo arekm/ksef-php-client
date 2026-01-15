@@ -17,7 +17,6 @@ final class KrajGroup extends AbstractDTO implements DomSerializableInterface
     /**
      * @param NrID $nrID Dane identyfikujące nabywcę
      * @param Optional|KodKraju $kodKraju Kod (prefiks) nabywcy VAT UE, o którym mowa w art. 106e ust. 1 pkt 24 ustawy oraz w przypadku, o którym mowa w art. 136 ust. 1 pkt 4 ustawy
-     * @return void
      */
     public function __construct(
         public readonly NrID $nrID,

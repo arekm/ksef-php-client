@@ -14,7 +14,6 @@ final class P_19NGroup extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param P_19N $p_19N Znacznik braku dostawy towarów lub świadczenia usług zwolnionych od podatku na podstawie art. 43 ust. 1, art. 113 ust. 1 i 9 ustawy albo przepisów wydanych na podstawie art. 82 ust. 3 ustawy lub na podstawie innych przepisów
-     * @return void
      */
     public function __construct(
         public readonly P_19N $p_19N = P_19N::Default,

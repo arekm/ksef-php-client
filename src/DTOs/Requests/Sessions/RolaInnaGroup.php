@@ -16,7 +16,6 @@ final class RolaInnaGroup extends AbstractDTO implements DomSerializableInterfac
     /**
      * @param RolaInna $rolaInna Znacznik innego podmiotu: 1 - Inny podmiot
      * @param OpisRoli $opisRoli Opis roli podmiotu - w przypadku wyboru roli jako Inny podmiot
-     * @return void
      */
     public function __construct(
         public readonly RolaInna $rolaInna,

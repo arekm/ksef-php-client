@@ -13,9 +13,6 @@ use N1ebieski\KSEFClient\Support\Optional;
 
 final class Informacje extends AbstractDTO implements DomSerializableInterface
 {
-    /**
-     * @return void
-     */
     public function __construct(
         public readonly Optional | StopkaFaktury $stopkaFaktury = new Optional(),
     ) {

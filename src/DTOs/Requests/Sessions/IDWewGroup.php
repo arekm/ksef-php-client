@@ -14,7 +14,6 @@ final class IDWewGroup extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param IDWew $iDWew Identyfikator wewnętrzny z NIP
-     * @return void
      */
     public function __construct(
         public readonly IDWew $iDWew,

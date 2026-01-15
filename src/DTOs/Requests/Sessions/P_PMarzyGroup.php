@@ -15,7 +15,6 @@ final class P_PMarzyGroup extends AbstractDTO implements DomSerializableInterfac
 {
     /**
      * @param P_PMarzy $p_PMarzy Znacznik wystąpienia procedur marży, o których mowa w art. 119 lub art. 120 ustawy
-     * @return void
      */
     public function __construct(
         public readonly P_PMarzy_2Group | P_PMarzy_3_1Group | P_PMarzy_3_2Group | P_PMarzy_3_3Group $p_PMarzy_2_3Group,

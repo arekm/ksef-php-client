@@ -21,7 +21,6 @@ final class TNaglowek extends AbstractDTO implements DomSerializableInterface
 
     /**
      * @param array<int, Kol> $kol Zawartość pola
-     * @return void
      */
     public function __construct(
         array $kol

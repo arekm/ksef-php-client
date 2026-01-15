@@ -14,7 +14,6 @@ final class P_22NGroup extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param P_22N $p_22N Znacznik braku wewnątrzwspólnotowej dostawy nowych środków transportu
-     * @return void
      */
     public function __construct(
         public readonly P_22N $p_22N = P_22N::Default,

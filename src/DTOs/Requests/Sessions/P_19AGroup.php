@@ -14,7 +14,6 @@ final class P_19AGroup extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param P_19A $p_19A Jeśli pole P_19 równa się "1" - należy wskazać przepis ustawy albo aktu wydanego na podstawie ustawy, na podstawie którego podatnik stosuje zwolnienie od podatku
-     * @return void
      */
     public function __construct(
         public readonly P_19A $p_19A,

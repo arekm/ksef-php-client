@@ -62,7 +62,6 @@ final class FaWiersz extends AbstractDTO implements DomSerializableInterface
      * @param Procedura|Optional $procedura Oznaczenie dotyczące procedury
      * @param KursWaluty|Optional $kursWaluty Kurs waluty stosowany do wyliczenia kwoty podatku w przypadkach, o których mowa w Dziale VI ustawy
      * @param StanPrzed|Optional $stanPrzed Znacznik stanu przed korektą w przypadku faktury korygującej lub faktury korygującej fakturę wystawioną w związku z art. 106f ust. 3 ustawy, w przypadku gdy korekta dotyczy danych wykazanych w pozycjach faktury i jest dokonywana w sposób polegający na wykazaniu danych przed korektą i po korekcie jako osobnych wierszy z odrębną numeracją oraz w przypadku potwierdzania braku zmiany wartości danej pozycji
-     * @return void
      */
     public function __construct(
         public readonly NrWierszaFa $nrWierszaFa,

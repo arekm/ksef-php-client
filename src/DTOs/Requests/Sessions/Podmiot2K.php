@@ -17,7 +17,6 @@ final class Podmiot2K extends AbstractDTO implements DomSerializableInterface
      * @param Podmiot2KDaneIdentyfikacyjne $daneIdentyfikacyjne Dane identyfikujące nabywcę
      * @param Adres|Optional $adres Adres nabywcy
      * @param IDNabywcy|Optional $idNabywcy Unikalny klucz powiązania danych nabywcy na fakturach korygujących, w przypadku gdy dane nabywcy na fakturze korygującej zmieniły się w stosunku do danych na fakturze korygowanej
-     * @return void
      */
     public function __construct(
         public readonly Podmiot2KDaneIdentyfikacyjne $daneIdentyfikacyjne,

@@ -14,7 +14,6 @@ final class P_PMarzy_2Group extends AbstractDTO implements DomSerializableInterf
 {
     /**
      * @param P_PMarzy_2 $p_PMarzy_2 Znacznik świadczenia usług turystyki, dla których podstawę opodatkowania stanowi marża, zgodnie z art. 119 ust. 1 ustawy, a faktura dokumentująca świadczenie zawiera wyrazy "procedura marży dla biur podróży"
-     * @return void
      */
     public function __construct(
         public readonly P_PMarzy_2 $p_PMarzy_2 = P_PMarzy_2::Default,

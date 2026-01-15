@@ -20,7 +20,6 @@ final class CreateRequest extends AbstractRequest implements BodyInterface
 
     /**
      * @param Optional|array<int, Subunit> $subunits
-     * @return void
      */
     public function __construct(
         public readonly NIP $subjectNip,

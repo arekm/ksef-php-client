@@ -19,7 +19,6 @@ final class P_13_4Group extends AbstractDTO implements DomSerializableInterface
      * @param P_13_4 $p_13_4 Suma wartości sprzedaży netto objętej ryczałtem dla taksówek osobowych. W przypadku faktur zaliczkowych, kwota zaliczki netto. W przypadku faktur korygujących, kwota różnicy, o której mowa w art. 106j ust. 2 pkt 5 ustawy
      * @param P_14_4 $p_14_4 Kwota podatku od sumy wartości sprzedaży netto w przypadku ryczałtu dla taksówek osobowych. W przypadku faktur zaliczkowych, kwota podatku wyliczona według wzoru, o którym mowa w art. 106f ust. 1 pkt 3 ustawy. W przypadku faktur korygujących, kwota różnicy, o której mowa w art. 106j ust. 2 pkt 5 ustawy
      * @param Optional|P_14_4W $p_14_4W W przypadku gdy faktura jest wystawiona w walucie obcej, kwota podatku ryczałtu dla taksówek osobowych, przeliczona zgodnie z przepisami Działu VI w związku z art. 106e ust. 11 ustawy. W przypadku faktur zaliczkowych, kwota podatku wyliczona według wzoru, o którym mowa w art. 106f ust. 1 pkt 3 ustawy. W przypadku faktur korygujących, kwota różnicy, o której mowa w art. 106j ust. 2 pkt 5 ustawy
-     * @return void
      */
     public function __construct(
         public readonly P_13_4 $p_13_4,

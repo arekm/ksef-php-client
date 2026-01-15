@@ -28,7 +28,6 @@ final class Podmiot1 extends AbstractDTO implements DomSerializableInterface
      * @param Optional|array<int, DaneKontaktowe> $daneKontaktowe Dane kontaktowe podatnika
      * @param PrefiksPodatnika|Optional $prefiksPodatnika Kod (prefiks) podatnika VAT UE dla przypadków określonych w art. 97 ust. 10 pkt 2 i 3 ustawy oraz w przypadku, o którym mowa w art. 136 ust. 1 pkt 3 ustawy
      * @param NrEORI|Optional $nrEORI Numer EORI podatnika (sprzedawcy)
-     * @return void
      */
     public function __construct(
         public readonly Podmiot1DaneIdentyfikacyjne $daneIdentyfikacyjne,

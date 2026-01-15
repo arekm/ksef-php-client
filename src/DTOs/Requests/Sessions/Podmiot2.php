@@ -33,7 +33,6 @@ final class Podmiot2 extends AbstractDTO implements DomSerializableInterface
      * @param IDNabywcy|Optional $idNabywcy Unikalny klucz powiązania danych nabywcy na fakturach korygujących, w przypadku gdy dane nabywcy na fakturze korygującej zmieniły się w stosunku do danych na fakturze korygowanej
      * @param JST $jst Znacznik jednostki podrzędnej JST. Wartość "1" oznacza, że faktura dotyczy jednostki podrzędnej JST. W takim przypadku, aby udostępnić fakturę jednostce podrzędnej JST, należy wypełnić sekcję Podmiot3, w szczególności podać NIP lub ID-Wew i określić rolę jako 8. Wartość "2" oznacza, że faktura nie dotyczy jednostki podrzędnej JST
      * @param GV $gv Znacznik członka grupy VAT. Wartość "1" oznacza, że faktura dotyczy członka grupy VAT. W takim przypadku, aby udostępnić fakturę członkowi grupy VAT, należy wypełnić sekcję Podmiot3, w szczególności podać NIP lub ID-Wew i określić rolę jako 10. Wartość "2" oznacza, że faktura nie dotyczy członka grupy VAT
-     * @return void
      */
     public function __construct(
         public readonly Podmiot2DaneIdentyfikacyjne $daneIdentyfikacyjne,

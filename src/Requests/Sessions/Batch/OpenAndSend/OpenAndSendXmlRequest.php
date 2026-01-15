@@ -16,7 +16,6 @@ final class OpenAndSendXmlRequest extends AbstractRequest implements BodyInterfa
 
     /**
      * @param array<int, string> $faktury
-     * @return void
      */
     public function __construct(
         public readonly FormCode $formCode,

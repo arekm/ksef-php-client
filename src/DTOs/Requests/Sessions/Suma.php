@@ -22,7 +22,6 @@ final class Suma extends AbstractDTO implements DomSerializableInterface
 
     /**
      * @param array<int, SKom> $sKom Zawartość pola
-     * @return void
      */
     public function __construct(
         array $sKom,

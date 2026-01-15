@@ -14,7 +14,6 @@ final class P_6Group extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param P_6 $p_6 Data dokonania lub zakończenia dostawy towarów lub wykonania usługi lub data otrzymania zapłaty, o której mowa w art. 106b ust. 1 pkt 4 ustawy, o ile taka data jest określona i różni się od daty wystawienia faktury. Pole wypełnia się w przypadku, gdy dla wszystkich pozycji faktury data jest wspólna
-     * @return void
      */
     public function __construct(
         public readonly P_6 $p_6,

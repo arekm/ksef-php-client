@@ -25,7 +25,6 @@ final class P_22Group extends AbstractDTO implements DomSerializableInterface
      * @param P_22 $p_22 Znacznik wewnątrzwspólnotowej dostawy nowych środków transportu
      * @param P_42_5 $p_42_5 Jeśli występuje obowiązek, o którym mowa w art. 42 ust. 5 ustawy, należy podać wartość "1", w przeciwnym przypadku - wartość "2
      * @param array<int, NowySrodekTransportu> $nowySrodekTransportu
-     * @return void
      */
     public function __construct(
         public readonly P_42_5 $p_42_5,

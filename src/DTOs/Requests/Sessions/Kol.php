@@ -16,7 +16,6 @@ final class Kol extends AbstractDTO implements DomSerializableInterface
     /**
      * @param Typ $typ Typ danych w nagłówku tabeli
      * @param NKom $nKom Zawartość pola
-     * @return void
      */
     public function __construct(
         public readonly Typ $typ,

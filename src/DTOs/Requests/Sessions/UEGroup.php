@@ -16,7 +16,6 @@ final class UEGroup extends AbstractDTO implements DomSerializableInterface
     /**
      * @param KodUE $kodUE Kod (prefiks) nabywcy VAT UE, o którym mowa w art. 106e ust. 1 pkt 24 ustawy oraz w przypadku, o którym mowa w art. 136 ust. 1 pkt 4 ustawy
      * @param NrVatUE $nrVatUE Numer Identyfikacyjny VAT kontrahenta UE
-     * @return void
      */
     public function __construct(
         public readonly KodUE $kodUE,

@@ -14,7 +14,6 @@ final class P_PMarzy_3_1Group extends AbstractDTO implements DomSerializableInte
 {
     /**
      * @param P_PMarzy_3_1 $p_PMarzy_3_1 Znacznik dostawy towarów używanych dla których podstawę opodatkowania stanowi marża, zgodnie z art. 120 ustawy, a faktura dokumentująca dostawę zawiera wyrazy "procedura marży - towary używane"
-     * @return void
      */
     public function __construct(
         public readonly P_PMarzy_3_1 $p_PMarzy_3_1 = P_PMarzy_3_1::Default,

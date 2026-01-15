@@ -19,7 +19,6 @@ final class Naglowek extends AbstractDTO implements DomSerializableInterface
 {
     /**
      * @param Optional|SystemInfo $systemInfo Nazwa systemu teleinformatycznego, z którego korzysta podatnik
-     * @return void
      */
     public function __construct(
         public readonly FormCode $wariantFormularza = FormCode::Fa3,
