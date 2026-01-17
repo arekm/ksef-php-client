@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\Requests\Sessions\Batch\OpenAndSend;
 
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
+use N1ebieski\KSEFClient\Contracts\Requests\Sessions\Batch\OpenAndSend\OpenAndSendResponseInterface;
 use N1ebieski\KSEFClient\ValueObjects\Support\KeyType;
 use Psr\Http\Message\ResponseInterface as BaseResponseInterface;
 
-final class OpenAndSendResponse implements ResponseInterface
+final class OpenAndSendResponse implements OpenAndSendResponseInterface
 {
     public readonly BaseResponseInterface $baseOpenResponse;
 

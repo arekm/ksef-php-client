@@ -7,11 +7,12 @@ namespace N1ebieski\KSEFClient\Requests\Security\PublicKeyCertificates;
 use DateTimeImmutable;
 use DateTimeZone;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
+use N1ebieski\KSEFClient\Contracts\Requests\Security\PublicKeyCertificates\PublicKeyCertificatesResponseInterface;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Security\PublicKeyCertificates\PublicKeyCertificateUsage;
 use N1ebieski\KSEFClient\ValueObjects\Support\KeyType;
 use Psr\Http\Message\ResponseInterface as BaseResponseInterface;
 
-final class PublicKeyCertificatesResponse implements ResponseInterface
+final class PublicKeyCertificatesResponse implements PublicKeyCertificatesResponseInterface
 {
     public readonly BaseResponseInterface $baseResponse;
 
