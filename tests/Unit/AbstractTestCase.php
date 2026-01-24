@@ -38,6 +38,7 @@ abstract class AbstractTestCase extends TestCase
     public function createHttpClientStub(AbstractResponseFixture $responseFixture): MockInterface & HttpClientInterface
     {
         $httpClientStub = Mockery::mock(HttpClientInterface::class);
+        $httpClientStub->shouldReceive('withBaseUri')->andReturnSelf();
         $httpClientStub->shouldReceive('withAccessToken')->andReturnSelf();
         $httpClientStub->shouldReceive('withoutAccessToken')->andReturnSelf();
         $httpClientStub->shouldReceive('withEncryptedKey')->andReturnSelf();
@@ -63,6 +64,7 @@ abstract class AbstractTestCase extends TestCase
             client: $httpClientStub,
             config: new Config(
                 baseUri: new BaseUri(Mode::Test->getApiUrl()->value),
+                latarnikBaseUri: new BaseUri(Mode::Test->getLatarnikApiUrl()->value),
                 encryptionKey: EncryptionKeyFactory::makeRandom()
             ),
             exceptionHandler: new ExceptionHandler(),

@@ -97,14 +97,22 @@ expect()->extend('toBeExceptionFixture', function (array $data): void {
 
 /**
  * @param array<string, mixed> $data
+ * @param object|array<int, object>|null $fixtureData
  */
-function toBeFixture(array $data, ?object $object = null): void
+function toBeFixture(array $data, object|array|null $fixtureData = null): void
 {
     foreach ($data as $key => $value) {
-        expect($object)->toHaveProperty($key);
+        if (is_array($fixtureData)) {
+            /** @var array<string, mixed> $value */
+            toBeFixture($value, $fixtureData[$key]);
 
-        if (is_array($value) && is_array($object->{$key}) && isset($object->{$key}[0]) && is_object($object->{$key}[0])) {
-            foreach ($object->{$key} as $itemKey => $itemValue) {
+            continue;
+        }
+
+        expect($fixtureData)->toHaveProperty($key);
+
+        if (is_array($value) && is_array($fixtureData->{$key}) && isset($fixtureData->{$key}[0]) && is_object($fixtureData->{$key}[0])) {
+            foreach ($fixtureData->{$key} as $itemKey => $itemValue) {
                 if (is_string($value[$itemKey])) {
                     $value[$itemKey] = ['value' => $value[$itemKey]];
                 }
@@ -120,25 +128,25 @@ function toBeFixture(array $data, ?object $object = null): void
             continue;
         }
 
-        if (is_array($value) && is_object($object->{$key})) {
+        if (is_array($value) && is_object($fixtureData->{$key})) {
             /** @var array<string, mixed> $value */
-            toBeFixture($value, $object->{$key});
+            toBeFixture($value, $fixtureData->{$key});
 
             continue;
         }
 
         $expected = match (true) {
             //@phpstan-ignore-next-line
-            $object->{$key} instanceof DateTimeInterface => new DateTimeImmutable($value),
+            $fixtureData->{$key} instanceof DateTimeInterface => new DateTimeImmutable($value),
             //@phpstan-ignore-next-line
-            $object->{$key} instanceof ValueAwareInterface && $object->{$key}->value instanceof DateTimeInterface => new DateTimeImmutable($value),
+            $fixtureData->{$key} instanceof ValueAwareInterface && $fixtureData->{$key}->value instanceof DateTimeInterface => new DateTimeImmutable($value),
             default => $value,
         };
 
         $actual = match (true) {
-            $object->{$key} instanceof DateTimeInterface => $object->{$key},
-            $object->{$key} instanceof ValueAwareInterface => $object->{$key}->value,
-            default => $object->{$key},
+            $fixtureData->{$key} instanceof DateTimeInterface => $fixtureData->{$key},
+            $fixtureData->{$key} instanceof ValueAwareInterface => $fixtureData->{$key}->value,
+            default => $fixtureData->{$key},
         };
 
         expect($actual)->toEqual($expected);

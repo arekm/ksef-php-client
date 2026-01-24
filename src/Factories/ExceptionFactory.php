@@ -17,7 +17,7 @@ use N1ebieski\KSEFClient\Support\Utility;
 final class ExceptionFactory extends AbstractFactory
 {
     /**
-     * @param null|object{exception?: object{exceptionDetailList: array<int, object{exceptionCode: int, exceptionDescription: string}>}, status?: object{code: int, description: string, details: array<int, string>}} $exceptionResponse
+     * @param null|object{exception?: object{exceptionDetailList: array<int, object{exceptionCode: int, exceptionDescription: string}>}, status?: object{code: int, description: string, details: array<int, string>}, message?: string} $exceptionResponse
      */
     public static function make(
         int $statusCode,
@@ -26,6 +26,7 @@ final class ExceptionFactory extends AbstractFactory
         $message = match (true) {
             isset($exceptionResponse->exception) => self::getExceptionMessage($exceptionResponse),
             isset($exceptionResponse->status) => self::getStatusMessage($exceptionResponse),
+            isset($exceptionResponse->message) => $exceptionResponse->message,
             default => null
         };
 

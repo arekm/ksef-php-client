@@ -13,6 +13,7 @@ use N1ebieski\KSEFClient\DTOs\HttpClient\Request;
 use N1ebieski\KSEFClient\Exceptions\HttpClient\AsyncClientNotSupportedException;
 use N1ebieski\KSEFClient\ValueObjects\AccessToken;
 use N1ebieski\KSEFClient\ValueObjects\EncryptionKey;
+use N1ebieski\KSEFClient\ValueObjects\HttpClient\BaseUri;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\EncryptedKey;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface as BaseResponseInterface;
@@ -25,6 +26,15 @@ final class HttpClient implements HttpClientInterface
         private readonly Config $config,
         private readonly ?LoggerInterface $logger = null
     ) {
+    }
+
+    public function withBaseUri(BaseUri $baseUri): self
+    {
+        return new self(
+            client: $this->client,
+            config: $this->config->withBaseUri($baseUri),
+            logger: $this->logger
+        );
     }
 
     public function withEncryptionKey(EncryptionKey $encryptionKey): self

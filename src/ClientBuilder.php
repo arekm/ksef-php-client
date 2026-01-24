@@ -69,6 +69,8 @@ final class ClientBuilder
 
     private ApiUrl $apiUrl;
 
+    private ApiUrl $latarnikApiUrl;
+
     private ?KsefToken $ksefToken = null;
 
     private ?AccessToken $accessToken = null;
@@ -92,6 +94,7 @@ final class ClientBuilder
         $this->httpClient = ClientFactory::make(Psr18ClientDiscovery::find());
         $this->logger = LoggerFactory::make();
         $this->apiUrl = $this->mode->getApiUrl();
+        $this->latarnikApiUrl = $this->mode->getLatarnikApiUrl();
         $this->verifyCertificateChain = new Optional();
     }
 
@@ -104,6 +107,7 @@ final class ClientBuilder
         $this->mode = $mode;
 
         $this->apiUrl = $this->mode->getApiUrl();
+        $this->latarnikApiUrl = $this->mode->getLatarnikApiUrl();
 
         if ($this->mode->isEquals(Mode::Test)) {
             $this->identifier = new NIP('1111111111');
@@ -134,6 +138,17 @@ final class ClientBuilder
         }
 
         $this->apiUrl = $apiUrl;
+
+        return $this;
+    }
+
+    public function withLatarnikApiUrl(ApiUrl | string $latarnikApiUrl): self
+    {
+        if ($latarnikApiUrl instanceof ApiUrl === false) {
+            $latarnikApiUrl = ApiUrl::from($latarnikApiUrl);
+        }
+
+        $this->latarnikApiUrl = $latarnikApiUrl;
 
         return $this;
     }
@@ -284,6 +299,7 @@ final class ClientBuilder
     {
         $config = new Config(
             baseUri: new BaseUri($this->apiUrl->value),
+            latarnikBaseUri: new BaseUri($this->latarnikApiUrl->value),
             asyncMaxConcurrency: $this->asyncMaxConcurrency,
             validateXml: $this->validateXml,
             accessToken: $this->accessToken,

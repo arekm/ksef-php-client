@@ -43,4 +43,12 @@ enum Mode: string implements EnumInterface
             self::Production => ApiUrl::from('https://api.ksef.mf.gov.pl/v2'),
         };
     }
+
+    public function getLatarnikApiUrl(): ApiUrl
+    {
+        return match ($this) {
+            self::Test, self::Demo => ApiUrl::from('https://api-latarnia-test.ksef.mf.gov.pl'),
+            self::Production => ApiUrl::from('https://api-latarnia.ksef.mf.gov.pl'),
+        };
+    }
 }

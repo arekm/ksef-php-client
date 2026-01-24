@@ -16,6 +16,7 @@ final class Config extends AbstractDTO implements ConfigInterface
 {
     public function __construct(
         public readonly BaseUri $baseUri,
+        public readonly BaseUri $latarnikBaseUri,
         public readonly int $asyncMaxConcurrency = 8,
         public readonly bool $validateXml = true,
         public readonly ?AccessToken $accessToken = null,
@@ -25,57 +26,44 @@ final class Config extends AbstractDTO implements ConfigInterface
     ) {
     }
 
+    public function withBaseUri(BaseUri $baseUri): self
+    {
+        return $this->with([
+            'baseUri' => $baseUri
+        ]);
+    }
+
     public function withEncryptionKey(EncryptionKey $encryptionKey): self
     {
-        /** @var array<string, mixed> $data */
-        $data = $this->toArray();
-
-        return self::from([
-            ...$data,
+        return $this->with([
             'encryptionKey' => $encryptionKey
         ]);
     }
 
     public function withEncryptedKey(EncryptedKey $encryptedKey): self
     {
-        /** @var array<string, mixed> $data */
-        $data = $this->toArray();
-
-        return self::from([
-            ...$data,
+        return $this->with([
             'encryptedKey' => $encryptedKey
         ]);
     }
 
     public function withAccessToken(AccessToken $accessToken): self
     {
-        /** @var array<string, mixed> $data */
-        $data = $this->toArray();
-
-        return self::from([
-            ...$data,
+        return $this->with([
             'accessToken' => $accessToken
         ]);
     }
 
     public function withoutAccessToken(): self
     {
-        /** @var array<string, mixed> $data */
-        $data = $this->toArray();
-
-        return self::from([
-            ...$data,
+        return $this->with([
             'accessToken' => null
         ]);
     }
 
     public function withRefreshToken(RefreshToken $refreshToken): self
     {
-        /** @var array<string, mixed> $data */
-        $data = $this->toArray();
-
-        return self::from([
-            ...$data,
+        return $this->with([
             'refreshToken' => $refreshToken
         ]);
     }
