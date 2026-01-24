@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Latarnik\Messages\MessagesResponseFixture;
+use N1ebieski\KSEFClient\Testing\Fixtures\Requests\Latarnia\Messages\MessagesResponseFixture;
 use N1ebieski\KSEFClient\Tests\Unit\AbstractTestCase;
 
 /** @var AbstractTestCase $this */
@@ -29,7 +29,7 @@ test('valid response', function (MessagesResponseFixture $responseFixture): void
     /** @var AbstractTestCase $this */
     $clientStub = $this->createClientStub($responseFixture);
 
-    $response = $clientStub->latarnik()->messages()->object();
+    $response = $clientStub->latarnia()->messages()->object();
 
     expect($response)->toBeFixture($responseFixture->data);
 })->with('validResponseProvider');

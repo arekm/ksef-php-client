@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Testing\Fixtures\Requests\Latarnik\Messages;
+namespace N1ebieski\KSEFClient\Testing\Fixtures\Requests\Latarnia\Messages;
 
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\AbstractResponseFixture;
 

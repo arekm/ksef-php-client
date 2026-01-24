@@ -134,9 +134,9 @@ Main features:
             - [Testdata Rate Limits Limits](#testdata-rate-limits-limits)
             - [Testdata Rate Limits Reset](#testdata-rate-limits-reset)
             - [Testdata Rate Limits Production](#testdata-rate-limits-production)
-    - [Latarnik](#latarnik)
-        - [Latarnik Status](#latarnik-status)
-        - [Latarnik Messages](#latarnik-messages)
+    - [Latarnia](#latarnia)
+        - [Latarnia Status](#latarnia-status)
+        - [Latarnia Messages](#latarnia-messages)
 
 - [Examples](#examples)
     - [Integration with a frontend application using certificate-based authentication](#integration-with-a-frontend-application-using-certificate-based-authentication)
@@ -179,7 +179,7 @@ use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
 $client = (new ClientBuilder())
     ->withMode(Mode::Production) // Choice between: Test, Demo, Production
     ->withApiUrl($_ENV['KSEF_API_URL']) // Optional, default is set by Mode selection
-    ->withLatarnikApiUrl($_ENV['LATARNIK_API_URL']) // Optional, default is set by Mode selection
+    ->withLatarniaApiUrl($_ENV['KSEF_LATARNIA_API_URL']) // Optional, default is set by Mode selection
     ->withHttpClient(new \GuzzleHttp\Client(...)) // Optional PSR-18 implementation, default is set by Psr18ClientDiscovery::find()
     ->withLogger(new \Monolog\Logger(...)) // Optional PSR-3 implementation, default is set by PsrDiscovery\Discover::log()
     ->withLogPath($_ENV['PATH_TO_LOG_FILE'], $_ENV['LOG_LEVEL']) // Optional, level: null disables logging
@@ -1415,29 +1415,29 @@ $response = $client->testdata()->rateLimits()->production(
 ```
 </details>
 
-### Latarnik
+### Latarnia
 
 <details>
     <summary>
-        <h4>Latarnik Status</h4>
+        <h4>Latarnia Status</h4>
     </summary>
 
 https://github.com/CIRFMF/ksef-latarnia/blob/main/scenariusze.md
 
 ```php
-$response = $client->latarnik()->status()->object();
+$response = $client->latarnia()->status()->object();
 ```
 </details>
 
 <details>
     <summary>
-        <h4>Latarnik Messages</h4>
+        <h4>Latarnia Messages</h4>
     </summary>
 
 https://github.com/CIRFMF/ksef-latarnia/blob/main/scenariusze.md
 
 ```php
-$response = $client->latarnik()->messages()->object();
+$response = $client->latarnia()->messages()->object();
 ```
 </details>
 

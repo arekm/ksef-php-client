@@ -18,7 +18,7 @@ use N1ebieski\KSEFClient\Resources\AbstractResource;
 use N1ebieski\KSEFClient\Resources\Auth\AuthResource;
 use N1ebieski\KSEFClient\Resources\Certificates\CertificatesResource;
 use N1ebieski\KSEFClient\Resources\Invoices\InvoicesResource;
-use N1ebieski\KSEFClient\Resources\Latarnik\LatarnikResource;
+use N1ebieski\KSEFClient\Resources\Latarnia\LatarniaResource;
 use N1ebieski\KSEFClient\Resources\Limits\LimitsResource;
 use N1ebieski\KSEFClient\Resources\Permissions\PermissionsResource;
 use N1ebieski\KSEFClient\Resources\Security\SecurityResource;
@@ -223,10 +223,10 @@ final class ClientResource extends AbstractResource implements ClientResourceInt
         }
     }
 
-    public function latarnik(): LatarnikResource
+    public function latarnia(): LatarniaResource
     {
         try {
-            return new LatarnikResource($this->client, $this->config, $this->exceptionHandler);
+            return new LatarniaResource($this->client, $this->config, $this->exceptionHandler);
         } catch (Throwable $throwable) {
             throw $this->exceptionHandler->handle($throwable);
         }

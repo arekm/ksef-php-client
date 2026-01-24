@@ -9,7 +9,7 @@ use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Auth\AuthResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Certificates\CertificatesResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Invoices\InvoicesResourceInterface;
-use N1ebieski\KSEFClient\Contracts\Resources\Latarnik\LatarnikResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Latarnia\LatarniaResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Limits\LimitsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Permissions\PermissionsResourceInterface;
 use N1ebieski\KSEFClient\Contracts\Resources\Security\SecurityResourceInterface;
@@ -55,5 +55,5 @@ interface ClientResourceInterface
 
     public function testdata(): TestdataResourceInterface;
 
-    public function latarnik(): LatarnikResourceInterface;
+    public function latarnia(): LatarniaResourceInterface;
 }

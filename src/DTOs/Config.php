@@ -16,7 +16,7 @@ final class Config extends AbstractDTO implements ConfigInterface
 {
     public function __construct(
         public readonly BaseUri $baseUri,
-        public readonly BaseUri $latarnikBaseUri,
+        public readonly BaseUri $latarniaBaseUri,
         public readonly int $asyncMaxConcurrency = 8,
         public readonly bool $validateXml = true,
         public readonly ?AccessToken $accessToken = null,

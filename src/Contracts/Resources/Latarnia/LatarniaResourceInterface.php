@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Contracts\Resources\Latarnik;
+namespace N1ebieski\KSEFClient\Contracts\Resources\Latarnia;
 
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
 
-interface LatarnikResourceInterface
+interface LatarniaResourceInterface
 {
     public function status(): ResponseInterface;
 

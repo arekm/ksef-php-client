@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Resources\Latarnik;
+namespace N1ebieski\KSEFClient\Resources\Latarnia;
 
 use N1ebieski\KSEFClient\Contracts\Exception\ExceptionHandlerInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
-use N1ebieski\KSEFClient\Contracts\Resources\Latarnik\LatarnikResourceInterface;
+use N1ebieski\KSEFClient\Contracts\Resources\Latarnia\LatarniaResourceInterface;
 use N1ebieski\KSEFClient\DTOs\Config;
-use N1ebieski\KSEFClient\Requests\Latarnik\Messages\MessagesHandler;
-use N1ebieski\KSEFClient\Requests\Latarnik\Status\StatusHandler;
+use N1ebieski\KSEFClient\Requests\Latarnia\Messages\MessagesHandler;
+use N1ebieski\KSEFClient\Requests\Latarnia\Status\StatusHandler;
 use N1ebieski\KSEFClient\Resources\AbstractResource;
 use Throwable;
 
-final class LatarnikResource extends AbstractResource implements LatarnikResourceInterface
+final class LatarniaResource extends AbstractResource implements LatarniaResourceInterface
 {
     public function __construct(
         private readonly HttpClientInterface $client,
