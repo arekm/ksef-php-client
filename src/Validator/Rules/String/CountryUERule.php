@@ -20,7 +20,7 @@ final class CountryUERule extends AbstractRule
     public function handle(string $value, ?string $attribute = null): void
     {
         if ( ! in_array($value, self::CODES)) {
-            $this->throwRuleValidationException('Invalid currency format.', $attribute);
+            $this->throwRuleValidationException('Invalid country code.', $attribute);
         }
     }
 }
