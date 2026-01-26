@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Validator\Rules\String;
 
-use InvalidArgumentException;
 use N1ebieski\KSEFClient\Validator\Rules\AbstractRule;
 
 final class MinBytesRule extends AbstractRule
@@ -17,11 +16,10 @@ final class MinBytesRule extends AbstractRule
     public function handle(string $value, ?string $attribute = null): void
     {
         if (strlen($value) < $this->min) {
-            throw new InvalidArgumentException(
-                $this->getMessage(
-                    sprintf('Value must have at least %d characters.', $this->min),
-                    $attribute
-                )
+            $this->throwRuleValidationException(
+                'Value must have at least %d characters.',
+                $attribute,
+                $this->min
             );
         }
     }

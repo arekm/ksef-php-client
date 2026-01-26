@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Validator\Rules\Number;
 
-use InvalidArgumentException;
 use N1ebieski\KSEFClient\Validator\Rules\AbstractRule;
 
 final class MaxDigitsRule extends AbstractRule
@@ -19,11 +18,10 @@ final class MaxDigitsRule extends AbstractRule
         $length = strlen(str_replace('.', '', $value));
 
         if ($length > $this->max) {
-            throw new InvalidArgumentException(
-                $this->getMessage(
-                    sprintf('Value must have at most %d digits.', $this->max),
-                    $attribute
-                )
+            $this->throwRuleValidationException(
+                'Value must have at most %d digits.',
+                $attribute,
+                $this->max
             );
         }
     }

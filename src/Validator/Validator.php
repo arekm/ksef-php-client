@@ -14,7 +14,7 @@ final class Validator
      */
     public static function validate(mixed $values, array $rules): void
     {
-        if ( ! is_array($values)) {
+        if ( ! is_array($values) || array_is_list($values)) {
             $values = [$values];
         }
 

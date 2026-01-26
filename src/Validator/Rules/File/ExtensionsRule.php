@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Validator\Rules\File;
 
-use InvalidArgumentException;
 use N1ebieski\KSEFClient\Validator\Rules\AbstractRule;
 
 final class ExtensionsRule extends AbstractRule
@@ -22,11 +21,10 @@ final class ExtensionsRule extends AbstractRule
         $extension = strtolower(pathinfo($value, PATHINFO_EXTENSION));
 
         if ( ! in_array($extension, $this->extensions)) {
-            throw new InvalidArgumentException(
-                $this->getMessage(
-                    sprintf('File has invalid extension. Available extensions: %s.', implode(', ', $this->extensions)),
-                    $attribute
-                )
+            $this->throwRuleValidationException(
+                'File has invalid extension. Available extensions: %s.',
+                $attribute,
+                implode(', ', $this->extensions)
             );
         }
     }

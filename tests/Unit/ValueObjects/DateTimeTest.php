@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use N1ebieski\KSEFClient\Contracts\ValueAwareInterface;
+use N1ebieski\KSEFClient\Exceptions\RuleValidationException;
 use N1ebieski\KSEFClient\Tests\Unit\AbstractTestCase;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Invoices\DateRangeFrom;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Invoices\DateRangeTo;
@@ -42,4 +43,4 @@ test('ensure that class throws timezone exception for datetime which is not in U
     $datetime = new DateTime('now', new DateTimeZone('Europe/Warsaw'));
 
     new $classname($datetime);
-})->with('classnameProvider')->throws(InvalidArgumentException::class, 'Date must be in timezone: UTC, Z.');
+})->with('classnameProvider')->throws(RuleValidationException::class, 'Date must be in timezone: UTC, Z.');
