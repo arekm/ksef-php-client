@@ -29,12 +29,14 @@ final class SchemaRule extends AbstractRule
 
             libxml_clear_errors();
 
+            $message = $this->getMessage('The value is not valid with xsd: %s.', $attribute);
+            $values = array_filter([$this->schemaPath->value, $attribute]);
+
             throw new XmlValidationException(
-                $this->getMessage(
-                    "The value is not valid with xsd: {$this->schemaPath->value}.",
-                    $attribute
-                ),
+                message: sprintf($message, ...$values),
                 context: [
+                    'message' => $message,
+                    'values' => $values,
                     'document' => $value,
                     'errors' => $errors
                 ]
