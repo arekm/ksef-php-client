@@ -1,12 +1,12 @@
 <?php
 
-namespace N1ebieski\KSEFClient\Contracts\Resources\Testdata\AttachmentPermission;
+namespace N1ebieski\KSEFClient\Contracts\Resources\Testdata\Attachment;
 
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
-use N1ebieski\KSEFClient\Requests\Testdata\AttachmentPermission\Approve\ApproveRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\AttachmentPermission\Revoke\RevokeRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Approve\ApproveRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Revoke\RevokeRequest;
 
-interface AttachmentPermissionResourceInterface
+interface AttachmentResourceInterface
 {
     /**
      * @param ApproveRequest|array<string, mixed> $request

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Testing\Fixtures\Requests\Testdata\AttachmentPermission\Revoke;
+namespace N1ebieski\KSEFClient\Testing\Fixtures\Requests\Testdata\Attachment\Revoke;
 
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\AbstractResponseFixture;
 

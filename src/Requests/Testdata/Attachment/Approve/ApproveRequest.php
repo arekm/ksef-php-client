@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Requests\Testdata\AttachmentPermission\Approve;
+namespace N1ebieski\KSEFClient\Requests\Testdata\Attachment\Approve;
 
 use N1ebieski\KSEFClient\Contracts\BodyInterface;
 use N1ebieski\KSEFClient\Requests\AbstractRequest;

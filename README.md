@@ -1264,7 +1264,7 @@ $response = $client->tokens()->revoke(
 
 <details>
     <summary>
-        <h5> Testdata Attachment Permission Approve </h5>
+        <h5> Testdata Attachment Approve </h5>
     </summary>
 
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1attachment/post
@@ -1272,7 +1272,7 @@ https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1test
 ```php
 use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Grant\ApproveRequest;
 
-$response = $client->testdata()->attachmentPermision()->approve(
+$response = $client->testdata()->attachment()->approve(
     new ApproveRequest(...)
 )->status();
 ```
@@ -1282,7 +1282,7 @@ $response = $client->testdata()->attachmentPermision()->approve(
 
 <details>
     <summary>
-        <h5> Testdata Attachment Permission Revoke </h5>
+        <h5> Testdata Attachment Revoke </h5>
     </summary>
 
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1attachment~1revoke/post
@@ -1290,7 +1290,7 @@ https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1test
 ```php
 use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Revoke\RevokeRequest;
 
-$response = $client->testdata()->attachmentPermission()->revoke(
+$response = $client->testdata()->attachment()->revoke(
     new RevokeRequest(...)
 )->status();
 ```

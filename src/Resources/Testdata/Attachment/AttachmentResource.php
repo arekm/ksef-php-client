@@ -2,26 +2,25 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Resources\Testdata\AttachmentPermission;
+namespace N1ebieski\KSEFClient\Resources\Testdata\Attachment;
 
 use N1ebieski\KSEFClient\Contracts\Exception\ExceptionHandlerInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\ResponseInterface;
-use N1ebieski\KSEFClient\Contracts\Resources\Testdata\AttachmentPermission\AttachmentPermissionResourceInterface;
-use N1ebieski\KSEFClient\Requests\Testdata\AttachmentPermission\Approve\ApproveHandler;
-use N1ebieski\KSEFClient\Requests\Testdata\AttachmentPermission\Approve\ApproveRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\AttachmentPermission\Revoke\RevokeHandler;
-use N1ebieski\KSEFClient\Requests\Testdata\AttachmentPermission\Revoke\RevokeRequest;
+use N1ebieski\KSEFClient\Contracts\Resources\Testdata\Attachment\AttachmentResourceInterface;
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Approve\ApproveHandler;
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Approve\ApproveRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Revoke\RevokeHandler;
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Revoke\RevokeRequest;
 use N1ebieski\KSEFClient\Resources\AbstractResource;
 use Throwable;
 
-final class AttachmentPermissionResource extends AbstractResource implements AttachmentPermissionResourceInterface
+final class AttachmentResource extends AbstractResource implements AttachmentResourceInterface
 {
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly ExceptionHandlerInterface $exceptionHandler
-    )
-    {
+    ) {
     }
 
     public function approve(ApproveRequest|array $request): ResponseInterface

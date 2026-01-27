@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace N1ebieski\KSEFClient\Testing\Fixtures\Requests\Testdata\AttachmentPermission\Approve;
+namespace N1ebieski\KSEFClient\Testing\Fixtures\Requests\Testdata\Attachment\Approve;
 
 use N1ebieski\KSEFClient\Testing\Fixtures\Requests\AbstractResponseFixture;
 
