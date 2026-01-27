@@ -118,6 +118,9 @@ Main features:
         - [Tokens Status](#tokens-status)
         - [Tokens Revoke](#tokens-revoke)
     - [Testdata](#testdata)
+        - [Testdata Attachment](#testdata-attachment)
+          - [Testdata Attachment Approve](#testdata-attachment-approve)
+          - [TestData Attachment Revoke](#testdata-attachment-revoke)
         - [Testdata Person](#testdata-person)
             - [Testdata Person Create](#testdata-person-create)
             - [Testdata Person Remove](#testdata-person-remove)
@@ -1256,6 +1259,43 @@ $response = $client->tokens()->revoke(
 </details>
 
 ### Testdata
+
+#### Testdata Attachment Permission
+
+<details>
+    <summary>
+        <h5> Testdata Attachment Permission Approve </h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1attachment/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Grant\ApproveRequest;
+
+$response = $client->testdata()->attachmentPermision()->approve(
+    new ApproveRequest(...)
+)->status();
+```
+
+</details>
+
+
+<details>
+    <summary>
+        <h5> Testdata Attachment Permission Revoke </h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1attachment~1revoke/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Revoke\RevokeRequest;
+
+$response = $client->testdata()->attachmentPermission()->revoke(
+    new RevokeRequest(...)
+)->status();
+```
+
+</details>
 
 #### Testdata Person
 
