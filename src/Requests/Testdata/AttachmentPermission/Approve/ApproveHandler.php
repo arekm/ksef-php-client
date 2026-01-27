@@ -15,8 +15,7 @@ final class ApproveHandler extends AbstractHandler
 {
     public function __construct(
         private readonly HttpClientInterface $client,
-    )
-    {
+    ) {
     }
 
     public function handle(ApproveRequest $request): ResponseInterface

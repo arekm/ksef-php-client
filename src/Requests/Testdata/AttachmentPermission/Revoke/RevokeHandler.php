@@ -15,8 +15,7 @@ final class RevokeHandler extends AbstractHandler
 {
     public function __construct(
         private readonly HttpClientInterface $client,
-    )
-    {
+    ) {
     }
 
     public function handle(RevokeRequest $request): ResponseInterface

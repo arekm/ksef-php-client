@@ -20,8 +20,7 @@ final class AttachmentPermissionResource extends AbstractResource implements Att
     public function __construct(
         private readonly HttpClientInterface $client,
         private readonly ExceptionHandlerInterface $exceptionHandler
-    )
-    {
+    ) {
     }
 
     public function approve(ApproveRequest|array $request): ResponseInterface
