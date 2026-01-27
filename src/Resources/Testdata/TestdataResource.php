@@ -50,19 +50,19 @@ final class TestdataResource extends AbstractResource implements TestdataResourc
         }
     }
 
-    public function attachment(): AttachmentResource
+    public function rateLimits(): RateLimitsResource
     {
         try {
-            return new AttachmentResource($this->client, $this->exceptionHandler);
+            return new RateLimitsResource($this->client, $this->exceptionHandler);
         } catch (Throwable $throwable) {
             throw $this->exceptionHandler->handle($throwable);
         }
     }
 
-    public function rateLimits(): RateLimitsResource
+    public function attachment(): AttachmentResource
     {
         try {
-            return new RateLimitsResource($this->client, $this->exceptionHandler);
+            return new AttachmentResource($this->client, $this->exceptionHandler);
         } catch (Throwable $throwable) {
             throw $this->exceptionHandler->handle($throwable);
         }

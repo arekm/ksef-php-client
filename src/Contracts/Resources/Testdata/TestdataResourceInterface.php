@@ -18,7 +18,7 @@ interface TestdataResourceInterface
 
     public function limits(): LimitsResourceInterface;
 
-    public function attachment(): AttachmentResourceInterface;
-
     public function rateLimits(): RateLimitsResourceInterface;
+
+    public function attachment(): AttachmentResourceInterface;
 }
