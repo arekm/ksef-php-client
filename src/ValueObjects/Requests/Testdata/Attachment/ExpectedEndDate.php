@@ -26,7 +26,7 @@ final class ExpectedEndDate extends AbstractValueObject implements ValueAwareInt
 
     public function __toString(): string
     {
-        return $this->value->format('Y-m-d\TH:i:s\Z');
+        return $this->value->format('Y-m-d');
     }
 
     public function toOriginal(): string
